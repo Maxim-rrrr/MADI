@@ -1,8 +1,20 @@
 # MADI
 Стек MERN
 ------------------
+![MERN](https://miro.medium.com/max/2800/0*QrGJeWvArCjF2BuV.jpg)
 
-Для разработки надо:
+###Предворительно должно быть установленно на ПК:
+- [Node.js](https://nodejs.org/en/)
+- [MongoDB](https://www.mongodb.com/)
+
+###Чтобы подтянут все звисимости надо:
+```
+npm i
+cd client
+npm i
+```
+
+###Для разработки надо:
 - Поднять MongoDB
 ```
 cd C:/database/bin
@@ -22,6 +34,6 @@ npm start
 
 - Запустить Gulp для сборки стилей
 ```
-cd gulp
+cd client
+gulp
 ```
-
