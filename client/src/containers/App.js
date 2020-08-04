@@ -2,27 +2,48 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { customersFetchData } from "../actions/customers";
 
+import Header from './Header'
+
 
 class App extends Component {
+  constructor(props) {
+    super (props)
+    this.state = {
+      login: false,
+      email: localStorage.getItem('email')
+    } 
+  }
+
   componentDidMount() {
     this.props.fetchData("/api/customers");
+
+    if (this.state.email !== null) {
+      this.setState({
+        login: true
+      })
+    }
+
+    // localStorage.clear();
+  }
+
+  loginUpdata(bool) {
+    this.setState({
+      login: bool,
+      email: localStorage.getItem('email')
+    })
   }
 
   render() {
+    
+    
     return (
-      <div>
-          <ul>
-              {this.props.customers.map((customers, index)=> {
-                return <li key={index}>
-                  <div>Name is: {customers.email}</div>
-                  <div>Age is: {customers.password}</div>
-                  <div>Status is: {customers.balance}</div>
-                  <div>Mugger ID is: {customers._id}</div>
-                </li>
-              })}
-
-          </ul>
-      </div>
+      <>
+        <Header 
+          customers = { this.props.customers } 
+          logIn = { this.state.login }
+          loginUpdata = { (bool) => { this.loginUpdata(bool) } }
+        />
+      </>
     );
   }
 }
