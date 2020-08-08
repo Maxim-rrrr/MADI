@@ -22,6 +22,8 @@
     border-radius: 5px
     border: 3px solid #504c63
     box-shadow: 4px 4px 4px rgba(0,0,0,0.6)
+
+    overflow: hidden
   &__close-btn
     position: absolute
     top: 0.5rem
@@ -40,10 +42,20 @@
     flex-direction: column
     align-items: center
     justify-content: center
+    height: 25.64rem
     margin-top: 4rem
-    &-email, &-pass, &-pass-repiat
+    &-email, &-pass, &-pass-repeat
       width: 60%
       margin-bottom: 1.7rem
     &-submit
       margin-top: 5rem
       margin-bottom: 3rem
+
+.code-form
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+.code-label
+  font-size: 1.5rem
+  color: #504c63

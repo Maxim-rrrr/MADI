@@ -18,6 +18,7 @@ export default class Header extends Component {
     this.closePopap = this.closePopap.bind(this)
 
     this.closeLoginPopap = this.closeLoginPopap.bind(this)
+    this.closeAllPopap = this.closeAllPopap.bind(this)
   }
 
   hoverLogo() {
@@ -60,17 +61,33 @@ export default class Header extends Component {
     })
   }
 
+  closeAllPopap() {
+    this.setState({
+      loginPopap: false,
+      registrationPopap: false
+    })
+  }
+
   render() {
     let logoHoverClass = ''
     if (this.state.hoverLogo) {
       logoHoverClass = '--hover'
     }
 
-    let loginBlock = 
-    <button className="btn btn-login" onClick = { this.activeLoginPopap }> Войти </button>
+    let loginBlock = <></>
 
     if (this.props.logIn) {
-      loginBlock = <Account customers = { this.props.customers }/>
+      loginBlock = 
+      <>
+        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } logInClass = ' account--logIn'/>
+        <button className="btn btn-login btn-login--logIn" onClick = { this.activeLoginPopap }> Войти </button>
+      </>
+    } else {
+      loginBlock = 
+      <>
+        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } logInClass = ''/>
+        <button className="btn btn-login" onClick = { this.activeLoginPopap }> Войти </button>
+      </>
     }
 
     return (
@@ -88,6 +105,9 @@ export default class Header extends Component {
         <RegistrationPopap 
           onClick = { this.closePopap } 
           active  = { this.state.registrationPopap }
+          customers = { this.props.customers }
+          closeAllPopap = { this.closeAllPopap }
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
         />
 
         <div className="container">
@@ -102,7 +122,9 @@ export default class Header extends Component {
               <img src="./img/madi.png" alt="" className={'logo-madi' + logoHoverClass}/>
             </div>
 
-            { loginBlock }
+            <div className='login-container'>
+              { loginBlock }
+            </div>
 
           </div>
         </div>

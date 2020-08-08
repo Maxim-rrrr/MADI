@@ -70,10 +70,25 @@ export default class LoginPopap extends Component {
           <div className="invalid-label"> { error } </div>
           <form onSubmit={ this.handleSubmit } className="login__form">
 
-            <input value={ this.state.emailValue } onChange={ this.handleEmailChange } type="email" className="input login__form-email" placeholder="Email" required/>
-            <input value={ this.state.passwordValue } onChange={ this.handlePasswordChange } type="password" className="input login__form-pass" placeholder="Пароль" required/>
+            <input 
+              value={ this.state.emailValue } 
+              onChange={ this.handleEmailChange } 
+              type="email" 
+              className="input login__form-email" 
+              placeholder="Email" 
+              required
+            />
             
-            <button  className='btn login__form-submit' type='submit'> ВОЙТИ </button>
+            <input 
+              value={ this.state.passwordValue } 
+              onChange={ this.handlePasswordChange } 
+              type="password" 
+              className="input login__form-pass" 
+              placeholder="Пароль" 
+              required
+            />
+            
+            <button className='btn login__form-submit' type='submit'> ВОЙТИ </button>
           </form>
 
           <button className="btn-registration" onClick = { () => (this.props.toRegistration()) }> Регистрация </button>

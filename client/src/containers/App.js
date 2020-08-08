@@ -22,8 +22,6 @@ class App extends Component {
         login: true
       })
     }
-
-    // localStorage.clear();
   }
 
   loginUpdata(bool) {
