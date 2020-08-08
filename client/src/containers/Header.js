@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import LoginPopap from './LoginPopap'
 import RegistrationPopap from './RegistrationPopap'
+import LoginEditPopap from './LoginEditPopap'
 import Account from './Account'
 
 export default class Header extends Component {
@@ -9,6 +10,7 @@ export default class Header extends Component {
     this.state = {
       hoverLogo: false,
       loginPopap: false,
+      loginEditPopap: false,
       registrationPopap: false
     } 
 
@@ -40,17 +42,27 @@ export default class Header extends Component {
     })
   }
 
+  activeLoginEditPopap() {
+    this.setState({
+      loginEditPopap: true
+    })
+  }
+
   closePopap(event) {
     if (event.target.className === 'login login--active' || 
         event.target.className === 'login__close-btn'    ||
         event.target.className === 'login__close-img'    ||
+        event.target.className === 'login-edit login-edit--active' || 
+        event.target.className === 'login-edit__close-btn'    ||
+        event.target.className === 'login-edit__close-img'    ||
         event.target.className === 'registration registration--active' || 
         event.target.className === 'registration__close-btn'    ||
         event.target.className === 'registration__close-img'    ) {
 
       this.setState({
         loginPopap: false,
-        registrationPopap: false
+        registrationPopap: false,
+        loginEditPopap: false,
       })
     }
   }
@@ -64,28 +76,24 @@ export default class Header extends Component {
   closeAllPopap() {
     this.setState({
       loginPopap: false,
+      loginEditPopap: false,
       registrationPopap: false
     })
   }
 
   render() {
-    let logoHoverClass = ''
-    if (this.state.hoverLogo) {
-      logoHoverClass = '--hover'
-    }
-
     let loginBlock = <></>
 
     if (this.props.logIn) {
       loginBlock = 
       <>
-        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } logInClass = ' account--logIn'/>
+        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } activeLoginEditPopap = { () => { this.activeLoginEditPopap() } } logInClass = ' account--logIn'/>
         <button className="btn btn-login btn-login--logIn" onClick = { this.activeLoginPopap }> Войти </button>
       </>
     } else {
       loginBlock = 
       <>
-        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } logInClass = ''/>
+        <Account customers = { this.props.customers } loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } activeLoginEditPopap = { () => { this.activeLoginEditPopap() } } logInClass = ''/>
         <button className="btn btn-login" onClick = { this.activeLoginPopap }> Войти </button>
       </>
     }
@@ -108,6 +116,16 @@ export default class Header extends Component {
           customers = { this.props.customers }
           closeAllPopap = { this.closeAllPopap }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
+          customersUpdataDB = { () => { this.props.customersUpdataDB() } }
+        />
+
+        <LoginEditPopap 
+          onClick = { this.closePopap } 
+          active  = { this.state.loginEditPopap }
+          customers = { this.props.customers }
+          closeAllPopap = { this.closeAllPopap }
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
+          customersUpdataDB = { () => { this.props.customersUpdataDB() } }
         />
 
         <div className="container">
@@ -118,8 +136,7 @@ export default class Header extends Component {
               onMouseOut  = { this.hoverLogo } 
             >
               <img src="./img/logo.png" alt="Logo"/>
-              <h1 className={'header__title' + logoHoverClass}> МАДИ </h1>
-              <img src="./img/madi.png" alt="" className={'logo-madi' + logoHoverClass}/>
+              <h1 className='header__title'> РГР работы МАДИ </h1>
             </div>
 
             <div className='login-container'>

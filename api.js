@@ -79,7 +79,7 @@ router.post("/add-user", (req, res)=>{
   
 });
 
-router.put("/customers/:id", (req, res)=>{
+router.post("/user-edit/:id", (req, res)=>{
   Сustomer.findByIdAndUpdate({_id: req.params.id}, req.body)
     .then(() => {
       Сustomer.findOne({_id: req.params.id})

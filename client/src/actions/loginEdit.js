@@ -1,11 +1,11 @@
-export function codeSendSuccess(code) {
+export function loginEditSuccess(user) {
   return {
-      type: "CODE_SUCCESS",
-      code
+      type: "LOGIN_EDIT_SUCCESS",
+      user
   }
 }
 
-export function codeSend(url, email = {}) {
+export function loginEdit(url, data = {}) {
   return (dispatch) => {
     fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -18,7 +18,7 @@ export function codeSend(url, email = {}) {
       },
       redirect: 'follow', // manual, *follow, error
       referrerPolicy: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(email) // body data type must match "Content-Type" header
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
       .then(response => {
         if(!response.ok) {
@@ -27,7 +27,7 @@ export function codeSend(url, email = {}) {
         return response;
       })
       .then(response => response.json())
-      .then(code => dispatch(codeSendSuccess(code)))
+      .then(user => dispatch(loginEditSuccess(user)))
       .catch(()=>{});
   }
 }

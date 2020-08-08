@@ -50,7 +50,42 @@
     &-submit
       margin-top: 5rem
       margin-bottom: 3rem
-
+    &-back
+      position: relative
+      display: block
+      width: 3rem 
+      height: 3px
+      background: #615c79
+      border: none
+      cursor: pointer
+      &::before
+        position: absolute
+        left: -0.3rem
+        top: -0.5rem
+        transform: rotate(-45deg)
+        content: ''
+        display: block
+        width: 1.5rem 
+        height: 3px
+        background: #615c79
+      &::after
+        position: absolute
+        left: -0.3rem
+        top: 0.5rem
+        transform: rotate(45deg)
+        content: ''
+        display: block
+        width: 1.5rem 
+        height: 3px
+        background: #615c79
+      &-box
+        position: absolute
+        top: 0.2rem
+        left: 0.5rem
+        height: 3rem
+        padding-top: 1.5rem
+        cursor: pointer
+        
 .code-form
   display: flex
   flex-direction: column

@@ -7,6 +7,14 @@ const customerSchema = new Schema({
   balance: {
     type: Number,
     default: 0
+  },
+  invitation: {
+    type: Boolean,
+    default: false,
+  },
+  inviting: {
+    type: String,
+    default: ''
   }
 });
 

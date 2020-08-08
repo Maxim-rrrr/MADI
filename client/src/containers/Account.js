@@ -42,7 +42,7 @@ export default class Account extends Component {
           
           <div className="account__login-block">
             <button className="account__edit" /> 
-            <b className = 'account__login'> { login } </b> 
+            <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopap() }}> { login } </b> 
           </div> 
 
           <div className="account__balace-block">

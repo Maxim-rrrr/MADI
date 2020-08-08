@@ -15,13 +15,18 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchData("/api/customers");
 
+    this.props.fetchData("/api/customers");
     if (this.state.email !== null) {
       this.setState({
         login: true
       })
     }
+
+  }
+
+  customersUpdataDB() {
+    this.props.fetchData("/api/customers");
   }
 
   loginUpdata(bool) {
@@ -40,6 +45,7 @@ class App extends Component {
           customers = { this.props.customers } 
           logIn = { this.state.login }
           loginUpdata = { (bool) => { this.loginUpdata(bool) } }
+          customersUpdataDB = { () => { this.customersUpdataDB() } }
         />
       </>
     );
