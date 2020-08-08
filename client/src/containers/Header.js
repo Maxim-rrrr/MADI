@@ -2,31 +2,27 @@ import React, { Component } from 'react'
 import LoginPopap from './LoginPopap'
 import RegistrationPopap from './RegistrationPopap'
 import LoginEditPopap from './LoginEditPopap'
+import PasswordEditPopap from './PasswordEditPopap'
 import Account from './Account'
 
 export default class Header extends Component {
   constructor(props) {
     super (props)
     this.state = {
-      hoverLogo: false,
       loginPopap: false,
       loginEditPopap: false,
-      registrationPopap: false
+      registrationPopap: false,
+      passwordEditPopap: false
     } 
 
-    this.hoverLogo = this.hoverLogo.bind(this)
     this.activeLoginPopap = this.activeLoginPopap.bind(this)
     this.activeRegistrationPopap = this.activeRegistrationPopap.bind(this)
+    this.activePasswordEditPopap = this.activePasswordEditPopap.bind(this)
+
     this.closePopap = this.closePopap.bind(this)
 
     this.closeLoginPopap = this.closeLoginPopap.bind(this)
     this.closeAllPopap = this.closeAllPopap.bind(this)
-  }
-
-  hoverLogo() {
-    this.setState({
-      hoverLogo: !this.state.hoverLogo
-    })
   }
 
   activeLoginPopap() {
@@ -38,6 +34,13 @@ export default class Header extends Component {
   activeRegistrationPopap() {
     this.setState({
       registrationPopap: true,
+      loginPopap: false
+    })
+  }
+
+  activePasswordEditPopap() {
+    this.setState({
+      passwordEditPopap: true,
       loginPopap: false
     })
   }
@@ -55,6 +58,9 @@ export default class Header extends Component {
         event.target.className === 'login-edit login-edit--active' || 
         event.target.className === 'login-edit__close-btn'    ||
         event.target.className === 'login-edit__close-img'    ||
+        event.target.className === 'pass-edit pass-edit--active' || 
+        event.target.className === 'pass-edit__close-btn'    ||
+        event.target.className === 'pass-edit__close-img'    ||
         event.target.className === 'registration registration--active' || 
         event.target.className === 'registration__close-btn'    ||
         event.target.className === 'registration__close-img'    ) {
@@ -63,6 +69,7 @@ export default class Header extends Component {
         loginPopap: false,
         registrationPopap: false,
         loginEditPopap: false,
+        passwordEditPopap: false
       })
     }
   }
@@ -77,7 +84,8 @@ export default class Header extends Component {
     this.setState({
       loginPopap: false,
       loginEditPopap: false,
-      registrationPopap: false
+      registrationPopap: false,
+      passwordEditPopap: false
     })
   }
 
@@ -105,6 +113,7 @@ export default class Header extends Component {
           onClick = { this.closePopap } 
           active  = { this.state.loginPopap }
           toRegistration = { this.activeRegistrationPopap }
+          toPassEdit = { this.activePasswordEditPopap }
           customers = { this.props.customers }
           closeLoginPopap = { this.closeLoginPopap }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
@@ -122,6 +131,15 @@ export default class Header extends Component {
         <LoginEditPopap 
           onClick = { this.closePopap } 
           active  = { this.state.loginEditPopap }
+          customers = { this.props.customers }
+          closeAllPopap = { this.closeAllPopap }
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
+          customersUpdataDB = { () => { this.props.customersUpdataDB() } }
+        />
+
+        <PasswordEditPopap 
+          onClick = { this.closePopap } 
+          active  = { this.state.passwordEditPopap }
           customers = { this.props.customers }
           closeAllPopap = { this.closeAllPopap }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }

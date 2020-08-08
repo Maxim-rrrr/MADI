@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { codeSend } from "../actions/code";
-import { loginEdit } from "../actions/loginEdit";
+import { editUser } from "../actions/editUser";
 
 class LoginEditPopap extends Component {
   constructor(props) {
@@ -90,8 +90,8 @@ class LoginEditPopap extends Component {
           idUser = customer._id
         }
       });
-      console.log(idUser);
-      this.props.codeSend("/api/user-edit/" + idUser, {
+      
+      this.props.editUser("/api/user-edit/" + idUser, {
         email: this.state.emailValue
       });
 
@@ -166,7 +166,7 @@ class LoginEditPopap extends Component {
               required
             />
 
-            <button className='btn registration__form-submit' type='submit'> Подтвердить </button>
+            <button className='btn registration__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
           </form>
         </>
       }
@@ -198,7 +198,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     codeSend: (url, email) => dispatch(codeSend(url, email)),
-    loginEdit: (url, data) => dispatch(loginEdit(url, data))
+    editUser: (url, data) => dispatch(editUser(url, data))
   };
 };
 

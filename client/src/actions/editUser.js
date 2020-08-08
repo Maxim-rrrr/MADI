@@ -1,11 +1,11 @@
-export function loginEditSuccess(user) {
+export function editUserSuccess(user) {
   return {
-      type: "LOGIN_EDIT_SUCCESS",
+      type: "EDIT_USER_SUCCESS",
       user
   }
 }
 
-export function loginEdit(url, data = {}) {
+export function editUser(url, data = {}) {
   return (dispatch) => {
     fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -27,7 +27,7 @@ export function loginEdit(url, data = {}) {
         return response;
       })
       .then(response => response.json())
-      .then(user => dispatch(loginEditSuccess(user)))
+      .then(user => dispatch(editUserSuccess(user)))
       .catch(()=>{});
   }
 }

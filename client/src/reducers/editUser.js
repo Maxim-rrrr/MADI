@@ -1,6 +1,6 @@
-export function loginEdit (state = '', action) {
+export function editUser (state = '', action) {
   switch (action.type) {
-      case 'LOGIN_EDIT_SUCCESS':
+      case 'EDIT_USER_SUCCESS':
           return action.user;
       default:
           return state;

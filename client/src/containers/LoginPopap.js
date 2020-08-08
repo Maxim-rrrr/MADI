@@ -92,6 +92,7 @@ export default class LoginPopap extends Component {
           </form>
 
           <button className="btn-registration" onClick = { () => (this.props.toRegistration()) }> Регистрация </button>
+          <button className="btn-registration" onClick = { () => (this.props.toPassEdit()) }> Забыли пароль? </button>
         </div>      
       </div>
     )

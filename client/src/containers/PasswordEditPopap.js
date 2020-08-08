@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { codeSend } from "../actions/code";
-import { addUser } from "../actions/addUser";
+import { editUser } from "../actions/editUser";
 
-class RegistrationPopap extends Component {
+class PasswordEditPopap extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,16 +64,6 @@ class RegistrationPopap extends Component {
       });
       sendCode = false
     }
-
-    // Проверим не заригистрирован ли такой Email уже
-    this.props.customers.forEach(customer => {
-      if (customer.email === this.state.emailValue) {
-        this.setState({
-          invalid: 'email error'
-        });
-        sendCode = false
-      }
-    });
     
     if (sendCode) {
       this.props.codeSend("/api/code", {
@@ -97,9 +87,14 @@ class RegistrationPopap extends Component {
       sha256.update(this.state.passwordValue, "utf8");  //utf8 here
       let pass = sha256.digest("base64");
 
-      // Регистрация пользователя
-      this.props.addUser("/api/add-user", {
-        email: this.state.emailValue,
+      let idUser = ''
+      this.props.customers.forEach(customer => {
+        if (customer.email === this.state.emailValue) {
+          idUser = customer._id
+        }
+      });
+
+      this.props.editUser("/api/user-edit/" + idUser, {
         password: pass
       });
 
@@ -109,6 +104,10 @@ class RegistrationPopap extends Component {
 
       this.props.customersUpdataDB()
       this.props.loginUpdata(true);
+
+      this.setState({
+        code: false
+      })
 
     } else {
       this.setState({
@@ -121,14 +120,12 @@ class RegistrationPopap extends Component {
   render() {
     let active = ''
     if (this.props.active) {
-      active = 'registration--active'
+      active = 'pass-edit--active'
     }
 
     let error = ''
     if (this.state.invalid === 'Pass error') {
       error = 'Пароли не совпадают'
-    } else if (this.state.invalid === 'email error') {
-      error = 'Данный Email уже зарегистрирован'
     } else if (this.state.invalid === 'false code') {
       error = 'Неверный код подтверждения'
     }
@@ -136,22 +133,22 @@ class RegistrationPopap extends Component {
     let massageCode = ' Мы отправили на вашу почту код подтверждения '
 
     let form = 
-      <form onSubmit={ this.handleSubmit } className="registration__form">
+      <form onSubmit={ this.handleSubmit } className="pass-edit__form">
 
         <input 
           value       = { this.state.emailValue } 
           onChange    = { this.handleEmailChange }  
           type        = "email" 
-          className   = "input registration__form-email" 
-          placeholder = "Email (На который будут приходить задания)" 
+          className   = "input pass-edit__form-email" 
+          placeholder = "Email" 
           required
         />
         <input 
           value       = { this.state.passwordValue } 
           onChange    = { this.handlePasswordChange } 
           type        = "password" 
-          className   = "input registration__form-pass" 
-          placeholder = "Пароль" 
+          className   = "input pass-edit__form-pass" 
+          placeholder = "Новый пароль" 
           minLength   = "4" 
           required
         />
@@ -159,45 +156,45 @@ class RegistrationPopap extends Component {
           value       = { this.state.passwordRepeatValue } 
           onChange    = { this.handlePasswordRepeatChange } 
           type        = "password" 
-          className   = "input registration__form-pass-repeat" 
+          className   = "input pass-edit__form-pass-repeat" 
           placeholder = "Повторите пароль" 
           minLength   = "4" 
           required 
         />
 
-        <button className='btn registration__form-submit' type='submit'> ЗАРЕГИСТРИРОВАТЬСЯ </button>
+        <button className='btn pass-edit__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
       </form>
 
       if (this.state.code) {
         form = 
         <>
-          <div className="registration__form-back-box" onClick={() => { this.setState({ code: false }) }}>
-            <span className='registration__form-back'></span>
+          <div className="pass-edit__form-back-box" onClick={() => { this.setState({ code: false }) }}>
+            <span className='pass-edit__form-back'></span>
           </div>
           
-          <form onSubmit={ this.handleCodeSubmit } className="registration__form code-form animated fadeIn">
+          <form onSubmit={ this.handleCodeSubmit } className="pass-edit__form code-form animated fadeIn">
             <div className="code-label"> { massageCode } </div>
             <input 
               value       = { this.state.codeValue } 
               onChange    = { this.handleCodeChange }  
               type        = "text" 
-              className   = "input registration__form-email" 
+              className   = "input pass-edit__form-email" 
               placeholder = "Код подверждения" 
               required
             />
 
-            <button className='btn registration__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
+            <button className='btn pass-edit__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
           </form>
         </>
       }
 
     return (
-      <div className={"registration " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="registration__window">
-          <button className="registration__close-btn">
-            <img src="./img/close.png" alt="" className="registration__close-img"/>
+      <div className={"pass-edit " + active} onClick = { (event) => (this.props.onClick(event)) }>
+        <div className="pass-edit__window">
+          <button className="pass-edit__close-btn">
+            <img src="./img/close.png" alt="" className="pass-edit__close-img"/>
           </button>
-          <div className="registration__title"> РЕГИСТРАЦИЯ </div>
+          <div className="pass-edit__title"> ВОСТАНОВЛЕНИЕ ПАРОЛЯ </div>
           <div className="invalid-label"> { error } </div>
           
           { form }
@@ -218,8 +215,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     codeSend: (url, email) => dispatch(codeSend(url, email)),
-    addUser: (url, userData) => dispatch(addUser(url, userData))
+    editUser: (url, data) => dispatch(editUser(url, data))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationPopap);
+export default connect(mapStateToProps, mapDispatchToProps)(PasswordEditPopap);
