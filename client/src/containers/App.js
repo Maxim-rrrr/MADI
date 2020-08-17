@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { customersFetchData } from "../actions/customers";
 
 import Header from './Header'
+import Admin from './Admin';
 
 
 class App extends Component {
@@ -10,7 +11,8 @@ class App extends Component {
     super (props)
     this.state = {
       login: false,
-      email: localStorage.getItem('email')
+      email: localStorage.getItem('email'),
+      admin: false
     } 
   }
 
@@ -23,6 +25,12 @@ class App extends Component {
       })
     }
 
+    if (this.state.email === 'admin@admin') {
+      this.setState({
+        admin: true
+      })
+    }
+    
   }
 
   customersUpdataDB() {
@@ -37,7 +45,10 @@ class App extends Component {
   }
 
   render() {
-    
+    let content = <></>
+    if (this.state.admin) {
+      content = <Admin />
+    }
     
     return (
       <>
@@ -47,6 +58,8 @@ class App extends Component {
           loginUpdata = { (bool) => { this.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.customersUpdataDB() } }
         />
+
+        { content }
       </>
     );
   }

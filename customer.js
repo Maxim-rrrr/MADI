@@ -1,23 +1,14 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema, model, Types } = require("mongoose");
+
 
 const customerSchema = new Schema({
-  email: String,
-  password: String,
-  balance: {
-    type: Number,
-    default: 0
-  },
-  invitation: {
-    type: Boolean,
-    default: false,
-  },
-  inviting: {
-    type: String,
-    default: ''
-  }
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true, unique: true },
+  balance:  { type: Number, default: 0 },
+  inviting: { type: String, default: '' },
+  orders:   [{ type: Types.ObjectId, ref: 'order' }]
 });
 
-const Сustomer = mongoose.model("customer", customerSchema);
+const Сustomer = model("Customer", customerSchema);
 
 module.exports = Сustomer;

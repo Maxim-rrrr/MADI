@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "config": "^3.3.1",
     "express": "^4.16.4",
     "mongoose": "^5.3.9",
     "nodemailer": "^6.4.11"

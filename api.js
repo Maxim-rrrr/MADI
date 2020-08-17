@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Сustomer = require("./customer")
+const Сustomer = require("./Customer")
 const nodemailer = require('nodemailer');
 
 router.get("/customers", (req, res)=>{
@@ -11,10 +11,6 @@ router.get("/customers", (req, res)=>{
 });
 
 router.post("/code", (req, res)=>{
-  // Сustomer.create(req.body)
-  //   .then(customer => {
-  //     res.send(customer);
-  //   });
   async function mail (req, res) {
     try {
   

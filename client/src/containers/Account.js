@@ -19,13 +19,29 @@ export default class Account extends Component {
     }, 1000)
   }
   render() {
-    let login = localStorage.getItem('email')
-    let customers = this.props.customers
+    let login = 
+      <div className="account__login-block">
+        <button className="account__edit" /> 
+        <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopap() }}> { localStorage.getItem('email') } </b> 
+      </div> 
 
-    let balance = 0
+    if (localStorage.getItem('email') === 'admin@admin') {
+      login = 
+      <div className="account__login-block">
+        <b className = 'account__login'> АДМИНИСТРАТОР </b> 
+      </div> 
+    }
+
+    let customers = this.props.customers
+    
+    let balance = <></>
     customers.forEach(customer => {
-      if (customer.email === login) {
-        balance = customer.balance
+      if (customer.email === localStorage.getItem('email') && localStorage.getItem('email') !== 'admin@admin') {
+        balance = 
+        <div className="account__balace-block">
+          <button className="account__add-balance" /> 
+          <span className="account__balace"> { customer.balance } руб. </span>
+        </div> 
       }
     });
 
@@ -40,15 +56,9 @@ export default class Account extends Component {
       <div className={'account' + logInClass}>
         <div className="account__info">
           
-          <div className="account__login-block">
-            <button className="account__edit" /> 
-            <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopap() }}> { login } </b> 
-          </div> 
+          { login }
 
-          <div className="account__balace-block">
-            <button className="account__add-balance" /> 
-            <span className="account__balace"> { balance } руб. </span>
-          </div> 
+          { balance }
 
         </div>
         <button className="account__exit" onClick={ () => (this.exit()) }>

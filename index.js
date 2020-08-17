@@ -10,11 +10,14 @@ const mongoose = require('mongoose');
 // Подключение body-parser для чтения тела запроса в формате json
 const bodyParser = require('body-parser');
 
+// Подключение файла конфигурации
+const config = require('config')
+
 // express() - основная функция фремворка express 
 const app = express();
 
 // mongodb://localhost/customer-db - адресс БД
-mongoose.connect("mongodb://localhost/customer-db", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(config.get('mongoUri'), { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(bodyParser.json());
 
@@ -30,8 +33,8 @@ app.use('/api',  require('./api'));
  * И CallBack function, вызываемая 
  * после обращения к серверу
  */
-const port = 4000;
+const PORT = config.get('port') || 4000
 
-app.listen(port, () => {
-  console.log('Сервер прослушивает порт ' + port);
+app.listen(PORT, () => {
+  console.log(`Сервер прослушивает порт: ${PORT} `);
 });
