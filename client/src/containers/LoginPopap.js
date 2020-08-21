@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { login } from "../actions/login";
 
-export default class LoginPopap extends Component {
+class LoginPopap extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,26 +29,46 @@ export default class LoginPopap extends Component {
   }
 
   handleSubmit(event) {
-    let crypto = require("crypto");
-    let sha256 = crypto.createHash("sha256");
-    sha256.update(this.state.passwordValue, "utf8");  //utf8 here
-    let pass = sha256.digest("base64");
+    event.preventDefault();
+    
+    function crypto(pass) {
+      let crypto = require("crypto");
+      let sha256 = crypto.createHash("sha256");
+      sha256.update(pass, "utf8");  //utf8 here
+      return sha256.digest("base64");
+    }
 
-    this.props.customers.forEach(customer => {
-      if (customer.email === this.state.emailValue && customer.password === pass) {
-        localStorage.setItem('email', customer.email);
-        this.props.closeLoginPopap();
-        this.props.loginUpdata(true);
+    function valid (props) {
+      if (props.loginResponse.status !== 200) {
+        this.setState({
+          invalid: true
+        });
+      } else {
+        const user = props.loginResponse.user
+        localStorage.setItem(       'id', user._id      );
+        localStorage.setItem(    'email', user.email    );
+        localStorage.setItem(  'balance', user.balance  );
+        localStorage.setItem(   'orders', user.orders   );
+        localStorage.setItem( 'inviting', user.inviting );
+   
+        props.closeLoginPopap();
+        props.loginUpdata(true);
       }
-    });
+    }
 
-    if (localStorage.getItem('email') === null) {
-      this.setState({
-        invalid: true
-      });
+    this.props.login('/api/login', {
+      email: this.state.emailValue,
+      password: crypto(this.state.passwordValue)
+    })
+
+    
+    if ( this.props.loginResponse !== '' ) {
+      valid(this.props)
+    } else {
+      setTimeout(() => { valid(this.props) }, 100)
     }
     
-    event.preventDefault();
+    
   }
 
   render() {
@@ -98,3 +120,17 @@ export default class LoginPopap extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    loginResponse: state.login,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (url, data) => dispatch(login(url, data))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPopap)

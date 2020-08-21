@@ -21,19 +21,8 @@ cd C:/database/bin
 mongod
 ```
 
-- Поднять сервер
+- Запустить проект 
 ```
-nodemon index
-```
-
-- Поднять Front-end
-```
-cd client
-npm start
+npm run dev
 ```
 
-- Запустить Gulp для сборки стилей
-```
-cd client
-gulp
-```

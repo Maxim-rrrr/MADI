@@ -31,19 +31,17 @@ export default class Account extends Component {
         <b className = 'account__login'> АДМИНИСТРАТОР </b> 
       </div> 
     }
-
-    let customers = this.props.customers
     
     let balance = <></>
-    customers.forEach(customer => {
-      if (customer.email === localStorage.getItem('email') && localStorage.getItem('email') !== 'admin@admin') {
-        balance = 
-        <div className="account__balace-block">
-          <button className="account__add-balance" /> 
-          <span className="account__balace"> { customer.balance } руб. </span>
-        </div> 
-      }
-    });
+    
+    if (localStorage.getItem('balance') && localStorage.getItem('email') !== 'admin@admin') {
+      balance = 
+      <div className="account__balace-block">
+        <button className="account__add-balance" /> 
+        <span className="account__balace"> { localStorage.getItem('balance') } руб. </span>
+      </div> 
+    }
+ 
 
     let logInClass = ''
     if (this.state.logInClass === null) {

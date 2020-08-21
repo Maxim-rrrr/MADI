@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { customersFetchData } from "../actions/customers";
 
 import Header from './Header'
 import Admin from './Admin';
@@ -18,7 +16,6 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.props.fetchData("/api/customers");
     if (this.state.email !== null) {
       this.setState({
         login: true
@@ -31,10 +28,6 @@ class App extends Component {
       })
     }
     
-  }
-
-  customersUpdataDB() {
-    this.props.fetchData("/api/customers");
   }
 
   loginUpdata(bool) {
@@ -65,16 +58,4 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    customers: state.customers
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchData: url => dispatch(customersFetchData(url))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

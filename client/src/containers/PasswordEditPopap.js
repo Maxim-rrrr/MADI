@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from "react-redux";
-import { codeSend } from "../actions/code";
-import { editUser } from "../actions/editUser";
+import { connect } from 'react-redux'
+import { codeSend } from '../actions/code'
+import { editUser } from '../actions/editUser'
+import { getId } from '../actions/getId'
+import { login } from '../actions/login'
 
 class PasswordEditPopap extends Component {
   constructor(props) {
@@ -74,6 +76,10 @@ class PasswordEditPopap extends Component {
         code: true
       })
     }
+
+    this.props.getId('/api/getId', {
+      "email": this.state.emailValue
+    })
     
     event.preventDefault();
   }
@@ -87,24 +93,27 @@ class PasswordEditPopap extends Component {
       sha256.update(this.state.passwordValue, "utf8");  //utf8 here
       let pass = sha256.digest("base64");
 
-      let idUser = ''
-      this.props.customers.forEach(customer => {
-        if (customer.email === this.state.emailValue) {
-          idUser = customer._id
-        }
-      });
-
-      this.props.editUser("/api/user-edit/" + idUser, {
+      this.props.editUser("/api/user-edit/" + this.props.getIdResponse, {
         password: pass
       });
-
-      localStorage.setItem('email', this.state.emailValue);
-
-      this.props.closeAllPopap()
-
-      this.props.customersUpdataDB()
-      this.props.loginUpdata(true);
-
+  
+      await this.props.login('/api/login', {
+        email: this.state.emailValue,
+        password: pass
+      })
+  
+      setTimeout(() => { 
+        const user = this.props.loginResponse.user
+        localStorage.setItem(       'id', user._id      );
+        localStorage.setItem(    'email', user.email    );
+        localStorage.setItem(  'balance', user.balance  );
+        localStorage.setItem(   'orders', user.orders   );
+        localStorage.setItem( 'inviting', user.inviting );
+    
+        this.props.closeAllPopap();
+        this.props.loginUpdata(true);
+      }, 500)
+      
       this.setState({
         code: false
       })
@@ -208,14 +217,18 @@ class PasswordEditPopap extends Component {
 const mapStateToProps = (state) => {
   return {
     code: state.code,
-    user: state.user
+    user: state.user,
+    getIdResponse: state.getId,
+    loginResponse: state.login,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     codeSend: (url, email) => dispatch(codeSend(url, email)),
-    editUser: (url, data) => dispatch(editUser(url, data))
+    editUser: (url, data) => dispatch(editUser(url, data)),
+    getId: (url, data) => dispatch(getId(url, data)),
+    login: (url, data) => dispatch(login(url, data))
   };
 };
 

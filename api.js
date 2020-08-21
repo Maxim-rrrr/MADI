@@ -10,6 +10,46 @@ router.get("/customers", (req, res)=>{
     });
 });
 
+router.post("/login", (req, res)=>{
+  try {
+    Сustomer.findOne({email: req.body.email})
+      .then(customer => {
+        if (customer) {
+
+          if (req.body.password === customer.password) {
+            res.send({status: 200, user: customer});
+          } else {
+            res.send({status: 400, message: 'Неверный логин или пароль'});
+          }
+
+        } else {
+          res.send({status: 400, message: 'Неверный логин или пароль'});
+        }
+      });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+});
+
+router.post("/getId", (req, res)=>{
+  try {
+    Сustomer.findOne({email: req.body.email})
+      .then(customer => {
+        if (customer) {
+          res.send({status: 200, id: customer._id});
+        } else {
+          res.send({status: 400, message: 'Несуществующий email'});
+        }
+      });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+});
+
 router.post("/code", (req, res)=>{
   async function mail (req, res) {
     try {
@@ -54,20 +94,6 @@ router.post("/code", (req, res)=>{
 });
 
 router.post("/add-user", (req, res)=>{
-  /*
-   * req.body :
-   *  {
-   *    email: String,
-   *    password: String,
-   *  } 
-   * 
-   *  Необязательное поле:
-   *    balance: {
-   *      type: Number,
-   *      default: 0
-   *    }
-   * 
-   */
   Сustomer.create(req.body)
     .then(customer => {
       res.send(customer);
