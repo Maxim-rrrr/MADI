@@ -1,0 +1,141 @@
+.tasks
+  &__content
+  &__btn
+    &-group
+      display: flex
+      align-items: center
+      margin-top: 2rem
+    &-category
+      display: block
+      width: 40%
+      border: 3px solid #FCD770
+      color: #FCD770
+    &-close
+      margin-left: 1.5rem
+      padding: 0.5rem
+      background-color: #c23232
+      border: none
+      border-radius: 50%
+      cursor: pointer
+    &-submit
+      display: block
+      height: 3rem  
+      width: 3.2rem
+      margin-left: 1.5rem
+      background: transparent url('../containers/check.png') no-repeat center
+      background-size: 60%
+      border: 3px solid #ecc454
+      border-radius: 50%
+      transition: 0.1s
+      cursor: pointer
+      &:hover 
+        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3))
+
+  &__form
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-top: 2rem
+    width: 40%
+  &__input
+    border-color: #FCD770
+    color: #FCD770
+    width: 100%
+    &::placeholder
+      color: #fcd77098
+
+.varisnt-form
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin: 3rem 0
+  width: 16rem
+  &__label
+    width: 40%
+    font-size: 1.5rem
+    color: #ecc454
+  &__input
+    width: 30%
+    margin: 0 0.5rem  
+    padding: 0
+    font-size: 1.5rem
+    text-align: center
+    color: #ecc454
+    border-color: #ecc454
+    &::placeholder
+      color: #504c63
+      font-size: 1.5rem
+  &__btn
+    display: block
+    height: 3rem  
+    width: 3rem
+    margin-left: 1.5rem
+    background: transparent url('../containers/check.png') no-repeat center
+    background-size: 60%
+    border: 3px solid #ecc454
+    border-radius: 50%
+    transition: 0.1s
+    cursor: pointer
+    &:hover 
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3))
+
+.btn-variant
+  display: inline-block
+  margin: 1rem 
+  width: 200px
+  border-color: #ecc454
+  color: #ecc454
+
+
+.task-card
+  border-bottom: 3px solid #ecc454
+  padding: 0 0 1rem 0
+  &__title
+    display: block
+    margin: 2rem 0 1rem
+    font-size: 1.5rem
+    text-decoration: underline
+    color: #ecc454
+  &__imgs-box
+    display: flex
+    align-items: flex-start
+
+.img-box
+  position: relative
+  
+  &>img
+    max-width: 300px
+    margin-right: 1rem
+    border: 2px solid #ecc454
+    border-radius: 3px
+      
+      
+.btn-img-del
+  position: absolute
+  right: 17px
+  top: 4px
+  width: 20px
+  height: 20px
+  background: #0000002a url('../containers/close.png') no-repeat center/cover
+  border: none
+  border-radius: 50%
+  cursor: pointer
+  &:hover
+    background: #0000004f url('../containers/close.png') no-repeat center/cover
+
+.prise
+  &-form
+    display: flex
+    align-items: center
+    margin: 1rem
+    width: 40%
+  &-span
+    font-size: 1.5rem
+    color: #ecc454
+
+.form-add-img
+  display: flex
+  align-items: center 
+  align-self: center
+  &>input
+    width: 189px

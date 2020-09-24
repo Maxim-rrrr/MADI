@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
-import { connect } from "react-redux";
-import { codeSend } from "../actions/code";
-import { addUser } from "../actions/addUser";
+import { connect } from 'react-redux'
+
+import { codeSend } from '../actions/code'
+import { addUser } from '../actions/addUser'
+import { getId } from '../actions/getId'
+import { login } from '../actions/login'
 
 class RegistrationPopap extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       emailValue: '',
       passwordValue: '',
@@ -55,9 +58,13 @@ class RegistrationPopap extends Component {
 
   // Отправка формы с вводом email и паролем перед кодом подтверждения
   async handleSubmit(event) {
+    await this.props.getId('/api/getId', {
+      "email": this.state.emailValue
+    })
 
     let sendCode = true
     // Проверим совпадают ли пароли
+    
     if (this.state.passwordValue !== this.state.passwordRepeatValue) {
       this.setState({
         invalid: 'Pass error'
@@ -66,14 +73,14 @@ class RegistrationPopap extends Component {
     }
 
     // Проверим не заригистрирован ли такой Email уже
-    this.props.customers.forEach(customer => {
-      if (customer.email === this.state.emailValue) {
+    setTimeout(() => {
+      if (this.props.getIdResponse.status === 200) {
         this.setState({
           invalid: 'email error'
         });
         sendCode = false
       }
-    });
+    }, 300)
     
     if (sendCode) {
       this.props.codeSend("/api/code", {
@@ -98,17 +105,34 @@ class RegistrationPopap extends Component {
       let pass = sha256.digest("base64");
 
       // Регистрация пользователя
-      this.props.addUser("/api/add-user", {
+      await this.props.addUser("/api/add-user", {
         email: this.state.emailValue,
         password: pass
-      });
+      })
 
-      localStorage.setItem('email', this.state.emailValue);
-
-      this.props.closeAllPopap()
-
-      this.props.customersUpdataDB()
-      this.props.loginUpdata(true);
+      let loginOut = await setInterval(() => { 
+        if (this.props.user) {
+          const user = this.props.user
+          localStorage.setItem(       'id', user._id      );
+          localStorage.setItem(    'email', user.email    );
+          localStorage.setItem( 'password', user.password );
+          localStorage.setItem(  'balance', user.balance  );
+          localStorage.setItem(   'orders', user.orders   );
+          localStorage.setItem( 'inviting', user.inviting );
+      
+          this.props.closeAllPopap();
+          this.props.loginUpdata(true);
+            
+          clearInterval(loginOut)
+          console.log('Да');
+        } else {
+          console.log('Нет');
+        }
+      }, 100)
+      
+      this.setState({
+        code: false
+      })
 
     } else {
       this.setState({
@@ -211,14 +235,18 @@ class RegistrationPopap extends Component {
 const mapStateToProps = (state) => {
   return {
     code: state.code,
-    user: state.user
+    user: state.addUser,
+    getIdResponse: state.getId,
+    loginResponse: state.login,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     codeSend: (url, email) => dispatch(codeSend(url, email)),
-    addUser: (url, userData) => dispatch(addUser(url, userData))
+    addUser: (url, userData) => dispatch(addUser(url, userData)),
+    getId: (url, data) => dispatch(getId(url, data)),
+    login: (url, data) => dispatch(login(url, data))
   };
 };
 

@@ -40,9 +40,9 @@ class CustomerList extends Component {
                   <div className="customer-list__item-balance">
                     <form onSubmit = { (event) => { this.handleSubmit(event) } } className="customer-list__form" id = { value._id }>
                       <input 
-                        type="number" 
-                        className="input customer-list__input" 
-                        placeholder={ this.props.balances[index] }
+                        type = "number" 
+                        className = "input customer-list__input" 
+                        placeholder = { this.props.balances[index] }
                       />
                       руб.
                       <button type='submit' className="customer-list__btn" />

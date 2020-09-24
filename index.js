@@ -26,8 +26,9 @@ app.use(bodyParser.json());
  * начинающиеся на строку в первом аргументе отправлять в файл
  * переданный во втором аргументе
  */
-app.use('/api',  require('./api'));
 
+app.use('/api', require('./api'));
+app.use('/uploads', express.static('uploads'))
 /*
  * Порт
  * И CallBack function, вызываемая 

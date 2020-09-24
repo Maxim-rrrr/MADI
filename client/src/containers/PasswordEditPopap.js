@@ -7,7 +7,7 @@ import { login } from '../actions/login'
 
 class PasswordEditPopap extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       emailValue: '',
       passwordValue: '',
@@ -93,7 +93,7 @@ class PasswordEditPopap extends Component {
       sha256.update(this.state.passwordValue, "utf8");  //utf8 here
       let pass = sha256.digest("base64");
 
-      this.props.editUser("/api/user-edit/" + this.props.getIdResponse, {
+      this.props.editUser("/api/user-edit/" + this.props.getIdResponse.id, {
         password: pass
       });
   
@@ -101,18 +101,23 @@ class PasswordEditPopap extends Component {
         email: this.state.emailValue,
         password: pass
       })
-  
-      setTimeout(() => { 
-        const user = this.props.loginResponse.user
-        localStorage.setItem(       'id', user._id      );
-        localStorage.setItem(    'email', user.email    );
-        localStorage.setItem(  'balance', user.balance  );
-        localStorage.setItem(   'orders', user.orders   );
-        localStorage.setItem( 'inviting', user.inviting );
-    
-        this.props.closeAllPopap();
-        this.props.loginUpdata(true);
-      }, 500)
+
+      let loginOut = setInterval(() => { 
+        if (this.props.loginResponse) {
+          const user = this.props.loginResponse.user
+          localStorage.setItem(       'id', user._id      );
+          localStorage.setItem(    'email', user.email    );
+          localStorage.setItem( 'password', user.password );
+          localStorage.setItem(  'balance', user.balance  );
+          localStorage.setItem(   'orders', user.orders   );
+          localStorage.setItem( 'inviting', user.inviting );
+      
+          this.props.closeAllPopap();
+          this.props.loginUpdata(true);
+            
+          clearInterval(loginOut)
+        }
+      }, 100)
       
       this.setState({
         code: false

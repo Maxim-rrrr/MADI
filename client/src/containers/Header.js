@@ -52,18 +52,18 @@ export default class Header extends Component {
   }
 
   closePopap(event) {
-    if (event.target.className === 'login login--active' || 
-        event.target.className === 'login__close-btn'    ||
-        event.target.className === 'login__close-img'    ||
-        event.target.className === 'login-edit login-edit--active' || 
-        event.target.className === 'login-edit__close-btn'    ||
-        event.target.className === 'login-edit__close-img'    ||
-        event.target.className === 'pass-edit pass-edit--active' || 
-        event.target.className === 'pass-edit__close-btn'    ||
-        event.target.className === 'pass-edit__close-img'    ||
-        event.target.className === 'registration registration--active' || 
-        event.target.className === 'registration__close-btn'    ||
-        event.target.className === 'registration__close-img'    ) {
+    if (event.target.className === 'login login--active'                || 
+        event.target.className === 'login__close-btn'                   ||
+        event.target.className === 'login__close-img'                   ||
+        event.target.className === 'login-edit login-edit--active'      || 
+        event.target.className === 'login-edit__close-btn'              ||
+        event.target.className === 'login-edit__close-img'              ||
+        event.target.className === 'pass-edit pass-edit--active'        || 
+        event.target.className === 'pass-edit__close-btn'               ||
+        event.target.className === 'pass-edit__close-img'               ||
+        event.target.className === 'registration registration--active'  || 
+        event.target.className === 'registration__close-btn'            ||
+        event.target.className === 'registration__close-img'            ) {
 
       this.setState({
         loginPopap: false,

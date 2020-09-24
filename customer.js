@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 
 const customerSchema = new Schema({
@@ -6,7 +6,7 @@ const customerSchema = new Schema({
   password: { type: String, required: true, unique: true },
   balance:  { type: Number, default: 0 },
   inviting: { type: String, default: '' },
-  orders:   [{ type: Types.ObjectId, ref: 'order' }]
+  orders:   { type: Array, default: [] }
 });
 
 const Сustomer = model("Customer", customerSchema);

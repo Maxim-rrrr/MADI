@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { customersFetchData } from "../actions/customers";
 import CustomerList from './CustomerList'
+import Tasks from './Tasks';
 
 class Admin extends Component {
   constructor(props){
     super (props)
     this.state = {
-      tab: 'CustomerList'
+      tab: 'Tasks'
     }
   }
 
@@ -22,21 +23,20 @@ class Admin extends Component {
 
   render() {
     let balances = []
-    this.props.customers.map((value, index) => {
-      balances.push(value.balance)
-    })
+    this.props.customers.map( value => balances.push(value.balance) )
     return (
       <>       
         <div className='container'>
           <nav className='admin__nav'>
             {
-              [['CustomerList', 'Пользователи'], ['BD', 'Задания']].map(value => {
+              [['CustomerList', 'Пользователи'], ['Tasks', 'Задания']].map(value => {
                 let active = ''
                 if (value[0] === this.state.tab) {
                   active = ' admin__nav-item--active'
                 }
                 return (
                   <div 
+                    key = {value[0]}
                     className={'admin__nav-item' + active} 
                     onClick = {() => { this.setState({ tab: value[0] }) }}
                   > { value[1] } </div>
@@ -48,11 +48,17 @@ class Admin extends Component {
         
 
         <CustomerList 
-          tab={ this.state.tab } 
+          tab = { this.state.tab } 
           customers = { this.props.customers }
           balances = { balances } 
           customersUpdataDB = { () => { this.customersUpdataDB() } }
         />
+
+        <Tasks
+          tab = { this.state.tab } 
+
+        />
+
       </>
     )
   }

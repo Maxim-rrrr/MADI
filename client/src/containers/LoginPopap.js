@@ -47,6 +47,7 @@ class LoginPopap extends Component {
         const user = props.loginResponse.user
         localStorage.setItem(       'id', user._id      );
         localStorage.setItem(    'email', user.email    );
+        localStorage.setItem( 'password', user.password );
         localStorage.setItem(  'balance', user.balance  );
         localStorage.setItem(   'orders', user.orders   );
         localStorage.setItem( 'inviting', user.inviting );
@@ -65,9 +66,13 @@ class LoginPopap extends Component {
     if ( this.props.loginResponse !== '' ) {
       valid(this.props)
     } else {
-      setTimeout(() => { valid(this.props) }, 100)
+      let loginOut = setInterval(() => { 
+        if (this.props.loginResponse) {
+          valid(this.props) 
+          clearInterval(loginOut)
+        }
+      }, 100)
     }
-    
     
   }
 

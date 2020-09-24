@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from "react-redux";
-import { codeSend } from "../actions/code";
-import { editUser } from "../actions/editUser";
+import { connect } from 'react-redux'
+import { codeSend } from '../actions/code'
+import { editUser } from '../actions/editUser'
+import { getId } from '../actions/getId'
 
 class LoginEditPopap extends Component {
   constructor(props) {
@@ -55,12 +56,7 @@ class LoginEditPopap extends Component {
 
     let sendCode = true
     // Проверим совпадают ли пароли
-    let truePass = ''
-    this.props.customers.forEach(customer => {
-      if (customer.email === localStorage.getItem('email')) {
-        truePass = customer.password
-      }
-    });
+    let truePass = localStorage.getItem('password')
 
     if (pass !== truePass) {
       this.setState({
@@ -78,28 +74,25 @@ class LoginEditPopap extends Component {
         code: true
       })
     }
+
+    this.props.getId('/api/getId', {
+      "email": this.state.emailValue
+    })
     
     event.preventDefault();
   }
 
   async handleCodeSubmit(event) {
     if (this.state.codeValue == this.props.code.code) {
-      let idUser = ''
-      this.props.customers.forEach(customer => {
-        if (customer.email === localStorage.getItem('email')) {
-          idUser = customer._id
-        }
-      });
       
-      this.props.editUser("/api/user-edit/" + idUser, {
+      
+      this.props.editUser("/api/user-edit/" + this.props.getIdResponse.id, {
         email: this.state.emailValue
       });
 
       localStorage.setItem('email', this.state.emailValue);
 
       this.props.closeAllPopap()
-
-      this.props.customersUpdataDB()
 
       this.props.loginUpdata(true);
 
@@ -192,13 +185,15 @@ class LoginEditPopap extends Component {
 const mapStateToProps = (state) => {
   return {
     code: state.code,
+    getIdResponse: state.getId,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     codeSend: (url, email) => dispatch(codeSend(url, email)),
-    editUser: (url, data) => dispatch(editUser(url, data))
+    editUser: (url, data) => dispatch(editUser(url, data)),
+    getId: (url, data) => dispatch(getId(url, data)),
   };
 };
 
