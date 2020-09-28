@@ -203,6 +203,7 @@ class Tasks extends Component {
     })
   }
 
+  // Изменение количества заданий
   async setTasksCount(event) {
     event.preventDefault()
 
@@ -353,7 +354,6 @@ class Tasks extends Component {
 
     this.props.setTask('/api/setTask/' + subject._id, {"works": subject.works})
   }
-
 
   render() {
     

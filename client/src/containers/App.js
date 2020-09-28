@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from './Header'
 import Admin from './Admin';
+import User from './User'
 
 
 class App extends Component {
@@ -38,7 +39,7 @@ class App extends Component {
   }
 
   render() {
-    let content = <></>
+    let content = <User/>
     if (this.state.admin) {
       content = <Admin />
     }

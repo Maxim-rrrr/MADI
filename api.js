@@ -70,7 +70,7 @@ router.post('/code', (req, res)=>{
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-          user: 'sendingmessage@mail.ru',
+          user: 'sendingmessage1@mail.ru',
           pass: 'Eo$P4KuuioP1'
         }
       })
@@ -78,7 +78,7 @@ router.post('/code', (req, res)=>{
       let code = Math.floor(Math.random() * 900000 + 100000);
 
       let result = await transporter.sendMail({
-        from: '"Работы по курсам мади" <sendingmessage@mail.ru>',
+        from: '"Работы по курсам мади" <sendingmessage1@mail.ru>',
         to: req.body.email,
         subject: 'Код подтверждения',
         text: '',

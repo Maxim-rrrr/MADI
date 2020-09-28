@@ -1,0 +1,38 @@
+.task-user-form
+  display: flex
+  flex-wrap: wrap
+
+.btn-allСhoice
+  border-color: #ecc454
+  color: #ecc454
+
+  /* Checkbox */
+.checkbox 
+  display: flex
+  margin: 2rem 0
+  &__input 
+    appearance: none
+  &__label 
+    display: flex
+    flex-direction: column
+    align-items: center
+    margin-right: 2rem
+    font-size: 2rem
+    color: #ecc454
+    cursor: pointer
+    &::after 
+      content: ""
+      display: block
+      width: 30px
+      height: 30px
+      border: 1px solid #ccc
+      background-color: #fff
+      border-radius: 3px  
+      transition: 0.1s
+
+.checkbox__input:checked + .checkbox__label::after 
+  background-color:#ecc454
+  border-color: #816d36
+
+
+
