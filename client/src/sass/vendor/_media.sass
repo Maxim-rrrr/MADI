@@ -4,13 +4,18 @@
   .login-edit, .login, .pass-edit, .registration
     &__window
       background: #FCD770 
+  .account__add-balance
+    background-size: 85%
+    background-position: 1px 1px 
   
 @media screen and ( max-width: 992px )
   html
     font-size: 12px
+
 @media screen and ( max-width: 920px )
   html
     font-size: 12px
+
 @media screen and ( max-width: 768px ) 
   .login-edit, .login, .pass-edit, .registration
     &__window
@@ -20,8 +25,30 @@
         width: 90%
       &-submit
         margin-top: 2rem
+  .header__title
+    display: none
+
 @media screen and ( max-width: 576px )
   .container
     width: 95%
-  .header__title
-    display: none
+  .btn-allСhoice
+    margin: 0 auto
+
+@media screen and ( max-width: 525px )
+  .btn-variant
+    width: 100%
+
+@media screen and ( max-width: 400px )
+  .account__login
+    width: 100px
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+@media screen and ( max-width: 395px )
+  .checkbox 
+    flex-basis: 20%
+    &__label
+      margin: 0 0.7rem
+
+  

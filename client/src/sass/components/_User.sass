@@ -3,6 +3,7 @@
   flex-wrap: wrap
 
 .btn-allСhoice
+  display: block
   border-color: #ecc454
   color: #ecc454
 
@@ -33,6 +34,50 @@
 .checkbox__input:checked + .checkbox__label::after 
   background-color:#ecc454
   border-color: #816d36
+  box-shadow: 0 0 5px #ecc35473
 
+.btn-prise
+  position: fixed
+  bottom: 50px
+  width: 250px
+  background: #ecc454
+  border-color: #ecc454
 
+// Loader
+.loader
+  position: fixed
+  right: 0
+  bottom: 50px
 
+.lds-ring 
+  display: inline-block
+  margin-left: auto
+  width: 80px
+  height: 80px
+  & div 
+    box-sizing: border-box
+    display: block
+    position: absolute
+    width: 64px
+    height: 64px
+    margin: 8px
+    border: 8px solid #ecc454
+    border-radius: 50%
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite
+    border-color: #ecc454 transparent transparent transparent
+    &:nth-child(1) 
+      animation-delay: -0.45s
+    &:nth-child(2) 
+      animation-delay: -0.3s
+    &:nth-child(3) 
+      animation-delay: -0.15s
+
+@keyframes lds-ring 
+  0% 
+    transform: rotate(0deg)
+  
+  100% 
+    transform: rotate(360deg)
+  
+
+  

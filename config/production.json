@@ -1,6 +1,4 @@
-
 {
-  "port" : 4000,
-  "localMongoUri": "mongodb://localhost/madi-db",
+  "port" : 80,
   "mongoUri": "mongodb+srv://front-end_madi:EyWETKdme3Wu2EB@cluster0.erxb5.azure.mongodb.net/<dbname>?retryWrites=true&w=majority"
 }

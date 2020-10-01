@@ -38,25 +38,6 @@ class LoginPopap extends Component {
       return sha256.digest("base64");
     }
 
-    function valid (props) {
-      if (props.loginResponse.status !== 200) {
-        this.setState({
-          invalid: true
-        });
-      } else {
-        const user = props.loginResponse.user
-        localStorage.setItem(       'id', user._id      );
-        localStorage.setItem(    'email', user.email    );
-        localStorage.setItem( 'password', user.password );
-        localStorage.setItem(  'balance', user.balance  );
-        localStorage.setItem(   'orders', user.orders   );
-        localStorage.setItem( 'inviting', user.inviting );
-   
-        props.closeLoginPopap();
-        props.loginUpdata(true);
-      }
-    }
-
     this.props.login('/api/login', {
       email: this.state.emailValue,
       password: crypto(this.state.passwordValue)
@@ -64,11 +45,44 @@ class LoginPopap extends Component {
 
     
     if ( this.props.loginResponse !== '' ) {
-      valid(this.props)
+      // Валидность 
+      if (this.props.loginResponse.status !== 200) {
+        this.setState({
+          invalid: true
+        });
+      } else {
+        const user = this.props.loginResponse.user
+        localStorage.setItem(       'id', user._id      );
+        localStorage.setItem(    'email', user.email    );
+        localStorage.setItem( 'password', user.password );
+        localStorage.setItem(  'balance', user.balance  );
+        localStorage.setItem(   'orders', user.orders   );
+        localStorage.setItem( 'inviting', user.inviting );
+   
+        this.props.closeLoginPopap();
+        this.props.loginUpdata(true);
+      }
     } else {
       let loginOut = setInterval(() => { 
         if (this.props.loginResponse) {
-          valid(this.props) 
+          // Валидность
+          if (this.props.loginResponse.status !== 200) {
+            this.setState({
+              invalid: true
+            });
+          } else {
+            const user = this.props.loginResponse.user
+            localStorage.setItem(       'id', user._id      );
+            localStorage.setItem(    'email', user.email    );
+            localStorage.setItem( 'password', user.password );
+            localStorage.setItem(  'balance', user.balance  );
+            localStorage.setItem(   'orders', user.orders   );
+            localStorage.setItem( 'inviting', user.inviting );
+       
+            this.props.closeLoginPopap();
+            this.props.loginUpdata(true);
+          } 
+
           clearInterval(loginOut)
         }
       }, 100)

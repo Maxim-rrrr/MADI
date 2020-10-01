@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 import { getTasks } from '../actions/getTasks'
+import { createPayment } from '../actions/createPayment'
 
 import TasksNav from './TasksNav'
 
@@ -17,7 +18,11 @@ class User extends Component {
         tasks: null
       },
 
-      checkboxes: []
+      prise: 0,
+
+      checkboxes: [],
+
+      loadingPayment: false
     };
 
   }
@@ -71,6 +76,40 @@ class User extends Component {
     })
   }
 
+  payment() {
+    this.setState({
+      loadingPayment: true
+    })
+
+    
+
+    let tasks = []
+    this.state.checkboxes.forEach((value, index) => {
+      if (value) {
+        tasks.push(index + 1)
+      }
+    })
+
+    this.props.createPayment('/api/createPayment', {
+      prise: this.state.prise,
+      info: {
+        email: localStorage.getItem('email'),
+        subject: this.state.navState.subject,
+        work: this.state.navState.work,
+        variant: this.state.navState.variant,
+        tasks
+      }
+    })
+
+    let payment = setInterval(() => {
+      if (this.props.createPaymentResponse) {
+        clearInterval(payment)
+        window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
+      }
+    })
+
+  }
+
   componentDidMount() {
     this.props.getTasks('/api/getTasks')
     setInterval(this.props.getTasks('/api/getTasks'), 10)
@@ -85,9 +124,17 @@ class User extends Component {
     
   }
 
+
   render() {
     
-    let subject, works, variant, tasks
+    let subject, works, variant, tasks, prise = 0, priseBtn = <></>
+
+    let right = (document.documentElement.clientWidth - 1144) / 2 
+    let w = this.state.loadingPayment?250:80
+    
+    if (document.documentElement.clientWidth <= 1200) {
+      right = (document.documentElement.clientWidth - w) / 2 
+    }
 
     if (this.props.getTasksResponse) {
       subject = this.props.getTasksResponse.tasks
@@ -110,15 +157,46 @@ class User extends Component {
         variant.forEach((element, index) => {
           if (index === this.state.navState.variant - 1) {
             tasks = element
+
             if (this.state.checkboxes.length === 0) {
               this.checkboxesDefalt(tasks.length)
+            }
+
+            this.state.checkboxes.forEach((checkbox, index) => {
+              if (checkbox) {
+                prise += tasks[index].prise
+              }
+            })
+
+            if (this.state.prise !== prise) {
+              this.setState({
+                prise
+              })
+            }
+
+            if (prise !== 0) {
+              priseBtn = 
+                <button 
+                  onClick={() => {this.payment()}}
+                  className='btn btn-prise' 
+                  style={{right}}
+                >
+                  Оплатить {prise} руб.
+                </button>
+            } 
+
+            if (this.state.loadingPayment) {
+              priseBtn = 
+                <div className="loader" style={{right}}>
+                  <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
             }
           } 
         })
       } 
       
     } 
-  
+
       return (
         <div className = 'tasks animated fadeIn'>
           <div className = 'container'>
@@ -207,6 +285,9 @@ class User extends Component {
                   </form>
 
                   <button onClick={() => {this.allСhoice()}} className='btn btn-allСhoice'> Выбрать всё </button> 
+                
+                  { priseBtn }
+
                 </>
               }
             </div>
@@ -221,13 +302,15 @@ class User extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    getTasksResponse: state.getTasks
+    getTasksResponse: state.getTasks,
+    createPaymentResponse: state.createPayment,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTasks: (url) => dispatch(getTasks(url))
+    getTasks: (url) => dispatch(getTasks(url)),
+    createPayment: (url, data) => dispatch(createPayment(url, data))
   };
 };
 

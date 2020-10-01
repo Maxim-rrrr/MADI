@@ -1,18 +1,27 @@
 const express = require('express')
 const router = express.Router()
 
-const Сustomer = require('./Customer')
-const Task = require('./Task')
+const Сustomer = require('./Schemes/Customer')
+const Task = require('./Schemes/Task')
+const Payment = require('./Schemes/Payment')
 
 const nodemailer = require('nodemailer')
 
 
 
-// Работа с пользователями
+/////// Работа с пользователями ///////
 
 // Получение всего списка пользователей 
 router.post('/customers', (req, res)=>{
   Сustomer.find({})
+    .then(customer => {
+      res.send(customer);
+    });
+});
+
+// Получение пользователя по id 
+router.post('/customers/:id', (req, res)=>{
+  Сustomer.findOne({_id: req.params.id})
     .then(customer => {
       res.send(customer);
     });
@@ -125,7 +134,7 @@ router.post('/user-edit/:id', (req, res)=>{
 });
 
 
-////// Работа с заданиями //////
+/////// Работа с заданиями ///////
 
 // Добавление
 router.post('/addTask', (req, res) => {
@@ -168,10 +177,10 @@ router.post('/removeTask/:id', (req, res) =>{
     });
 });
 
+/////// Загрузка изображений ///////
 const multer = require('multer')
 const moment = require('moment')
 
-// Загрузка изображений
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads')
@@ -199,4 +208,32 @@ router.post('/addImg', upload.single('myFile'), (req, res, next) => {
   
 })
 
-module.exports = router;
+
+/////// Яндекс Касса ///////
+let YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ') // !!!
+
+// Создание платежа
+router.post('/createPayment', (req, res) => {
+  let idempotenceKey = 'ключ идемпотентности' // !!!
+  YandexCheckout.createPayment({
+    'amount': {
+      'value': req.body.prise,
+      'currency': 'RUB'
+    },
+    'confirmation': {
+      'type': 'redirect',
+      'return_url': 'Страница возврата после платежа' // !!!
+    },
+    "capture": true,
+    "description": JSON.stringify(req.body.info)
+  }, idempotenceKey)
+  .then(result => {
+    Payment.create({id: result.id}).then();
+
+    res.send({payment: result})
+  })
+  .catch(err => res.send(err))
+
+})
+
+module.exports = router

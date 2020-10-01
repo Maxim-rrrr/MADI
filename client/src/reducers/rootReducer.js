@@ -13,6 +13,8 @@ import { setTask } from './setTask'
 
 import { addImg } from './addImg'
 
+import { createPayment } from './createPayment'
+
 const rootReducer = combineReducers({
     customers,
     code,
@@ -23,7 +25,8 @@ const rootReducer = combineReducers({
     getTasks,
     addTask,
     setTask,
-    addImg
+    addImg,
+    createPayment
 });
 
 export default rootReducer;
