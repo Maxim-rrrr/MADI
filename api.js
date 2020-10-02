@@ -1,12 +1,21 @@
 const express = require('express')
 const router = express.Router()
+const dayjs = require('dayjs')
 
 const Сustomer = require('./Schemes/Customer')
 const Task = require('./Schemes/Task')
 const Payment = require('./Schemes/Payment')
+const Log = require('./Schemes/Log')
 
 const nodemailer = require('nodemailer')
 
+function logger(status = 200, message = '') {
+  Log.create({
+    time: `${dayjs().get('D')}-${dayjs().get('M')}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
+    status,
+    message
+  })
+}
 
 
 /////// Работа с пользователями ///////
@@ -46,6 +55,7 @@ router.post('/login', (req, res)=>{
       });
 
   } catch (error) {
+    logger(status = 500, message = `Ошибка сервера при входе пользователя: ${err}`)
     res.send(error);
   }
 
@@ -101,7 +111,7 @@ router.post('/code', (req, res)=>{
       });
       
     } catch (err) {
-  
+      logger(status = 500, message = `Ошибка сервера при отправке кода подтверждения: ${err}`)
       res.send({
         error: err,
         massage: 'Наташа, мы всё уронили'
@@ -115,23 +125,35 @@ router.post('/code', (req, res)=>{
 });
 
 // Добавление пользователя
-router.post('/add-user', (req, res)=>{
-  Сustomer.create(req.body)
+router.post('/add-user', (req, res)=> {
+  try {
+    Сustomer.create(req.body)
     .then(customer => {
       res.send(customer);
     });
+  } catch (err) {
+    logger(status = 500, message = `Ошибка сервера при регистрации пользователя: ${err}`)
+    res.send(err);
+  }
+  
   
 });
 
 // Изменение по id
-router.post('/user-edit/:id', (req, res)=>{
-  Сustomer.findByIdAndUpdate({_id: req.params.id}, req.body)
+router.post('/user-edit/:id', (req, res)=> {
+  try {
+    Сustomer.findByIdAndUpdate({_id: req.params.id}, req.body)
     .then(() => {
       Сustomer.findOne({_id: req.params.id})
         .then(customer => {
           res.send(customer);
         });
     });
+  } catch (err) {
+    logger(status = 500, message = `Ошибка сервера при изменении данных пользователя: ${err}`)
+    res.send(err)
+  }
+  
 });
 
 
@@ -145,7 +167,10 @@ router.post('/addTask', (req, res) => {
         res.send(name)
       });
 
-  } catch (err) { res.send({ status: 500, err }) }
+  } catch (err) { 
+    logger(status = 500, message = `Ошибка добавления предмета: ${err}`)
+    res.send({ status: 500, err }) 
+  }
 });
 
 // Получение всего списка
@@ -155,27 +180,42 @@ router.post('/getTasks', (req, res) => {
     .then(tasks => {
       res.send({ status: 200, tasks });
     });
-  } catch (err) { res.send({ status: 500, err }) }
+  } catch (err) { 
+    logger(status = 500, message = `Ошибка получения всех заданий из БД: ${err}`)
+    res.send({ status: 500, err }) 
+  }
   
 });
 
 // Изменение предмета по id
 router.post('/setTask/:id', (req, res) => {
-  Task.findByIdAndUpdate({_id: req.params.id}, req.body)
+  try {
+    Task.findByIdAndUpdate({_id: req.params.id}, req.body)
     .then(() => {
       Task.findOne({_id: req.params.id})
         .then(task => {
           res.send({ status: 200, task });
         });
     });
+  } catch (err) {
+    logger(status = 500, message = `Ошибка изменения предмета: ${err}`)
+    res.send(err)
+  }
+  
 });
 
 // Удаление предмета по id
 router.post('/removeTask/:id', (req, res) =>{
-  Task.deleteOne({_id: req.params.id})
+  try {
+    Task.deleteOne({_id: req.params.id})
     .then(task => {
       res.send({ status: 200, task });
     });
+  } catch (err) {
+    logger(status = 500, message = `Ошибка удаления предмета: ${err}`)
+    res.send(err)
+  }
+  
 });
 
 /////// Загрузка изображений ///////
@@ -230,10 +270,13 @@ router.post('/createPayment', (req, res) => {
   }, idempotenceKey)
   .then(result => {
     Payment.create({id: result.id}).then();
-
+    logger(status = 200, message = `успешное создание платежа id: ${result.id}`)
     res.send({payment: result})
   })
-  .catch(err => res.send(err))
+  .catch(err => {
+    logger(status = 500, message = `Ошибка создания платежа`)
+    res.send(err)
+  })
 
 })
 
