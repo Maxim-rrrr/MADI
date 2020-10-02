@@ -81,8 +81,6 @@ class User extends Component {
       loadingPayment: true
     })
 
-    
-
     let tasks = []
     this.state.checkboxes.forEach((value, index) => {
       if (value) {
@@ -164,7 +162,7 @@ class User extends Component {
 
             this.state.checkboxes.forEach((checkbox, index) => {
               if (checkbox) {
-                prise += tasks[index].prise
+                prise += +tasks[index].prise
               }
             })
 

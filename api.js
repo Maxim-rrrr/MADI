@@ -92,6 +92,7 @@ router.post('/code', (req, res)=>{
         subject: 'Код подтверждения',
         text: '',
         html: '<b>Завершите регистрацию <br/> Код подтверждения: </b><h1> ' + code + ' </h1>'
+        
       })
 
       res.send({
@@ -210,7 +211,7 @@ router.post('/addImg', upload.single('myFile'), (req, res, next) => {
 
 
 /////// Яндекс Касса ///////
-let YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ') // !!!
+const YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ') // !!!
 
 // Создание платежа
 router.post('/createPayment', (req, res) => {
