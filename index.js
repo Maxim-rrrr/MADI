@@ -1,11 +1,8 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 const config = require('config')
 const path = require('path')
-const dayjs = require('dayjs')
-
-const Log = require('./Schemes/Log')
 
 const app = express();
 
@@ -39,14 +36,17 @@ async function start() {
 
 start()
 
+// Функция логирования 
+const dayjs = require('dayjs')
+const Log = require('./Schemes/Log')
+
 function logger(status = 200, message = '') {
   Log.create({
-    time: `${dayjs().get('D')}-${dayjs().get('M')}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
+    time: `${dayjs().get('D')}-${(dayjs().get('M') + 1)}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
     status,
     message
   })
 }
-
 
 
 // Проверка подтверждённых платежей
@@ -99,7 +99,7 @@ setInterval(async () => {
             }
           })
 
-          // Отпрака
+          // Отправка
           async function mail (req, res) {
             try {
           
@@ -145,3 +145,55 @@ setInterval(async () => {
   })
   
 }, 10000)
+// Отправка отчётов раз в неделю
+const crontab = require('node-crontab')
+
+crontab.scheduleJob("* * * * */7", async () => { 
+  let loges = await Log.find({}).then()
+
+  let messageHTML = '<head><style>.log{display:flex;justify-content:space-between;margin-bottom:10px}.log--e{background:#c72020}.t{margin:0 15px;white-space:nowrap}</style></head> <body>'
+
+  loges.forEach(log => {
+    let mod = ''
+    if (log.status != 200 || log.status != '200') {
+      mod = ' log--e'
+    }
+    messageHTML += '<div class="log' + mod + '"><span>' + log.status + '</span>' +
+    '<span class="t">' + log.time + '</span><span>' + 
+    log.message + '</span></div>'
+  })
+
+  if (loges.length === 0) {
+    messageHTML = 'Записей нет'
+  } else {
+    messageHTML +='</body>'
+  }
+
+  try {
+          
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.mail.ru',
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: 'sendingmessage1@mail.ru',
+        pass: 'Eo$P4KuuioP1'
+      }
+    })
+        
+    await transporter.sendMail({
+      from: '"Мади" <sendingmessage1@mail.ru>',
+      to: 'kewin.rrrr@gmail.com',
+      subject: 'Отчёт',
+      text: '',
+      html: messageHTML
+    })
+    
+    console.log(`Отчёт отправлен`)
+    Log.deleteMany({}).then()
+  } catch (err) { 
+    logger(status = 500, message = `Ошибка отправки отчёта`)
+    console.log(`Ошибка отправки отчёта: ${err}`) 
+  }
+
+});
