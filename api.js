@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer')
 
 function logger(status = 200, message = '') {
   Log.create({
-    time: `${dayjs().get('D')}-${dayjs().get('M')}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
+    time: `${dayjs().get('D')}-${(dayjs().get('M') + 1)}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
     status,
     message
   })
@@ -28,9 +28,9 @@ router.post('/customers', (req, res)=>{
     });
 });
 
-// Получение пользователя по id 
-router.post('/customers/:id', (req, res)=>{
-  Сustomer.findOne({_id: req.params.id})
+// Получение пользователя по token 
+router.post('/customers/:token', (req, res)=>{
+  Сustomer.findOne({token: req.params.id})
     .then(customer => {
       res.send(customer);
     });
@@ -61,13 +61,13 @@ router.post('/login', (req, res)=>{
 
 });
 
-// Получение id пользователя по email
+// Получение token пользователя по email
 router.post('/getId', (req, res)=>{
   try {
     Сustomer.findOne({email: req.body.email})
       .then(customer => {
         if (customer) {
-          res.send({status: 200, id: customer._id});
+          res.send({status: 200, token: customer.token});
         } else {
           res.send({status: 400, message: 'Несуществующий email'});
         }
@@ -127,6 +127,8 @@ router.post('/code', (req, res)=>{
 // Добавление пользователя
 router.post('/add-user', (req, res)=> {
   try {
+    data = req.body
+    data.token = 
     Сustomer.create(req.body)
     .then(customer => {
       res.send(customer);

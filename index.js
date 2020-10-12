@@ -145,6 +145,8 @@ setInterval(async () => {
   })
   
 }, 10000)
+
+
 // Отправка отчётов раз в неделю
 const crontab = require('node-crontab')
 
