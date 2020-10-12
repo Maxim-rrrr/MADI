@@ -28,9 +28,9 @@ router.post('/customers', (req, res)=>{
     });
 });
 
-// Получение пользователя по token 
-router.post('/customers/:token', (req, res)=>{
-  Сustomer.findOne({token: req.params.id})
+// Получение пользователя по id 
+router.post('/customers/:id', (req, res)=>{
+  Сustomer.findOne({_id: req.params.id})
     .then(customer => {
       res.send(customer);
     });
@@ -61,13 +61,13 @@ router.post('/login', (req, res)=>{
 
 });
 
-// Получение token пользователя по email
+// Получение id пользователя по email
 router.post('/getId', (req, res)=>{
   try {
     Сustomer.findOne({email: req.body.email})
       .then(customer => {
         if (customer) {
-          res.send({status: 200, token: customer.token});
+          res.send({status: 200, id: customer._id});
         } else {
           res.send({status: 400, message: 'Несуществующий email'});
         }
@@ -127,8 +127,6 @@ router.post('/code', (req, res)=>{
 // Добавление пользователя
 router.post('/add-user', (req, res)=> {
   try {
-    data = req.body
-    data.token = 
     Сustomer.create(req.body)
     .then(customer => {
       res.send(customer);
