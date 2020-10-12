@@ -8,6 +8,7 @@ const Payment = require('./Schemes/Payment')
 const Log = require('./Schemes/Log')
 
 const nodemailer = require('nodemailer')
+const crypto = require("crypto");
 
 function logger(status = 200, message = '') {
   Log.create({
@@ -126,9 +127,19 @@ router.post('/code', (req, res)=>{
 
 // Добавление пользователя
 router.post('/add-user', (req, res)=> {
+  
   try {
     Сustomer.create(req.body)
     .then(customer => {
+      
+      let sha256 = crypto.createHash("sha256");
+      sha256.update(customer._id + '', "utf8");  //utf8 here
+
+      let token = sha256.digest("base64");
+      console.log(token);
+
+      Сustomer.update({token: token}).then()
+
       res.send(customer);
     });
   } catch (err) {

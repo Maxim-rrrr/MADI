@@ -115,7 +115,6 @@ class RegistrationPopap extends Component {
           const user = this.props.user
           localStorage.setItem(       'id', user._id      );
           localStorage.setItem(    'email', user.email    );
-          localStorage.setItem( 'password', user.password );
           localStorage.setItem(  'balance', user.balance  );
           localStorage.setItem(   'orders', user.orders   );
           localStorage.setItem( 'inviting', user.inviting );
