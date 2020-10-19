@@ -63,78 +63,95 @@ setInterval(async () => {
 
     YandexCheckout.getPayment(payment.id)
       .then((result) => {
-        
+        result = JSON.parse(result)
         if (result.status === "succeeded") {
           console.log('payment.description: ', payment.description);
           let description = JSON.parse(payment.description)
-
-          // Подготовка изображений 
-          let attachments = []
-          let subject, work, variant
-          subject = Task.findOne({name: description.subject}).then()
-
-          // Предмет 
-          subject.works.forEach(w => {
-            if (w.name === description.work) {
-              work = w
-            }
-          })
-
-          // Вариант
-          work.variant.forEach((v, i) => {
-            if (i + 1 === +description.variant) {
-              variant = v
-            }
-          })
-
-          // Задания
-          variant.forEach((t, i) => {
-            if (description.tasks.includes(i + 1)) {
-              t.img.forEach(img => {
-                attachments.push({
-                  filename: `Задание_${i + 1}.jpg`,
-                  path: `./uploads/${img}`,
-                  cid: 'unique@cid'
-                })
-              })
-            }
-          })
-
-          // Отправка
-          async function mail (req, res) {
-            try {
           
-              let transporter = nodemailer.createTransport({
-                host: 'smtp.mail.ru',
-                port: 465,
-                secure: true, // true for 465, false for other ports
-                auth: {
-                  user: 'sendingmessage1@mail.ru',
-                  pass: 'Eo$P4KuuioP1'
-                }
-              })
-                  
-              await transporter.sendMail({
-                from: '"Работы по курсам мади" <sendingmessage1@mail.ru>',
-                to: description.email,
-                subject: 'Решения',
-                text: '',
-                html: `Предмет: ${description.subject}<br> Работа: ${work}<br> Вариант: ${variant}<br> Заданий: ${tasks.join(', ')}`,
-                attachments: attachments,
-                
-              })
-              
-              logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${work} Вариант: ${variant} Заданий: ${tasks.join(', ')} `)
-              console.log(`Отправленны решения ${description.email}`)
-              Payment.deleteOne({_id: payment._id}).then()
+          if (description.type == 1) { // Оплата работ
 
-            } catch (err) { 
-              logger(status = 500, message = `Ошибка отправки решений ${err}`)
-              console.log(`Ошибка отправки решений ${err}`) 
+            // Подготовка изображений 
+            let attachments = []
+            let subject, work, variant
+            subject = Task.findOne({name: description.subject}).then()
+  
+            // Предмет 
+            subject.works.forEach(w => {
+              if (w.name === description.work) {
+                work = w
+              }
+            })
+  
+            // Вариант
+            work.variant.forEach((v, i) => {
+              if (i + 1 === +description.variant) {
+                variant = v
+              }
+            })
+  
+            // Задания
+            variant.forEach((t, i) => {
+              if (description.tasks.includes(i + 1)) {
+                t.img.forEach(img => {
+                  attachments.push({
+                    filename: `Задание_${i + 1}.jpg`,
+                    path: `./uploads/${img}`,
+                    cid: 'unique@cid'
+                  })
+                })
+              }
+            })
+  
+            // Отправка
+            async function mail (req, res) {
+              try {
+            
+                let transporter = nodemailer.createTransport({
+                  host: 'smtp.mail.ru',
+                  port: 465,
+                  secure: true, // true for 465, false for other ports
+                  auth: {
+                    user: 'sendingmessage1@mail.ru',
+                    pass: 'Eo$P4KuuioP1'
+                  }
+                })
+                    
+                await transporter.sendMail({
+                  from: '"Работы по курсам мади" <sendingmessage1@mail.ru>',
+                  to: description.email,
+                  subject: 'Решения',
+                  text: '',
+                  html: `Предмет: ${description.subject}<br> Работа: ${work}<br> Вариант: ${variant}<br> Заданий: ${tasks.join(', ')}`,
+                  attachments: attachments,
+                  
+                })
+                
+                logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${work} Вариант: ${variant} Заданий: ${tasks.join(', ')} `)
+                console.log(`Отправленны решения ${description.email}`)
+                Payment.deleteOne({_id: payment._id}).then()
+  
+              } catch (err) { 
+                logger(status = 500, message = `Ошибка отправки решений ${err}`)
+                console.log(`Ошибка отправки решений ${err}`) 
+              }
+            }
+          
+            mail(req, res);  
+                  
+          } else if (description.type == 2) { // Пополнение баланса
+            try {
+              sum = +result.amount.value
+              user_token = description.token
+  
+              user = Сustomer.findOne({token: user_token}).then()
+              user.balance += sum;
+  
+              Сustomer.findByIdAndUpdate({token: user_token},{balance: user.balance}).then()
+              logger(status = 200, message = `Пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
+            } catch (err) {
+              logger(status = 500, message = `Ошибка пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
             }
           }
-        
-          mail(req, res);        
         }
 
       })

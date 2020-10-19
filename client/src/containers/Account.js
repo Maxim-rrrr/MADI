@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 
 export default class Account extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   exit() {
     this.setState({
       logInClass: null
@@ -33,7 +29,7 @@ export default class Account extends Component {
     
     if (localStorage.getItem('balance') && localStorage.getItem('email') !== 'admin@admin') {
       balance = 
-      <div className="account__balace-block">
+      <div className="account__balace-block" onClick = {() => { this.props.activeAddBalancePopap() }}>
         <button className="account__add-balance" /> 
         <span className="account__balace"> { localStorage.getItem('balance') } руб. </span>
       </div> 

@@ -4,6 +4,7 @@ import RegistrationPopap from './RegistrationPopap'
 import LoginEditPopap from './LoginEditPopap'
 import PasswordEditPopap from './PasswordEditPopap'
 import Account from './Account'
+import AddBalancePopap from './AddBalancePopap'
 
 export default class Header extends Component {
   constructor(props) {
@@ -12,12 +13,14 @@ export default class Header extends Component {
       loginPopap: false,
       loginEditPopap: false,
       registrationPopap: false,
-      passwordEditPopap: false
+      passwordEditPopap: false,
+      addBalancePopap: false
     } 
 
     this.activeLoginPopap = this.activeLoginPopap.bind(this)
     this.activeRegistrationPopap = this.activeRegistrationPopap.bind(this)
     this.activePasswordEditPopap = this.activePasswordEditPopap.bind(this)
+    this.activePasswordEditPopap = this.activeAddBalancePopap.bind(this)
 
     this.closePopap = this.closePopap.bind(this)
 
@@ -51,6 +54,12 @@ export default class Header extends Component {
     })
   }
 
+  activeAddBalancePopap() {
+    this.setState({
+      addBalancePopap: true
+    })
+  }
+
   closePopap(event) {
     if (event.target.className === 'login login--active'                || 
         event.target.className === 'login__close-btn'                   ||
@@ -69,7 +78,8 @@ export default class Header extends Component {
         loginPopap: false,
         registrationPopap: false,
         loginEditPopap: false,
-        passwordEditPopap: false
+        passwordEditPopap: false,
+        addBalancePopap: false
       })
     }
   }
@@ -85,7 +95,8 @@ export default class Header extends Component {
       loginPopap: false,
       loginEditPopap: false,
       registrationPopap: false,
-      passwordEditPopap: false
+      passwordEditPopap: false,
+      addBalancePopap: false
     })
   }
 
@@ -95,13 +106,23 @@ export default class Header extends Component {
     if (this.props.logIn) {
       loginBlock = 
       <>
-        <Account loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } activeLoginEditPopap = { () => { this.activeLoginEditPopap() } } logInClass = ' account--logIn'/>
+        <Account 
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } 
+          activeLoginEditPopap = { () => { this.activeLoginEditPopap() } }
+          activeAddBalancePopap = { () => { this.activeAddBalancePopap() } } 
+          logInClass = ' account--logIn'
+        />
         <button className="btn btn-login btn-login--logIn" onClick = { this.activeLoginPopap }> Войти </button>
       </>
     } else {
       loginBlock = 
       <>
-        <Account loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } activeLoginEditPopap = { () => { this.activeLoginEditPopap() } } logInClass = ''/>
+        <Account 
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } 
+          activeLoginEditPopap = { () => { this.activeLoginEditPopap() } }
+          activeAddBalancePopap = { () => { this.activeAddBalancePopap() } } 
+          logInClass = ''
+        />
         <button className="btn btn-login" onClick = { this.activeLoginPopap }> Войти </button>
       </>
     }
@@ -137,6 +158,14 @@ export default class Header extends Component {
         <PasswordEditPopap 
           onClick = { this.closePopap } 
           active  = { this.state.passwordEditPopap }
+          closeAllPopap = { this.closeAllPopap }
+          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
+          customersUpdataDB = { () => { this.props.customersUpdataDB() } }
+        />
+
+        <AddBalancePopap 
+          onClick = { this.closePopap } 
+          active  = { this.state.addBalancePopap }
           closeAllPopap = { this.closeAllPopap }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.props.customersUpdataDB() } }

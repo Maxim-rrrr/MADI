@@ -91,6 +91,7 @@ class User extends Component {
     this.props.createPayment('/api/createPayment', {
       prise: this.state.prise,
       info: {
+        type: 1, // Прямая оплата товара
         email: localStorage.getItem('email'),
         subject: this.state.navState.subject,
         work: this.state.navState.work,
@@ -102,7 +103,12 @@ class User extends Component {
     let payment = setInterval(() => {
       if (this.props.createPaymentResponse) {
         clearInterval(payment)
-        window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
+        if (this.props.createPaymentResponse.confirmation) {
+          window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
+        } 
+        this.setState({
+          loadingPayment: false,
+        });
       }
     })
 

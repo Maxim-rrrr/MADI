@@ -149,18 +149,18 @@ router.post('/add-user', (req, res)=> {
   
   try {
     Сustomer.create(req.body)
-    .then((customer) => {
-      
-      let sha256 = crypto.createHash("sha256")
-      sha256.update(customer._id + '', "utf8")
+      .then((customer) => {
+        
+        let sha256 = crypto.createHash("sha256")
+        sha256.update(customer._id + '', "utf8")
 
-      let token = sha256.digest("base64")
+        let token = sha256.digest("base64")
 
-      Сustomer.findByIdAndUpdate({_id: customer.id},{token: token}).then()
+        Сustomer.findByIdAndUpdate({_id: customer.id},{token: token}).then()
 
-      customer.token = token
-      res.send(customer)
-    });
+        customer.token = token
+        res.send(customer)
+      });
   } catch (err) {
     logger(status = 500, message = `Ошибка сервера при регистрации пользователя: ${err}`)
     res.send(err);
