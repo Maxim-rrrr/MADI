@@ -58,6 +58,7 @@ class RegistrationPopap extends Component {
 
   // Отправка формы с вводом email и паролем перед кодом подтверждения
   async handleSubmit(event) {
+    event.preventDefault();
     await this.props.getId('/api/getId', {
       "email": this.state.emailValue
     })
@@ -79,20 +80,20 @@ class RegistrationPopap extends Component {
           invalid: 'email error'
         });
         sendCode = false
-      }
-    }, 300)
-    
-    if (sendCode) {
-      this.props.codeSend("/api/code", {
-        email: this.state.emailValue
-      });
 
-      this.setState({
-        code: true
-      })
-    }
+      } else if (this.props.getIdResponse.status === 400) {
+        if (sendCode) {
+          this.props.codeSend("/api/code", {
+            email: this.state.emailValue
+          });
     
-    event.preventDefault();
+          this.setState({
+            code: true
+          })
+        }
+        
+      }
+    })
   }
 
   // Отправка кода подтверждения
@@ -110,10 +111,11 @@ class RegistrationPopap extends Component {
         password: pass
       })
 
-      let loginOut = await setInterval(() => { 
+      let login = await setInterval(() => { 
         if (this.props.user) {
           const user = this.props.user
           localStorage.setItem(       'id', user._id      );
+          localStorage.setItem(    'token', user.token    );
           localStorage.setItem(    'email', user.email    );
           localStorage.setItem(  'balance', user.balance  );
           localStorage.setItem(   'orders', user.orders   );
@@ -122,12 +124,9 @@ class RegistrationPopap extends Component {
           this.props.closeAllPopap();
           this.props.loginUpdata(true);
             
-          clearInterval(loginOut)
-          console.log('Да');
-        } else {
-          console.log('Нет');
+          clearInterval(login)
         }
-      }, 100)
+      })
       
       this.setState({
         code: false
@@ -236,7 +235,7 @@ const mapStateToProps = (state) => {
     code: state.code,
     user: state.addUser,
     getIdResponse: state.getId,
-    loginResponse: state.login,
+    loginResponse: state.login
   };
 };
 

@@ -3,9 +3,6 @@ import React, { Component } from 'react'
 export default class Account extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      logInClass: null
-    };
   }
 
   exit() {
@@ -43,15 +40,10 @@ export default class Account extends Component {
     }
  
 
-    let logInClass = ''
-    if (this.state.logInClass === null) {
-      logInClass = this.props.logInClass
-    } else {
-      logInClass = this.state.logInClass
-    }
+    
 
     return (
-      <div className={'account' + logInClass}>
+      <div className={'account' + this.props.logInClass}>
         <div className="account__info">
           
           { login }

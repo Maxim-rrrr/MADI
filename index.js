@@ -27,6 +27,7 @@ async function start() {
       useCreateIndex: true,
       useUnifiedTopology: true
     })
+    console.log('База данных подключена');
     app.listen(PORT, () => console.log(`Сервер прослушивает порт: ${PORT} `));
   } catch (err) {
     console.log('Server error', err.message);

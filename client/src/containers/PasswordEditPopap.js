@@ -106,6 +106,7 @@ class PasswordEditPopap extends Component {
         if (this.props.loginResponse) {
           const user = this.props.loginResponse.user
           localStorage.setItem(       'id', user._id      );
+          localStorage.setItem(    'token', user.token    );
           localStorage.setItem(    'email', user.email    );
           localStorage.setItem( 'password', user.password );
           localStorage.setItem(  'balance', user.balance  );

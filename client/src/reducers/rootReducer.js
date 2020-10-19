@@ -6,6 +6,7 @@ import { editUser } from './editUser'
 import { addUser } from './addUser'
 import { login } from './login'
 import { getId } from './getId'
+import { getCustomer } from './getCustomer'
 
 import { getTasks } from './getTasks'
 import { addTask } from './addTask'
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     addTask,
     setTask,
     addImg,
-    createPayment
+    createPayment,
+    getCustomer
 });
 
 export default rootReducer;

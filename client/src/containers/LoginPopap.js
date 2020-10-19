@@ -53,6 +53,7 @@ class LoginPopap extends Component {
       } else {
         const user = this.props.loginResponse.user
         localStorage.setItem(       'id', user._id      );
+        localStorage.setItem(    'token', user.token    );
         localStorage.setItem(    'email', user.email    );
         localStorage.setItem( 'password', user.password );
         localStorage.setItem(  'balance', user.balance  );
@@ -63,7 +64,7 @@ class LoginPopap extends Component {
         this.props.loginUpdata(true);
       }
     } else {
-      let loginOut = setInterval(() => { 
+      let login = setInterval(() => { 
         if (this.props.loginResponse) {
           // Валидность
           if (this.props.loginResponse.status !== 200) {
@@ -73,8 +74,8 @@ class LoginPopap extends Component {
           } else {
             const user = this.props.loginResponse.user
             localStorage.setItem(       'id', user._id      );
+            localStorage.setItem(    'token', user.token    );
             localStorage.setItem(    'email', user.email    );
-            localStorage.setItem( 'password', user.password );
             localStorage.setItem(  'balance', user.balance  );
             localStorage.setItem(   'orders', user.orders   );
             localStorage.setItem( 'inviting', user.inviting );
@@ -83,7 +84,7 @@ class LoginPopap extends Component {
             this.props.loginUpdata(true);
           } 
 
-          clearInterval(loginOut)
+          clearInterval(login)
         }
       }, 100)
     }

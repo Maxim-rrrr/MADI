@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+
+import { getCustomer } from '../actions/getCustomer'
 
 import Header from './Header'
 import Admin from './Admin';
@@ -10,31 +13,32 @@ class App extends Component {
     super (props)
     this.state = {
       login: false,
-      email: localStorage.getItem('email'),
+      token: localStorage.getItem('token'),
       admin: false
     } 
   }
 
   componentDidMount() {
 
-    if (this.state.email !== null) {
+    if (this.state.token !== null && this.state.token !== '0') {
       this.setState({
         login: true
       })
     }
 
-    if (this.state.email === 'admin@admin') {
+    if (this.state.token === 'NYqtUUpzC5Je6oDw55UMiTkxVKFyLKHb+RsHNtybEKA=') {
       this.setState({
         admin: true
       })
     }
+    
     
   }
 
   loginUpdata(bool) {
     this.setState({
       login: bool,
-      email: localStorage.getItem('email')
+      token: localStorage.getItem('token')
     })
   }
 
@@ -59,4 +63,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    getCustomerResponse: state.customer
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCustomer: url => dispatch(getCustomer(url))
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

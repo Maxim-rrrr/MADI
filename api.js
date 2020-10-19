@@ -80,6 +80,24 @@ router.post('/getId', (req, res)=>{
 
 });
 
+// Получение пользователя по token
+router.post('/getCustomer/:token', (req, res)=>{
+  try {
+    Сustomer.findOne({token: req.params.token})
+      .then(customer => {
+        if (customer) {
+          res.send({status: 200, customer});
+        } else {
+          res.send({status: 400, message: 'Неверный token'});
+        }
+      });
+
+  } catch (error) {
+    res.send(error);
+  }
+
+});
+
 // Отправка кода подтверждения
 router.post('/code', (req, res)=>{
   async function mail (req, res) {
@@ -90,15 +108,15 @@ router.post('/code', (req, res)=>{
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-          user: 'sendingmessage1@mail.ru',
-          pass: 'Eo$P4KuuioP1'
+          user: 'sendingmessage2@mail.ru',
+          pass: 'tyjNaPOuA12&'
         }
       })
       
       let code = Math.floor(Math.random() * 900000 + 100000);
 
       let result = await transporter.sendMail({
-        from: '"Работы по курсам мади" <sendingmessage1@mail.ru>',
+        from: '"Работы по курсам мади" <sendingmessage2@mail.ru>',
         to: req.body.email,
         subject: 'Код подтверждения',
         text: '',
@@ -112,6 +130,7 @@ router.post('/code', (req, res)=>{
       });
       
     } catch (err) {
+      console.log(`status: 500`, `message: Ошибка сервера при отправке кода подтверждения: ${err}`);
       logger(status = 500, message = `Ошибка сервера при отправке кода подтверждения: ${err}`)
       res.send({
         error: err,
@@ -130,17 +149,17 @@ router.post('/add-user', (req, res)=> {
   
   try {
     Сustomer.create(req.body)
-    .then(customer => {
+    .then((customer) => {
       
-      let sha256 = crypto.createHash("sha256");
-      sha256.update(customer._id + '', "utf8");  //utf8 here
+      let sha256 = crypto.createHash("sha256")
+      sha256.update(customer._id + '', "utf8")
 
-      let token = sha256.digest("base64");
-      console.log(token);
+      let token = sha256.digest("base64")
 
-      Сustomer.update({token: token}).then()
+      Сustomer.findByIdAndUpdate({_id: customer.id},{token: token}).then()
 
-      res.send(customer);
+      customer.token = token
+      res.send(customer)
     });
   } catch (err) {
     logger(status = 500, message = `Ошибка сервера при регистрации пользователя: ${err}`)
