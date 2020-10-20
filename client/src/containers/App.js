@@ -166,6 +166,7 @@ class App extends Component {
       <User 
         activeLoginPopap = { this.activeLoginPopap }
         userUpdata = {() => {this.userUpdata()}}
+        activeAddBalancePopap   = { this.activeAddBalancePopap   }
       />
     if (this.state.admin) {
       content = <Admin />

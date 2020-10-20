@@ -108,7 +108,7 @@ class User extends Component {
             }
           })
 
-          if (+this.state.prise <= +user.balance) {
+          if (+this.state.prise <= +user.balance && +this.state.prise !== 0) {
             this.props.paymentFullBalance('/api/paymentFullBalance', {
               numberPayment: this.state.numberPayment,
               prise: this.state.prise,
@@ -168,6 +168,11 @@ class User extends Component {
                   loadingPayment: false,
                 });
               }
+            })
+          } else if (+user.balance !== 0) {
+            this.props.activeAddBalancePopap()
+            this.setState({
+              loadingPayment: false
             })
           } else {
             this.setState({
