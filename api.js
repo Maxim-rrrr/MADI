@@ -81,14 +81,17 @@ router.post('/getId', (req, res)=>{
 });
 
 // Получение пользователя по token
-router.post('/getCustomer/:token', (req, res)=>{
+router.post('/getCustomer', (req, res)=>{
   try {
-    Сustomer.findOne({token: req.params.token})
+    Сustomer.findOne({token: req.body.token})
       .then(customer => {
         if (customer) {
+          if (req.body.counter) {
+            res.send({status: 200, customer, counter: req.body.counter});
+          }
           res.send({status: 200, customer});
         } else {
-          res.send({status: 400, message: 'Неверный token'});
+          res.send({status: 400, message: req.body.token});
         }
       });
 
@@ -278,6 +281,90 @@ router.post('/addImg', upload.single('myFile'), (req, res, next) => {
     })
   
 })
+
+router.post('/paymentFullBalance', async (req, res) =>{
+  try {
+    let user = await Сustomer.findOne({token: req.body.token}).then()
+    let description = req.body
+    
+    // Подготовка изображений 
+    let attachments = []
+    let subject, work, variant
+    subject = await Task.findOne({name: description.subject}).then()
+
+    // Предмет 
+    subject.works.forEach(w => {
+      if (w.name === description.work) {
+        work = w
+      }
+    })
+
+    // Вариант
+    work.variant.forEach((v, i) => {
+      if (i + 1 === +description.variant) {
+        variant = v
+      }
+    })
+
+    // Задания
+    variant.forEach((t, i) => {
+      if (description.tasks.includes(i + 1)) {
+        t.img.forEach(img => {
+          attachments.push({
+            filename: `Задание_${i + 1}.jpg`,
+            path: `./uploads/${img}`,
+            cid: 'unique@cid'
+          })
+        })
+      }
+    })
+
+    // Отправка
+    async function mail (req, res) {
+      try {
+    
+        let transporter = nodemailer.createTransport({
+          host: 'smtp.mail.ru',
+          port: 465,
+          secure: true, // true for 465, false for other ports
+          auth: {
+            user: 'sendingmessage2@mail.ru',
+            pass: 'tyjNaPOuA12&'
+          }
+        })
+            
+        await transporter.sendMail({
+          from: '"Работы по курсам мади" <sendingmessage2@mail.ru>',
+          to: user.email,
+          subject: 'Решения',
+          text: '',
+          html: `Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')}`,
+          attachments: attachments,
+          
+        })
+        
+        logger(status = 200, message = `Отправленны решения ${user.email} Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')} `)
+        console.log(`Отправленны решения ${user.email}`)
+
+      } catch (err) { 
+        logger(status = 500, message = `Ошибка отправки решений ${err}`)
+        console.log(`Ошибка отправки решений ${err}`) 
+      }
+    }
+  
+    await mail(req, res);
+
+    Сustomer.findOneAndUpdate({token: user.token},{balance: +user.balance - +description.prise}).then()
+    res.send({
+      status: 200,
+      numberPayment: description.numberPayment
+    })
+  } catch (err) {
+    logger(status = 500, message = `Ошибка покупки полность за баланс: ${err}`)
+    res.send(err)
+  }
+  
+});
 
 
 /////// Яндекс Касса ///////

@@ -111,22 +111,22 @@ setInterval(async () => {
                   port: 465,
                   secure: true, // true for 465, false for other ports
                   auth: {
-                    user: 'sendingmessage1@mail.ru',
-                    pass: 'Eo$P4KuuioP1'
+                    user: 'sendingmessage2@mail.ru',
+                    pass: 'tyjNaPOuA12&'
                   }
                 })
                     
                 await transporter.sendMail({
-                  from: '"Работы по курсам мади" <sendingmessage1@mail.ru>',
+                  from: '"Работы по курсам мади" <sendingmessage2@mail.ru>',
                   to: description.email,
                   subject: 'Решения',
                   text: '',
-                  html: `Предмет: ${description.subject}<br> Работа: ${work}<br> Вариант: ${variant}<br> Заданий: ${tasks.join(', ')}`,
+                  html: `Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')}`,
                   attachments: attachments,
                   
                 })
                 
-                logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${work} Вариант: ${variant} Заданий: ${tasks.join(', ')} `)
+                logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${description.work} Вариант: ${description.variant} Заданий: ${description.tasks.join(', ')} `)
                 console.log(`Отправленны решения ${description.email}`)
                 Payment.deleteOne({_id: payment._id}).then()
   
@@ -146,7 +146,7 @@ setInterval(async () => {
               user = Сustomer.findOne({token: user_token}).then()
               user.balance += sum;
   
-              Сustomer.findByIdAndUpdate({token: user_token},{balance: user.balance}).then()
+              Сustomer.findOneAndUpdate({token: user_token},{balance: user.balance}).then()
               logger(status = 200, message = `Пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
             } catch (err) {
               logger(status = 500, message = `Ошибка пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)

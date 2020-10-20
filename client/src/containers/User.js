@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 import { getTasks } from '../actions/getTasks'
+import { getCustomer } from '../actions/getCustomer'
 import { createPayment } from '../actions/createPayment'
+import { paymentFullBalance } from '../actions/paymentFullBalance'
 
 import TasksNav from './TasksNav'
 
@@ -19,10 +21,9 @@ class User extends Component {
       },
 
       prise: 0,
-
       checkboxes: [],
-
-      loadingPayment: false
+      loadingPayment: false,
+      numberPayment: 1
     };
 
   }
@@ -77,40 +78,109 @@ class User extends Component {
   }
 
   payment() {
-    this.setState({
-      loadingPayment: true
-    })
+    if (localStorage.getItem('token')) {
+      this.setState({
+        loadingPayment: true
+      })
 
-    let tasks = []
-    this.state.checkboxes.forEach((value, index) => {
-      if (value) {
-        tasks.push(index + 1)
-      }
-    })
+      this.props.getCustomer('/api/getCustomer', {
+        token: localStorage.getItem('token'),
+        counter: this.state.numberPayment
+      })
 
-    this.props.createPayment('/api/createPayment', {
-      prise: this.state.prise,
-      info: {
-        type: 1, // Прямая оплата товара
-        email: localStorage.getItem('email'),
-        subject: this.state.navState.subject,
-        work: this.state.navState.work,
-        variant: this.state.navState.variant,
-        tasks
-      }
-    })
+      let user_valid = setInterval(() => {
+        if (this.props.getCustomerResponse !== '' && this.props.getCustomerResponse.status === 200 && this.props.getCustomerResponse.counter == this.state.numberPayment) {
+          clearInterval(user_valid)
 
-    let payment = setInterval(() => {
-      if (this.props.createPaymentResponse) {
-        clearInterval(payment)
-        if (this.props.createPaymentResponse.confirmation) {
-          window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
-        } 
-        this.setState({
-          loadingPayment: false,
-        });
-      }
-    })
+          let user = this.props.getCustomerResponse.customer
+          localStorage.setItem(       'id', user._id      );
+          localStorage.setItem(    'token', user.token    );
+          localStorage.setItem(    'email', user.email    );
+          localStorage.setItem( 'password', user.password );
+          localStorage.setItem(  'balance', user.balance  );
+          localStorage.setItem(   'orders', user.orders   );
+          localStorage.setItem( 'inviting', user.inviting );
+
+          let tasks = []
+          this.state.checkboxes.forEach((value, index) => {
+            if (value) {
+              tasks.push(index + 1)
+            }
+          })
+
+          if (+this.state.prise <= +user.balance) {
+            this.props.paymentFullBalance('/api/paymentFullBalance', {
+              numberPayment: this.state.numberPayment,
+              prise: this.state.prise,
+              token: user.token,
+              subject: this.state.navState.subject,
+              work: this.state.navState.work,
+              variant: this.state.navState.variant,
+              tasks
+            })
+
+            let time = setInterval(() => {
+              if (this.props.paymentFullBalanceResponse) {
+                if (this.props.paymentFullBalanceResponse.numberPayment === this.state.numberPayment) {
+
+                  this.setState({
+                    loadingPayment: false,
+                    numberPayment: this.state.numberPayment + 1
+                  })
+
+                  this.setState({
+                    navState: {
+                      subject: null,
+                      work: null,
+                      variant: null,
+                      tasks: null
+                    },
+                  })
+
+                  clearInterval(time)
+
+                  this.props.userUpdata()
+                }
+              }
+
+            })
+            
+          } else if (+user.balance === 0) {
+            this.props.createPayment('/api/createPayment', {
+              prise: this.state.prise,
+              info: {
+                type: 1, // Прямая оплата товара
+                email: localStorage.getItem('email'),
+                subject: this.state.navState.subject,
+                work: this.state.navState.work,
+                variant: this.state.navState.variant,
+                tasks
+              }
+            })
+  
+            let payment = setInterval(() => {
+              if (this.props.createPaymentResponse) {
+                clearInterval(payment)
+                if (this.props.createPaymentResponse.confirmation) {
+                  window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
+                } 
+                this.setState({
+                  loadingPayment: false,
+                });
+              }
+            })
+          } else {
+            this.setState({
+              loadingPayment: false
+            })
+          }
+        }
+      })
+      
+      
+    } else {
+      this.props.activeLoginPopap()
+    }
 
   }
 
@@ -307,14 +377,18 @@ class User extends Component {
 const mapStateToProps = (state) => {
   return {
     getTasksResponse: state.getTasks,
+    getCustomerResponse: state.getCustomer,
     createPaymentResponse: state.createPayment,
+    paymentFullBalanceResponse: state.paymentFullBalance
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getTasks: (url) => dispatch(getTasks(url)),
-    createPayment: (url, data) => dispatch(createPayment(url, data))
+    getCustomer: (url, data) => dispatch(getCustomer(url, data)),
+    createPayment: (url, data) => dispatch(createPayment(url, data)),
+    paymentFullBalance: (url, data) => dispatch(paymentFullBalance(url, data))
   };
 };
 

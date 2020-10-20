@@ -15,6 +15,7 @@ import { setTask } from './setTask'
 import { addImg } from './addImg'
 
 import { createPayment } from './createPayment'
+import { paymentFullBalance } from './paymentFullBalance'
 
 const rootReducer = combineReducers({
     customers,
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     setTask,
     addImg,
     createPayment,
-    getCustomer
+    getCustomer,
+    paymentFullBalance
 });
 
 export default rootReducer;

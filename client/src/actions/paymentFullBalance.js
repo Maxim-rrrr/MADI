@@ -1,11 +1,11 @@
-export function getCustomerSuccess(customer) {
+export function paymentFullBalanceSuccess(response) {
   return {
-      type: "GET_CUSTOMER_SUCCESS",
-      customer
+      type: "PAYMENT_FULL_BALANCE_SUCCESS",
+      response
   }
 }
 
-export function getCustomer(url, data = {}) {
+export function paymentFullBalance(url, data) {
   return (dispatch) => {
     fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -27,7 +27,7 @@ export function getCustomer(url, data = {}) {
         return response;
       })
       .then(response => response.json())
-      .then(customer => dispatch(getCustomerSuccess(customer)))
+      .then(response => dispatch(paymentFullBalanceSuccess(response)))
       .catch(()=>{});
   }
 }
