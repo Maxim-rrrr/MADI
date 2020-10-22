@@ -150,6 +150,7 @@ class User extends Component {
               prise: this.state.prise,
               info: {
                 type: 1, // Прямая оплата товара
+                token: localStorage.getItem('token'),
                 email: localStorage.getItem('email'),
                 subject: this.state.navState.subject,
                 work: this.state.navState.work,

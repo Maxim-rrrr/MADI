@@ -7,7 +7,8 @@ const customerSchema = new Schema({
   token:    { type: String, default: 0 },
   balance:  { type: Number, default: 0 },
   inviting: { type: String, default: '' },
-  orders:   { type: Array, default: [] }
+  orders:   { type: Array, default: [] },
+  summa:    { type: Number, default: 0 }
 });
 
 const Сustomer = model("Customer", customerSchema);

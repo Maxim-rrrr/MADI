@@ -22,15 +22,15 @@ const PORT = config.get('port') || 4000
 
 async function start() {
   try {
-    await mongoose.connect(config.get('mongoUri'), { 
+    await mongoose.connect(config.get('localMongoUri'), { 
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true
     })
-    console.log('База данных подключена');
-    app.listen(PORT, () => console.log(`Сервер прослушивает порт: ${PORT} `));
+    console.log("\x1b[32m", 'База данных подключена.');
+    app.listen(PORT, () => console.log("\x1b[32m", `Сервер прослушивает порт: ${PORT} `));
   } catch (err) {
-    console.log('Server error', err.message);
+    console.log("\x1b[41m", 'Server error.', err.message);
     process.exit(1)
   }
 }
@@ -54,6 +54,7 @@ function logger(status = 200, message = '') {
 const YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ');
 const Payment = require('./Schemes/Payment')
 const Task = require('./Schemes/Task')
+const Сustomer = require('./Schemes/Customer')
 const nodemailer = require('nodemailer')
 
 setInterval(async () => {
@@ -127,12 +128,22 @@ setInterval(async () => {
                 })
                 
                 logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${description.work} Вариант: ${description.variant} Заданий: ${description.tasks.join(', ')} `)
-                console.log(`Отправленны решения ${description.email}`)
+                console.log("\x1b[32m", `Отправленны решения ${description.email}`)
                 Payment.deleteOne({_id: payment._id}).then()
-  
+
+                let user = await Сustomer.findOne({token: description.token}).then()
+                Сustomer.findOneAndUpdate({token: user.token},{
+                  orders: [...user.orders, {
+                    'subject': description.subject,
+                    'work': description.work,
+                    'variant': description.variant,
+                    'tasks': description.tasks.join(', ')
+                  }],
+                  summa: user.summa + +result.amount.value
+                }).then()
               } catch (err) { 
                 logger(status = 500, message = `Ошибка отправки решений ${err}`)
-                console.log(`Ошибка отправки решений ${err}`) 
+                console.log("\x1b[41m", `Ошибка отправки решений ${err}`) 
               }
             }
           
@@ -146,7 +157,10 @@ setInterval(async () => {
               user = Сustomer.findOne({token: user_token}).then()
               user.balance += sum;
   
-              Сustomer.findOneAndUpdate({token: user_token},{balance: user.balance}).then()
+              Сustomer.findOneAndUpdate({token: user_token},{
+                balance: user.balance,
+                summa: user.summa + +result.amount.value
+              }).then()
               logger(status = 200, message = `Пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
             } catch (err) {
               logger(status = 500, message = `Ошибка пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
@@ -209,11 +223,11 @@ crontab.scheduleJob("* * * * */7", async () => {
       html: messageHTML
     })
     
-    console.log(`Отчёт отправлен`)
+    console.log("\x1b[32m", `Отчёт отправлен`)
     Log.deleteMany({}).then()
   } catch (err) { 
     logger(status = 500, message = `Ошибка отправки отчёта`)
-    console.log(`Ошибка отправки отчёта: ${err}`) 
+    console.log("\x1b[31m", `Ошибка отправки отчёта: ${err}`) 
   }
 
 });

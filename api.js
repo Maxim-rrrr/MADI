@@ -354,7 +354,16 @@ router.post('/paymentFullBalance', async (req, res) =>{
   
     await mail(req, res);
 
-    Сustomer.findOneAndUpdate({token: user.token},{balance: +user.balance - +description.prise}).then()
+    Сustomer.findOneAndUpdate({token: user.token},{
+      balance: +user.balance - +description.prise,
+      orders: [...user.orders, {
+        'subject': description.subject,
+        'work': description.work,
+        'variant': description.variant,
+        'tasks': description.tasks.join(', ')
+      }]
+    }).then()
+
     res.send({
       status: 200,
       numberPayment: description.numberPayment
