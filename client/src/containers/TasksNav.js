@@ -8,48 +8,47 @@ export default class TasksNav extends Component {
           className='tasks-nav__tab animated fadeIn' 
           onClick = { () => { this.props.navEdit({
             subject: null,
-            work: null,
-            variant: null,
-            tasks: null
+            categories: []
           }) } }
         > Предметы </button>
 
         { 
-          this.props.navState.subject ? 
-          <button 
-            className = 'tasks-nav__tab animated fadeIn' 
-            onClick   = { () => { this.props.navEdit({ 
-              subject: this.props.navState.subject,
-              work: null,
-              variant: null
-            }) } }
-          > { this.props.navState.subject } </button> : ''
+          this.props.navState.subject?
+          
+              <button 
+                className = 'tasks-nav__tab animated fadeIn' 
+                onClick   = { () => {         
+                  this.props.navEdit({ 
+                    subject: this.props.navState.subject,
+                    categories: []
+                  })
+                }}
+              > 
+                { this.props.navState.subject } 
+              </button>: ''
         }
 
-        {
-          this.props.navState.work ? 
-          <button 
-            className = 'tasks-nav__tab animated fadeIn' 
-            onClick   = { () => { this.props.navEdit({ 
-              subject: this.props.navState.subject,
-              work: this.props.navState.work,
-              variant: null
-            }) } }
-          > { this.props.navState.work } </button> : ''
-        }
+        { 
+          this.props.navState.categories?
+          this.props.navState.categories.map(item => {
+            return (
+              <button 
+                className = 'tasks-nav__tab animated fadeIn' 
+                onClick   = { () => {         
+                  let categories = this.props.navState.categories
+                  categories = categories.slice(0, categories.indexOf(item) + 1)
+                  this.props.navEdit({ 
+                    subject: this.props.navState.subject,
+                    categories: categories
+                  })
+                }}
+              > 
+                { item } 
+              </button>
 
-        {
-          this.props.navState.variant ? 
-          <button 
-            className = 'tasks-nav__tab animated fadeIn' 
-            onClick   = { () => { this.props.navEdit({ 
-              subject: this.props.navState.subject,
-              work: this.props.navState.work,
-              variant: this.props.navState.variant
-            }) } }
-          > { this.props.navState.variant } Вариант </button> : ''
+            )
+          }): ''
         }
-
 
       </nav>
     )
