@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { getTasks } from '../actions/getTasks'
-import { addTask } from '../actions/addTask'
 import { setTask } from '../actions/setTask'
-import { removeTask } from '../actions/removeTask'
 import { addImg } from '../actions/addImg'
 
 
@@ -19,13 +17,9 @@ class Tasks extends Component {
         subject: null,
         categories: []
       },
-      addSubject: true,
-      addSubjectInput: '',
-      addWorkInput: '',
       prevImg: ''
     };
 
-    this.addSubject = this.addSubject.bind(this);
   }
 
   navEdit(navState) {
@@ -39,34 +33,6 @@ class Tasks extends Component {
     setInterval(this.props.getTasks('/api/getTasks'), 10)
   }
   
-  // Subject формы добавления предмета
-  addSubject(event) {
-    event.preventDefault()
-
-    if (this.state.addSubjectInput) {
-      let tasks = this.props.getTasksResponse.tasks 
-      let valid = true
-
-      // Проверим нет ли уже предмета с таким названием
-      tasks.forEach((value) => {
-        if (value.name === this.state.addSubjectInput) {
-          valid = false
-        }
-      })
-
-      if (valid) {
-        this.props.addTask('/api/addTask', {name: this.state.addSubjectInput})
-      }
-
-      this.props.getTasks('/api/getTasks')
-
-      this.setState({
-        addSubjectInput: ''
-      })
-    }
-  }
-
-
   // Изменение категории
   editInCategory(value, type, index = 0, indexImg = 0) {
     let subjectName = this.state.navState.subject
@@ -387,12 +353,6 @@ class Tasks extends Component {
     }
   }
 
-  // Удаление предмета
-  removeSubject(id) {
-    this.props.removeTask(`/api/removeTask/${id}`)
-    this.props.getTasks('/api/getTasks')
-  }
- 
   // Добавление изображение
   addImg(event) {
     event.preventDefault()
@@ -482,22 +442,10 @@ class Tasks extends Component {
                 <button className="btn tasks__btn-category"  onClick = { () => {this.navEdit({subject: elem.name, categories: []})} }>
                   { elem.name } 
                 </button>
-                <button className="tasks__btn-close" onClick = {() => {  }}>
-                  <img src="./img/close.png" alt=""/> 
-                </button>
               </div>
             )
           }) : ''
         }
-        
-        <button 
-          className="tasks__btn-add-subject"
-          onClick = {() => {
-
-          }}
-        > 
-          Добавить предмет 
-        </button>
       </>
     // Первая категория
     } else if (nav.subject && nav.categories.length === 0) {
@@ -519,8 +467,9 @@ class Tasks extends Component {
         }
         <form 
           onSubmit = { (event) => { 
-            event.preventDefault()
+            event.preventDefault()  
             this.editInCategory(event.target[0].value, 'add') 
+            event.target[0].value = ''
           } } 
           className="tasks__form"
         >
@@ -554,6 +503,7 @@ class Tasks extends Component {
           onSubmit = { (event) => { 
             event.preventDefault()
             this.editInCategory(event.target[0].value, 'add') 
+            event.target[0].value = ''
           } } 
           className="tasks__form"
         >
@@ -685,9 +635,7 @@ class Tasks extends Component {
 const mapStateToProps = (state) => {
   return {
     getTasksResponse: state.getTasks,
-    addTaskResponse: state.addTask,
     setTaskResponse: state.setTask,
-    removeTaskResponse: state.removeTask,
     addImgResponse: state.addImg,
   };
 };
@@ -695,9 +643,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     getTasks: (url) => dispatch(getTasks(url)),
-    addTask: (url, name) => dispatch(addTask(url, name)),
     setTask: (url, data) => dispatch(setTask(url, data)),
-    removeTask: (url) => dispatch(removeTask(url)),
     addImg: (url, imgData) => dispatch(addImg(url, imgData))
   };
 };

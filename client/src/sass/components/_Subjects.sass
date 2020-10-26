@@ -1,0 +1,124 @@
+.subjects
+  &__create-form
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    align-content: center
+    width: 100%
+    height: 20rem
+    margin-bottom: 3rem
+    background-color: #FCD770
+    border-radius: 1rem
+    transition: 0.2s
+    &--error
+      & .subjects__create-form-input
+        color:#cf1d11
+        border-color: #cf1d11
+      & .subjects__create-form-btn
+        color:#cf1d11
+        border-color: #cf1d11
+    &-title
+      text-align: center
+      font-size: 3rem
+      color: #504c63
+    &-input-box
+      display: flex
+      justify-content: space-between
+      width: 70%
+      margin: auto
+    &-input
+      width: 40%
+    &-btn
+      width: 30%
+      margin: 0 auto
+      margin-bottom: 2rem
+  
+  
+.subjects
+  &__card
+    position: relative
+    display: flex
+    justify-content: space-between
+    width: 100%
+    padding: 1rem
+    margin-bottom: 2rem
+    border: 3px solid #FCD770
+    border-radius: 1rem
+    transition: 0.3s
+    &-public
+      &-box
+        margin-right: 2rem
+      &-text
+        text-align: center
+        color: #FCD770
+    &-name
+      font-size: 3rem
+      color: #FCD770
+      overflow: hidden
+    &-model
+      color: #FCD770
+    &-btn-del
+      position: absolute
+      right: 7px
+      top: 4px
+      width: 20px
+      height: 20px
+      background: #0000002a url('../containers/close.png') no-repeat center/cover
+      border: none
+      border-radius: 50%
+      cursor: pointer
+      &:hover
+        background-color: #0000004f
+    &--public
+      background-color: #FCD770
+      & .subjects__card-name
+        color: #504c63
+      & .subjects__card-model
+        color: #504c63
+      & .subjects__card-public-text
+        color: #504c63
+      & .toggel-public
+        border: 2px solid #504c63
+      & .subjects__card-btn-del
+        background: #0000002a url('../containers/close-dark.png') no-repeat center/cover
+        &:hover
+          background-color: #0000004f
+  
+.toggel-public
+  position: relative
+  height: calc(2.7rem + 4px)
+  padding: 0.2rem
+  width: 7rem
+  margin-top: 1rem
+  background-color: transparent
+  border-radius: 20px
+  cursor: pointer
+  transition: 1s
+  &--false
+    border: 2px solid #FCD770
+    transition: 1s
+    &>span
+      position: absolute
+      top: 0.1rem
+      left: 0.1rem
+      display: block
+      height: 2.5rem
+      width: 2.5rem
+      background-color: transporent
+      border-radius: 50%
+      transition: 1s
+      border: 2px solid #FCD770
+  &--true
+    background-color: #645f7e
+    transition: 1s
+    &>span
+      position: absolute
+      top: 0.1rem
+      left: 4rem
+      display: block
+      height: 2.5rem
+      width: 2.5rem
+      background-color: #FCD770 
+      border-radius: 50%
+      transition: 1s
+      

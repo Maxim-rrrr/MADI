@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { customersFetchData } from "../actions/customers";
 import CustomerList from './CustomerList'
 import Tasks from './Tasks';
+import Subjects from './Subjects';
 
 class Admin extends Component {
   constructor(props){
     super (props)
     this.state = {
-      tab: 'Tasks'
+      tab: localStorage.getItem('tab_admin')?localStorage.getItem('tab_admin'):'CustomerList'
     }
   }
 
@@ -29,7 +30,7 @@ class Admin extends Component {
         <div className='container'>
           <nav className='admin__nav'>
             {
-              [['CustomerList', 'Пользователи'], ['Tasks', 'Задания']].map(value => {
+              [['CustomerList', 'Пользователи'], ['Tasks', 'Задания'], ['Subjects', 'Предметы']].map(value => {
                 let active = ''
                 if (value[0] === this.state.tab) {
                   active = ' admin__nav-item--active'
@@ -38,7 +39,10 @@ class Admin extends Component {
                   <div 
                     key = {value[0]}
                     className={'admin__nav-item' + active} 
-                    onClick = {() => { this.setState({ tab: value[0] }) }}
+                    onClick = {() => { 
+                      localStorage.setItem('tab_admin', value[0])
+                      this.setState({ tab: value[0] }) 
+                    }}
                   > { value[1] } </div>
                 )
               })
@@ -56,7 +60,10 @@ class Admin extends Component {
 
         <Tasks
           tab = { this.state.tab } 
+        />
 
+        <Subjects
+          tab = { this.state.tab } 
         />
 
       </>
