@@ -15,9 +15,7 @@ class User extends Component {
 
       navState: {
         subject: null,
-        work: null,
-        variant: null,
-        tasks: null
+        categories: []
       },
 
       prise: 0,
@@ -114,8 +112,7 @@ class User extends Component {
               prise: this.state.prise,
               token: user.token,
               subject: this.state.navState.subject,
-              work: this.state.navState.work,
-              variant: this.state.navState.variant,
+              categories: this.state.navState.categories,
               tasks
             })
 
@@ -131,9 +128,7 @@ class User extends Component {
                   this.setState({
                     navState: {
                       subject: null,
-                      work: null,
-                      variant: null,
-                      tasks: null
+                      categories: []
                     },
                   })
 
@@ -150,11 +145,10 @@ class User extends Component {
               prise: this.state.prise,
               info: {
                 type: 1, // Прямая оплата товара
-                token: localStorage.getItem('token'),
-                email: localStorage.getItem('email'),
+                token: user.token,
+                email: user.email,
                 subject: this.state.navState.subject,
-                work: this.state.navState.work,
-                variant: this.state.navState.variant,
+                categories: this.state.navState.categories,
                 tasks
               }
             })
@@ -207,7 +201,7 @@ class User extends Component {
 
   render() {
     
-    let subject, works, variant, tasks, prise = 0, priseBtn = <></>
+    let prise = 0, priseBtn = <></>
 
     let right = (document.documentElement.clientWidth - 1144) / 2 
     let w = this.state.loadingPayment?250:80
@@ -215,67 +209,149 @@ class User extends Component {
     if (document.documentElement.clientWidth <= 1200) {
       right = (document.documentElement.clientWidth - w) / 2 
     }
+      let subjects = []
 
-    if (this.props.getTasksResponse) {
-      subject = this.props.getTasksResponse.tasks
-
-      subject.forEach(element => {
-        if (element.name === this.state.navState.subject) {
-          works = element.works
-        }
-      });
-
-      if (works) {
-        works.forEach(element => {
-          if (element.name === this.state.navState.work) {
-            variant = element.variant
-          } 
+      if (this.props.getTasksResponse) {
+        this.props.getTasksResponse.tasks.forEach((subject) => {
+          if (subject.public) {
+            subjects.push(subject)
+          }
         })
       }
-
-      if (variant) {
-        variant.forEach((element, index) => {
-          if (index === this.state.navState.variant - 1) {
-            tasks = element
-
-            if (this.state.checkboxes.length === 0) {
-              this.checkboxesDefalt(tasks.length)
-            }
-
-            this.state.checkboxes.forEach((checkbox, index) => {
-              if (checkbox) {
-                prise += +tasks[index].prise
+      
+      let nav = this.state.navState
+  
+      let subject
+      if (nav.subject) {
+        subjects.forEach(item => {
+          if (item.name === nav.subject) {
+            subject = item
+          }
+        })
+      }
+      
+      let contentPage
+      if (nav.subject) {
+        if (nav.categories.length === 0) {       
+          contentPage = subject.tasks
+          
+        } else {
+          contentPage = subject.tasks
+          nav.categories.forEach(item => {
+            contentPage.forEach(task => {
+              if (task.name === item) {
+                contentPage = task.tasks
               }
             })
+          })
+        }
+      }
 
-            if (this.state.prise !== prise) {
-              this.setState({
-                prise
-              })
-            }
-
-            if (prise !== 0) {
-              priseBtn = 
-                <button 
-                  onClick={() => {this.payment()}}
-                  className='btn btn-prise' 
-                  style={{right}}
-                >
-                  Оплатить {prise} руб.
-                </button>
-            } 
-
-            if (this.state.loadingPayment) {
-              priseBtn = 
-                <div className="loader" style={{right}}>
-                  <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+      let content = <></>
+      // Предметы
+      if (!nav.subject && nav.categories.length === 0) {
+        content = <>
+          { 
+            subjects ? subjects.map(elem => {
+              return (
+                <div className='tasks__btn-group' key = {elem.name}>
+                  <button className="btn tasks__btn-category"  onClick = { () => {this.navEdit({subject: elem.name, categories: []})} }>
+                    { elem.name } 
+                  </button>
                 </div>
-            }
-          } 
+              )
+            }) : ''
+          }
+        </>
+      // Первая категория
+      } else if (nav.subject && nav.categories.length === 0) {
+        content = <>
+          {
+            contentPage ? contentPage.map((elem, index) => {
+              return (
+                <div className='tasks__btn-group' key = {elem.name}>
+                  <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [elem.name]})} }>
+                    { elem.name } 
+                  </button>
+                </div>
+              )
+            }) : '' 
+          }
+        </>
+      // Категории
+      } else if (nav.subject && nav.categories.length !== 0 && nav.categories.length < subject.model) {
+        content = <>
+          {
+            contentPage ? contentPage.map((elem, index) => {
+              return (
+                <div className='tasks__btn-group' key = {elem.name}>
+                  <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [...this.state.navState.categories,elem.name]})} }>
+                    { elem.name } 
+                  </button>
+                </div>
+              )
+            }) : ''
+          }
+        </>
+      // Задания
+      } else {
+        
+
+        if (this.state.checkboxes.length === 0) {
+          this.checkboxesDefalt(contentPage.length)
+        }
+
+        this.state.checkboxes.forEach((checkbox, index) => {
+          if (checkbox) {
+            prise += +contentPage[index].prise
+          }
         })
-      } 
-      
-    } 
+
+        if (this.state.prise !== prise) {
+          this.setState({
+            prise
+          })
+        }
+
+        if (prise !== 0) {
+          priseBtn = 
+            <button 
+              onClick={() => {this.payment()}}
+              className='btn btn-prise' 
+              style={{right}}
+            >
+              Оплатить {prise} руб.
+            </button>
+        } 
+
+        if (this.state.loadingPayment) {
+          priseBtn = 
+            <div className="loader" style={{right}}>
+              <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+        }
+
+        content = <>
+           <form  className="task-user-form">
+              {
+                contentPage ? contentPage.map((elem, index) => {
+                  return (
+                    <>
+                      <div className="checkbox" key={index}>
+                          <input onClick={() => {this.checkboxChange(index)}} checked={this.state.checkboxes[index]} className="checkbox__input" type="checkbox" id={"checkbox_" + index}/>
+                          <label className="checkbox__label" htmlFor={"checkbox_" + index}>{ index + 1 }</label>
+                      </div>
+                    </>
+                  )
+                }) : ''
+              } 
+            </form>
+
+            <button onClick={() => {this.allСhoice()}} className='btn btn-allСhoice'> Выбрать всё </button> 
+          
+            { priseBtn }
+        </>
+      }
 
       return (
         <div className = 'tasks animated fadeIn'>
@@ -285,91 +361,8 @@ class User extends Component {
               navEdit  = { (navState) => { this.navEdit(navState) } }
             />
 
-            <div className="tasks__content">
-              { 
-                // Предметы
-                !this.state.navState.subject && !this.state.navState.work ? 
-                <> 
-                  { 
-                    subject ? subject.map(elem => {
-                      return (
-                        <div className='tasks__btn-group' key = {elem.name}>
-                          <button className="btn tasks__btn-category"  onClick = { () => {this.navEdit({subject: elem.name, work: null})} }>
-                            { elem.name } 
-                          </button>
-                        </div>
-                      )
-                    }) : ''
-                  }
-                </>:
-
-                // Работы
-                this.state.navState.subject && !this.state.navState.work ? 
-                <> 
-                  {
-                    works ? works.map(elem => {
-                      return (
-                        <div className='tasks__btn-group' key = {elem.name}>
-                          <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, work: elem.name})} }>
-                            { elem.name } 
-                          </button>
-
-                        </div>
-                      )
-                    }) : ''
-                  }
-                  
-                </>: 
-
-                // Варианты 
-                this.state.navState.subject && this.state.navState.work && !this.state.navState.variant ? 
-                <>
-
-                  {
-                    variant ? variant.map((elem, index) => {
-                      return (
-                        <button 
-                          key = {index} 
-                          onClick = {() => {
-                            this.navEdit({
-                              subject: this.state.navState.subject, 
-                              work: this.state.navState.work, 
-                              variant: index + 1
-                            })
-                          }}
-                          className='btn btn-variant'
-                        >
-                          Вариант { index + 1 } 
-                        </button>
-                      )
-                    }) : ''
-                  } 
-
-                </>:
-                // Задания
-                <>
-                  
-                  <form  className="task-user-form">
-                    {
-                      tasks ? tasks.map((elem, index) => {
-                        return (
-                          <>
-                            <div className="checkbox" key={index}>
-                                <input onClick={() => {this.checkboxChange(index)}} checked={this.state.checkboxes[index]} className="checkbox__input" type="checkbox" id={"checkbox_" + index}/>
-                                <label className="checkbox__label" htmlFor={"checkbox_" + index}>{ index + 1 }</label>
-                            </div>
-                          </>
-                        )
-                      }) : ''
-                    } 
-                  </form>
-
-                  <button onClick={() => {this.allСhoice()}} className='btn btn-allСhoice'> Выбрать всё </button> 
-                
-                  { priseBtn }
-
-                </>
-              }
+            <div className="tasks__content">   
+              { content } 
             </div>
             
           </div>

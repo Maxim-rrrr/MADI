@@ -289,25 +289,19 @@ router.post('/paymentFullBalance', async (req, res) =>{
     
     // Подготовка изображений 
     let attachments = []
-    let subject, work, variant
-    subject = await Task.findOne({name: description.subject}).then()
+    let subject = await Task.findOne({name: description.subject}).then()
 
-    // Предмет 
-    subject.works.forEach(w => {
-      if (w.name === description.work) {
-        work = w
-      }
-    })
-
-    // Вариант
-    work.variant.forEach((v, i) => {
-      if (i + 1 === +description.variant) {
-        variant = v
-      }
+    solutions = subject.tasks
+    description.categories.forEach(item => {
+      solutions.forEach(task => {
+        if (task.name === item) {
+          solutions = task.tasks
+        }
+      })
     })
 
     // Задания
-    variant.forEach((t, i) => {
+    solutions.forEach((t, i) => {
       if (description.tasks.includes(i + 1)) {
         t.img.forEach(img => {
           attachments.push({
@@ -338,12 +332,12 @@ router.post('/paymentFullBalance', async (req, res) =>{
           to: user.email,
           subject: 'Решения',
           text: '',
-          html: `Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')}`,
+          html: `Предмет: ${description.subject}<br> Раздел: ${description.categories.join(' -> ')} <br> Задания: ${description.tasks.join(', ')}`,
           attachments: attachments,
           
         })
         
-        logger(status = 200, message = `Отправленны решения ${user.email} Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')} `)
+        logger(status = 200, message = `Отправленны решения: ${description.email}  Предмет: ${description.subject} Раздел: ${description.categories.join(' -> ')} Заданий: ${description.tasks.join(', ')} `)
         console.log(`Отправленны решения ${user.email}`)
 
       } catch (err) { 

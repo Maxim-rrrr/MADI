@@ -73,25 +73,19 @@ setInterval(async () => {
 
             // Подготовка изображений 
             let attachments = []
-            let subject, work, variant
-            subject = Task.findOne({name: description.subject}).then()
+            let subject = Task.findOne({name: description.subject}).then()
   
-            // Предмет 
-            subject.works.forEach(w => {
-              if (w.name === description.work) {
-                work = w
-              }
+            solutions = subject.tasks
+            description.categories.forEach(item => {
+              solutions.forEach(task => {
+                if (task.name === item) {
+                  solutions = task.tasks
+                }
+              })
             })
-  
-            // Вариант
-            work.variant.forEach((v, i) => {
-              if (i + 1 === +description.variant) {
-                variant = v
-              }
-            })
-  
+
             // Задания
-            variant.forEach((t, i) => {
+            solutions.forEach((t, i) => {
               if (description.tasks.includes(i + 1)) {
                 t.img.forEach(img => {
                   attachments.push({
@@ -102,7 +96,7 @@ setInterval(async () => {
                 })
               }
             })
-  
+
             // Отправка
             async function mail (req, res) {
               try {
@@ -122,12 +116,12 @@ setInterval(async () => {
                   to: description.email,
                   subject: 'Решения',
                   text: '',
-                  html: `Предмет: ${description.subject}<br> Работа: ${description.work}<br> Вариант: ${description.variant}<br> Заданий: ${description.tasks.join(', ')}`,
+                  html: `Предмет: ${description.subject}<br> Раздел: ${description.categories.join(' -> ')} <br> Задания: ${description.tasks.join(', ')}`,
                   attachments: attachments,
                   
                 })
                 
-                logger(status = 200, message = `Отправленны решения: ${description.email} Предмет: ${description.subject} Работа: ${description.work} Вариант: ${description.variant} Заданий: ${description.tasks.join(', ')} `)
+                logger(status = 200, message = `Отправленны решения: ${description.email}  Предмет: ${description.subject} Раздел: ${description.categories.join(' -> ')} Заданий: ${description.tasks.join(', ')} `)
                 console.log("\x1b[32m", `Отправленны решения ${description.email}`)
                 Payment.deleteOne({_id: payment._id}).then()
 
