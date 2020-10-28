@@ -125,6 +125,49 @@ class App extends Component {
     }
     
     this.userUpdata()
+
+    globalGradient('body', [45, 44, 83], [81, 90, 209])
+
+    document.addEventListener('scroll', () => {
+      globalGradient('body', [45, 44, 83], [81, 90, 209])
+    })
+
+    function globalGradient(selector = '.grad', colorStart = [0, 0, 0], colorEnd = [255, 255, 255]) {
+      let items = document.querySelectorAll(selector)
+      items.forEach(item => {
+        let colorDelta = []
+      
+        for (let i = 0; i < 3; i++) {
+          colorDelta.push(colorEnd[i] - colorStart[i])
+        }
+      
+        let height = document.documentElement.clientHeight
+        let colorCoefficient = [
+          colorDelta[0] / height,
+          colorDelta[1] / height,
+          colorDelta[2] / height,
+        ]
+      
+        let clientTop = document.documentElement.scrollTop
+      
+        let heightStart = item.offsetTop - clientTop
+        let heightEnd = heightStart + item.offsetHeight
+      
+        let gradStart = [
+          colorStart[0] + colorCoefficient[0] * heightStart,
+          colorStart[1] + colorCoefficient[1] * heightStart,
+          colorStart[2] + colorCoefficient[2] * heightStart,
+        ]
+      
+        let gradEnd = [
+          colorStart[0] + colorCoefficient[0] * heightEnd,
+          colorStart[1] + colorCoefficient[1] * heightEnd,
+          colorStart[2] + colorCoefficient[2] * heightEnd,
+        ]
+      
+        item.style.background = `linear-gradient(to bottom, rgb(${gradStart[0]}, ${gradStart[1]}, ${gradStart[2]}), rgb(${gradEnd[0]}, ${gradEnd[1]}, ${gradEnd[2]}))`
+      })
+    }
   }
 
   loginUpdata(bool) {
