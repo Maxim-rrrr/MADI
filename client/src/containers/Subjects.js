@@ -25,8 +25,11 @@ class Subjects extends Component {
     
     // Название предмета
     let name = event.target[0].value.trim()
-    name = name[0].toUpperCase() + name.slice(1).toLowerCase()
+    if (name.length > 1) {
+      name = name[0].toUpperCase() + name.slice(1).toLowerCase()
 
+    }
+    
     // Модель
     let model =  event.target[1].value.replace( /\s/g, "")
     
