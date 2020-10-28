@@ -4,9 +4,9 @@
 
 .btn-allСhoice
   display: block
-  border-color: #FCD770
+  border-color: $yellow
   color: #504c63
-  background-color: #FCD770
+  background-color: $yellow
 
   /* Checkbox */
 .checkbox 
@@ -20,7 +20,7 @@
     align-items: center
     margin-right: 2rem
     font-size: 2rem
-    color:  #FCD770
+    color:  $yellow
     cursor: pointer
     &::after 
       content: ""
@@ -33,16 +33,16 @@
       transition: 0.1s
 
 .checkbox__input:checked + .checkbox__label::after 
-  background-color: #FCD770
+  background-color: $yellow
   border-color: #816d36
-  box-shadow: 0 0 5px #ecc35473
+  box-shadow: 0 0 5px rgba($yellow, 160)
 
 .btn-prise
   position: fixed
   bottom: 50px
   width: 250px
-  background: #FCD770
-  border-color: #FCD770
+  background: $yellow
+  border-color: $yellow
 
 // Loader
 .loader
@@ -62,10 +62,10 @@
     width: 64px
     height: 64px
     margin: 8px
-    border: 8px solid #FCD770
+    border: 8px solid $yellow
     border-radius: 50%
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite
-    border-color: #FCD770 transparent transparent transparent
+    border-color: $yellow transparent transparent transparent
     &:nth-child(1) 
       animation-delay: -0.45s
     &:nth-child(2) 
