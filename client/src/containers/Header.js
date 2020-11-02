@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Login from './Popap/Login'
-import Registration from './Popap/Registration'
-import LoginEdit from './Popap/LoginEdit'
-import PasswordEdit from './Popap/PasswordEdit'
+import Login from './Popup/Login'
+import Registration from './Popup/Registration'
+import LoginEdit from './Popup/LoginEdit'
+import PasswordEdit from './Popup/PasswordEdit'
 import Account from './Account'
-import AddBalance from './Popap/AddBalance'
+import AddBalance from './Popup/AddBalance'
 
 export default class Header extends Component {
   
