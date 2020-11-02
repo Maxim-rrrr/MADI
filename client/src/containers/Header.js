@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import LoginPopap from './LoginPopap'
-import RegistrationPopap from './RegistrationPopap'
-import LoginEditPopap from './LoginEditPopap'
-import PasswordEditPopap from './PasswordEditPopap'
+import Login from './Popap/Login'
+import Registration from './Popap/Registration'
+import LoginEdit from './Popap/LoginEdit'
+import PasswordEdit from './Popap/PasswordEdit'
 import Account from './Account'
-import AddBalancePopap from './AddBalancePopap'
+import AddBalance from './Popap/AddBalance'
 
 export default class Header extends Component {
   
@@ -16,67 +16,63 @@ export default class Header extends Component {
       <>
         <Account 
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } 
-          activeLoginEditPopap = { () => { this.props.activeLoginEditPopap() } }
-          activeAddBalancePopap = { () => { this.props.activeAddBalancePopap() } } 
+          activeLoginEditPopup = { () => { this.props.activeLoginEditPopup() } }
+          activeAddBalancePopup = { () => { this.props.activeAddBalancePopup() } } 
           logInClass = ' account--logIn'
         />
-        <button className="btn btn-login btn-login--logIn" onClick = { () => { this.props.activeLoginPopap() } }> Войти </button>
+        <button className="btn btn-login btn-login--logIn" onClick = { () => { this.props.activeLoginPopup() } }> Войти </button>
       </>
     } else {
       loginBlock = 
       <>
         <Account 
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } } 
-          activeLoginEditPopap = { () => { this.props.activeLoginEditPopap() } }
-          activeAddBalancePopap = { () => { this.props.activeAddBalancePopap() } } 
+          activeLoginEditPopup = { () => { this.props.activeLoginEditPopup() } }
+          activeAddBalancePopup = { () => { this.props.activeAddBalancePopup() } } 
           logInClass = ''
         />
-        <button className="btn btn-login" onClick = { () => { this.props.activeLoginPopap() } }> Войти </button>
+        <button className="btn btn-login" onClick = { () => { this.props.activeLoginPopup() } }> Войти </button>
       </>
     }
 
     return (
       <header className="header">
 
-        <LoginPopap 
-          onClick = { (event) => {this.props.closePopap(event)} } 
-          active  = { this.props.loginPopap }
-          toRegistration = { () => {this.props.activeRegistrationPopap()} }
-          toPassEdit = { () => {this.props.activePasswordEditPopap()} }
-          closeLoginPopap = { this.props.closeLoginPopap }
+        <Login
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
+          active  = { this.props.loginPopup }
+          toRegistration = { () => {this.props.activeRegistrationPopup()} }
+          toPassEdit = { () => {this.props.activePasswordEditPopup()} }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
         />
 
-        <RegistrationPopap 
-          onClick = { (event) => {this.props.closePopap(event)} } 
-          active  = { this.props.registrationPopap }
-          closeAllPopap = { () => {this.props.closeAllPopap()} }
+        <Registration 
+          onClick = { (event) => {this.props.closePopup(event)} } 
+          active  = { this.props.registrationPopup }
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.props.customersUpdataDB() } }
         />
 
-        <LoginEditPopap 
-          onClick = { (event) => {this.props.closePopap(event)} } 
-          active  = { this.props.loginEditPopap }
-          closeAllPopap = { () => {this.props.closeAllPopap()} }
+        <LoginEdit 
+          onClick = { (event) => {this.props.closePopup(event)} } 
+          active  = { this.props.loginEditPopup }
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.props.customersUpdataDB() } }
         />
 
-        <PasswordEditPopap 
-          onClick = { (event) => {this.props.closePopap(event)} } 
-          active  = { this.props.passwordEditPopap }
-          closeAllPopap = { () => {this.props.closeAllPopap()} }
+        <PasswordEdit
+          onClick = { (event) => {this.props.closePopup(event)} } 
+          active  = { this.props.passwordEditPopup }
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
           loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.props.customersUpdataDB() } }
         />
 
-        <AddBalancePopap 
-          onClick = { (event) => {this.props.closePopap(event)} } 
-          active  = { this.props.addBalancePopap }
-          closeAllPopap = { () => {this.props.closeAllPopap()} }
-          loginUpdata = { (bool) => { this.props.loginUpdata(bool) } }
-          customersUpdataDB = { () => { this.props.customersUpdataDB() } }
+        <AddBalance
+          active  = { this.props.addBalancePopup }
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
         />
 
         <div className="container">

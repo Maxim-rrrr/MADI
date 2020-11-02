@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = config.get('port') || 4000
 
 async function start() {
-  try {
+  try { 
     await mongoose.connect(config.get('localMongoUri'), { 
       useNewUrlParser: true,
       useCreateIndex: true,

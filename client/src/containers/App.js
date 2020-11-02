@@ -17,96 +17,63 @@ class App extends Component {
       token: localStorage.getItem('token'),
       admin: false,
 
-      loginPopap: false,
-      loginEditPopap: false,
-      registrationPopap: false,
-      passwordEditPopap: false,
-      addBalancePopap: false,
+      loginPopup: false,
+      loginEditPopup: false,
+      registrationPopup: false,
+      passwordEditPopup: false,
+      addBalancePopup: false,
 
       user: {}
     } 
 
-    this.activeLoginPopap = this.activeLoginPopap.bind(this)
-    this.activeRegistrationPopap = this.activeRegistrationPopap.bind(this)
-    this.activePasswordEditPopap = this.activePasswordEditPopap.bind(this)
-    this.activeLoginEditPopap = this.activeLoginEditPopap.bind(this)
-    this.activeAddBalancePopap = this.activeAddBalancePopap.bind(this)
+    this.activeLoginPopup = this.activeLoginPopup.bind(this)
+    this.activeRegistrationPopup = this.activeRegistrationPopup.bind(this)
+    this.activePasswordEditPopup = this.activePasswordEditPopup.bind(this)
+    this.activeLoginEditPopup = this.activeLoginEditPopup.bind(this)
+    this.activeAddBalancePopup = this.activeAddBalancePopup.bind(this)
 
-    this.closePopap = this.closePopap.bind(this)
-
-    this.closeLoginPopap = this.closeLoginPopap.bind(this)
-    this.closeAllPopap = this.closeAllPopap.bind(this)
+    this.closeAllPopup = this.closeAllPopup.bind(this)
   }
 
-  activeLoginPopap() {
+  activeLoginPopup() {
     this.setState({
-      loginPopap: true
+      loginPopup: true
     })
   }
 
-  activeRegistrationPopap() {
+  activeRegistrationPopup() {
     this.setState({
-      registrationPopap: true,
-      loginPopap: false
+      registrationPopup: true,
+      loginPopup: false
     })
   }
 
-  activePasswordEditPopap() {
+  activePasswordEditPopup() {
     this.setState({
-      passwordEditPopap: true,
-      loginPopap: false
+      passwordEditPopup: true,
+      loginPopup: false
     })
   }
 
-  activeLoginEditPopap() {
+  activeLoginEditPopup() {
     this.setState({
-      loginEditPopap: true
+      loginEditPopup: true
     })
   }
 
-  activeAddBalancePopap() {
+  activeAddBalancePopup() {
     this.setState({
-      addBalancePopap: true
+      addBalancePopup: true
     })
   }
 
-  closePopap(event) {
-    if (event.target.className === 'login login--active'                || 
-        event.target.className === 'login__close-btn'                   ||
-        event.target.className === 'login__close-img'                   ||
-        event.target.className === 'login-edit login-edit--active'      || 
-        event.target.className === 'login-edit__close-btn'              ||
-        event.target.className === 'login-edit__close-img'              ||
-        event.target.className === 'pass-edit pass-edit--active'        || 
-        event.target.className === 'pass-edit__close-btn'               ||
-        event.target.className === 'pass-edit__close-img'               ||
-        event.target.className === 'registration registration--active'  || 
-        event.target.className === 'registration__close-btn'            ||
-        event.target.className === 'registration__close-img'            ) {
-
-      this.setState({
-        loginPopap: false,
-        registrationPopap: false,
-        loginEditPopap: false,
-        passwordEditPopap: false,
-        addBalancePopap: false
-      })
-    }
-  }
-
-  closeLoginPopap() {
+  closeAllPopup() {
     this.setState({
-      loginPopap: false
-    })
-  }
-
-  closeAllPopap() {
-    this.setState({
-      loginPopap: false,
-      loginEditPopap: false,
-      registrationPopap: false,
-      passwordEditPopap: false,
-      addBalancePopap: false
+      loginPopup: false,
+      loginEditPopup: false,
+      registrationPopup: false,
+      passwordEditPopup: false,
+      addBalancePopup: false
     })
   }
 
@@ -118,7 +85,7 @@ class App extends Component {
       })
     }
 
-    if (this.state.token === 'apksLWiOCMXtp8VVOfOIahLzUWhyo94i23QgwbPJHhs=') {
+    if (localStorage.getItem('email') === 'admin@admin') {
       this.setState({
         admin: true
       })
@@ -207,9 +174,9 @@ class App extends Component {
   render() {
     let content = 
       <User 
-        activeLoginPopap = { this.activeLoginPopap }
+        activeLoginPopup = { this.activeLoginPopup }
         userUpdata = {() => {this.userUpdata()}}
-        activeAddBalancePopap   = { this.activeAddBalancePopap   }
+        activeAddBalancePopup   = { this.activeAddBalancePopup   }
       />
     if (this.state.admin) {
       content = <Admin />
@@ -223,20 +190,19 @@ class App extends Component {
           loginUpdata = { (bool) => { this.loginUpdata(bool) } }
           customersUpdataDB = { () => { this.customersUpdataDB() } }
 
-          loginPopap        = { this.state.loginPopap        }
-          loginEditPopap    = { this.state.loginEditPopap    }
-          registrationPopap = { this.state.registrationPopap }
-          passwordEditPopap = { this.state.passwordEditPopap }
-          addBalancePopap   = { this.state.addBalancePopap   }
+          loginPopup        = { this.state.loginPopup        }
+          loginEditPopup    = { this.state.loginEditPopup    }
+          registrationPopup = { this.state.registrationPopup }
+          passwordEditPopup = { this.state.passwordEditPopup }
+          addBalancePopup   = { this.state.addBalancePopup   }
 
-          activeLoginPopap        = { this.activeLoginPopap        }
-          activeRegistrationPopap = { this.activeRegistrationPopap }
-          activePasswordEditPopap = { this.activePasswordEditPopap }
-          activeLoginEditPopap    = { this.activeLoginEditPopap    }
-          activeAddBalancePopap   = { this.activeAddBalancePopap   }
-          closePopap              = { this.closePopap              }
-          closeLoginPopap         = { this.closeLoginPopap         }
-          closeAllPopap           = { this.closeAllPopap           }
+          activeLoginPopup        = { this.activeLoginPopup        }
+          activeRegistrationPopup = { this.activeRegistrationPopup }
+          activePasswordEditPopup = { this.activePasswordEditPopup }
+          activeLoginEditPopup    = { this.activeLoginEditPopup    }
+          activeAddBalancePopup   = { this.activeAddBalancePopup   }
+          closePopup              = { this.closePopup              }
+          closeAllPopup           = { this.closeAllPopup           }
       />
 
         { content }

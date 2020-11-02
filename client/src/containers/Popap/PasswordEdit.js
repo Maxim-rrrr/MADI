@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { codeSend } from '../actions/code'
-import { editUser } from '../actions/editUser'
-import { getId } from '../actions/getId'
-import { login } from '../actions/login'
+import { codeSend } from '../../actions/code'
+import { editUser } from '../../actions/editUser'
+import { getId } from '../../actions/getId'
+import { login } from '../../actions/login'
+
+import Popup from './models/Popup'
 
 class PasswordEditPopap extends Component {
   constructor(props) {
@@ -133,10 +135,6 @@ class PasswordEditPopap extends Component {
   }
 
   render() {
-    let active = ''
-    if (this.props.active) {
-      active = 'pass-edit--active'
-    }
 
     let error = ''
     if (this.state.invalid === 'Pass error') {
@@ -148,13 +146,13 @@ class PasswordEditPopap extends Component {
     let massageCode = ' Мы отправили на вашу почту код подтверждения '
 
     let form = 
-      <form onSubmit={ this.handleSubmit } className="pass-edit__form">
+      <form onSubmit={ this.handleSubmit } className="popup__form">
 
         <input 
           value       = { this.state.emailValue } 
           onChange    = { this.handleEmailChange }  
           type        = "email" 
-          className   = "input pass-edit__form-email" 
+          className   = "input popup__form-email" 
           placeholder = "Email" 
           required
         />
@@ -162,7 +160,7 @@ class PasswordEditPopap extends Component {
           value       = { this.state.passwordValue } 
           onChange    = { this.handlePasswordChange } 
           type        = "password" 
-          className   = "input pass-edit__form-pass" 
+          className   = "input popup__form-pass" 
           placeholder = "Новый пароль" 
           minLength   = "4" 
           required
@@ -171,51 +169,49 @@ class PasswordEditPopap extends Component {
           value       = { this.state.passwordRepeatValue } 
           onChange    = { this.handlePasswordRepeatChange } 
           type        = "password" 
-          className   = "input pass-edit__form-pass-repeat" 
+          className   = "input popup__form-pass" 
           placeholder = "Повторите пароль" 
           minLength   = "4" 
           required 
         />
 
-        <button className='btn pass-edit__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
+        <button className='btn popup__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
       </form>
 
       if (this.state.code) {
         form = 
         <>
-          <div className="pass-edit__form-back-box" onClick={() => { this.setState({ code: false }) }}>
-            <span className='pass-edit__form-back'></span>
+          <div className="popup__back-box" onClick={() => { this.setState({ code: false }) }}>
+            <span className='popup__back'></span>
           </div>
           
-          <form onSubmit={ this.handleCodeSubmit } className="pass-edit__form code-form animated fadeIn">
+          <form onSubmit={ this.handleCodeSubmit } className="popup__form code-form animated fadeIn">
             <div className="code-label"> { massageCode } </div>
             <input 
               value       = { this.state.codeValue } 
               onChange    = { this.handleCodeChange }  
               type        = "text" 
-              className   = "input pass-edit__form-email" 
+              className   = "input popup__form-email" 
               placeholder = "Код подверждения" 
               required
             />
 
-            <button className='btn pass-edit__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
+            <button className='btn popup__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
           </form>
         </>
       }
 
     return (
-      <div className={"pass-edit " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="pass-edit__window">
-          <button className="pass-edit__close-btn">
-            <img src="./img/close.png" alt="" className="pass-edit__close-img"/>
-          </button>
-          <div className="pass-edit__title"> ВОСТАНОВЛЕНИЕ ПАРОЛЯ </div>
-          <div className="invalid-label"> { error } </div>
-          
-          { form }
+      <Popup 
+        active = { this.props.active }
+        title = 'Востановление пароля' 
+        close = { this.props.closeAllPopup }
+        error = { error }
+      >
 
-        </div>      
-      </div>
+        { form }
+
+      </Popup>
     )
   }
 }

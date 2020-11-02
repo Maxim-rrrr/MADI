@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { codeSend } from '../actions/code'
-import { addUser } from '../actions/addUser'
-import { getId } from '../actions/getId'
-import { login } from '../actions/login'
+import { codeSend } from '../../actions/code'
+import { addUser } from '../../actions/addUser'
+import { getId } from '../../actions/getId'
+import { login } from '../../actions/login'
 
-class RegistrationPopap extends Component {
+import Popup from './models/Popup'
+
+class Registration extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -141,10 +143,6 @@ class RegistrationPopap extends Component {
   }
 
   render() {
-    let active = ''
-    if (this.props.active) {
-      active = 'registration--active'
-    }
 
     let error = ''
     if (this.state.invalid === 'Pass error') {
@@ -158,13 +156,13 @@ class RegistrationPopap extends Component {
     let massageCode = ' Мы отправили на вашу почту код подтверждения '
 
     let form = 
-      <form onSubmit={ this.handleSubmit } className="registration__form">
+      <form onSubmit={ this.handleSubmit } className="popup__form">
 
         <input 
           value       = { this.state.emailValue } 
           onChange    = { this.handleEmailChange }  
           type        = "email" 
-          className   = "input registration__form-email" 
+          className   = "input popup__form-email" 
           placeholder = "Email (На который будут приходить задания)" 
           required
         />
@@ -172,7 +170,7 @@ class RegistrationPopap extends Component {
           value       = { this.state.passwordValue } 
           onChange    = { this.handlePasswordChange } 
           type        = "password" 
-          className   = "input registration__form-pass" 
+          className   = "input popup__form-pass" 
           placeholder = "Пароль" 
           minLength   = "4" 
           required
@@ -181,51 +179,49 @@ class RegistrationPopap extends Component {
           value       = { this.state.passwordRepeatValue } 
           onChange    = { this.handlePasswordRepeatChange } 
           type        = "password" 
-          className   = "input registration__form-pass-repeat" 
+          className   = "input popup__form-pass" 
           placeholder = "Повторите пароль" 
           minLength   = "4" 
           required 
         />
 
-        <button className='btn registration__form-submit' type='submit'> ЗАРЕГИСТРИРОВАТЬСЯ </button>
+        <button className='btn popup__form-submit' type='submit'> ЗАРЕГИСТРИРОВАТЬСЯ </button>
       </form>
 
       if (this.state.code) {
         form = 
         <>
-          <div className="registration__form-back-box" onClick={() => { this.setState({ code: false }) }}>
-            <span className='registration__form-back'></span>
+          <div className="popup__back-box" onClick={() => { this.setState({ code: false }) }}>
+            <span className='popup__back'></span>
           </div>
           
-          <form onSubmit={ this.handleCodeSubmit } className="registration__form code-form animated fadeIn">
+          <form onSubmit={ this.handleCodeSubmit } className="popup__form code-form animated fadeIn">
             <div className="code-label"> { massageCode } </div>
             <input 
               value       = { this.state.codeValue } 
               onChange    = { this.handleCodeChange }  
               type        = "text" 
-              className   = "input registration__form-email" 
+              className   = "input popup__form-email" 
               placeholder = "Код подверждения" 
               required
             />
 
-            <button className='btn registration__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
+            <button className='btn popup__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
           </form>
         </>
       }
 
     return (
-      <div className={"registration " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="registration__window">
-          <button className="registration__close-btn">
-            <img src="./img/close.png" alt="" className="registration__close-img"/>
-          </button>
-          <div className="registration__title"> РЕГИСТРАЦИЯ </div>
-          <div className="invalid-label"> { error } </div>
+      <Popup 
+        active = { this.props.active }
+        title = 'Регистрация' 
+        close = { this.props.closeAllPopup }
+        error = { error }
+      >
           
           { form }
 
-        </div>      
-      </div>
+      </Popup>
     )
   }
 }
@@ -248,4 +244,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationPopap);
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

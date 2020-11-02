@@ -15,7 +15,7 @@ export default class Account extends Component {
     let login = 
       <div className="account__login-block">
         <button className="account__edit" /> 
-        <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopap() }}> { localStorage.getItem('email') } </b> 
+        <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopup() }}> { localStorage.getItem('email') } </b> 
       </div> 
 
     if (localStorage.getItem('email') === 'admin@admin') {
@@ -29,7 +29,7 @@ export default class Account extends Component {
     
     if (localStorage.getItem('balance') && localStorage.getItem('email') !== 'admin@admin') {
       balance = 
-      <div className="account__balace-block" onClick = {() => { this.props.activeAddBalancePopap() }}>
+      <div className="account__balace-block" onClick = {() => { this.props.activeAddBalancePopup() }}>
         <button className="account__add-balance" /> 
         <span className="account__balace"> { localStorage.getItem('balance') } руб. </span>
       </div> 

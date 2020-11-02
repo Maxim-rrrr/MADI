@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { createPayment } from '../actions/createPayment'
+import { createPayment } from '../../actions/createPayment'
+import Popup from './models/Popup'
 
 class AddBalancePopap extends Component {
   constructor(props) {
@@ -57,14 +58,14 @@ class AddBalancePopap extends Component {
   }
 
   render() {
-    let active = ''
-    if (this.props.active) {
-      active = 'registration--active'
-    }
-
-
-    let form = 
-      <form onSubmit={ this.handleSubmit } className="registration__form">
+    return (
+      
+      <Popup 
+        active = { this.props.active }
+        title = 'Пополнение баланса' 
+        close = { this.props.closeAllPopup }
+      >
+        <form onSubmit={ this.handleSubmit } className="popup__form">
 
         <input 
           value       = { this.state.summa } 
@@ -74,7 +75,7 @@ class AddBalancePopap extends Component {
           placeholder = "Сумма..." 
           required
         />
-        
+
         {
           this.state.loadingPayment?
             <div className="loader add-balance__loader">
@@ -82,21 +83,9 @@ class AddBalancePopap extends Component {
             </div>:
             <button className='btn registration__form-submit' type='submit'> Оплатить </button>
         }
-      </form>
-
-
-    return (
-      <div className={"registration " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="registration__window">
-          <button className="registration__close-btn">
-            <img src="./img/close.png" alt="" className="registration__close-img"/>
-          </button>
-          <div className="registration__title"> Пополнение баланса </div>
+        </form>
+      </Popup>
           
-          { form }
-
-        </div>      
-      </div>
     )
   }
 }

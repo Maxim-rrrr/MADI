@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { login } from "../actions/login";
+import { login } from "../../actions/login";
+import Popup from './models/Popup'
 
-class LoginPopap extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,7 +61,7 @@ class LoginPopap extends Component {
         localStorage.setItem(   'orders', user.orders   );
         localStorage.setItem( 'inviting', user.inviting );
    
-        this.props.closeLoginPopap();
+        this.props.closeLoginPopup();
         this.props.loginUpdata(true);
       }
     } else {
@@ -80,7 +81,7 @@ class LoginPopap extends Component {
             localStorage.setItem(   'orders', user.orders   );
             localStorage.setItem( 'inviting', user.inviting );
        
-            this.props.closeLoginPopap();
+            this.props.closeLoginPopup();
             this.props.loginUpdata(true);
           } 
 
@@ -103,40 +104,38 @@ class LoginPopap extends Component {
     }
 
     return (
-      <div className={"login " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="login__window">
-          <button className="login__close-btn">
-            <img src="./img/close.png" alt="" className="login__close-img"/>
-          </button>
-          <div className="login__title"> ВХОД </div>
-          <div className="invalid-label"> { error } </div>
-          <form onSubmit={ this.handleSubmit } className="login__form">
+      <Popup
+        active = { this.props.active }
+        title = 'ВХОД'
+        error={ error }
+        close = { this.props.closeAllPopup }
+      >
+        <form onSubmit={ this.handleSubmit } className="popup__form">
 
-            <input 
-              value={ this.state.emailValue } 
-              onChange={ this.handleEmailChange } 
-              type="email" 
-              className="input login__form-email" 
-              placeholder="Email" 
-              required
-            />
-            
-            <input 
-              value={ this.state.passwordValue } 
-              onChange={ this.handlePasswordChange } 
-              type="password" 
-              className="input login__form-pass" 
-              placeholder="Пароль" 
-              required
-            />
-            
-            <button className='btn login__form-submit' type='submit'> ВОЙТИ </button>
-          </form>
+          <input 
+            value={ this.state.emailValue } 
+            onChange={ this.handleEmailChange } 
+            type="email" 
+            className="input popup__form-email" 
+            placeholder="Email" 
+            required
+          />
+          
+          <input 
+            value={ this.state.passwordValue } 
+            onChange={ this.handlePasswordChange } 
+            type="password" 
+            className="input popup__form-pass" 
+            placeholder="Пароль" 
+            required
+          />
+          
+          <button className='btn popup__form-submit' type='submit'> ВОЙТИ </button>
+        </form>
 
-          <button className="btn-registration" onClick = { () => (this.props.toRegistration()) }> Регистрация </button>
-          <button className="btn-registration" onClick = { () => (this.props.toPassEdit()) }> Забыли пароль? </button>
-        </div>      
-      </div>
+        <button className="popup__link" onClick = { () => (this.props.toRegistration()) }> Регистрация </button>
+        <button className="popup__link" onClick = { () => (this.props.toPassEdit()) }> Забыли пароль? </button>
+      </Popup>
     )
   }
 }
@@ -153,4 +152,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPopap)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

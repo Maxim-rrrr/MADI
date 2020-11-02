@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { codeSend } from '../actions/code'
-import { editUser } from '../actions/editUser'
-import { getId } from '../actions/getId'
+import { codeSend } from '../../actions/code'
+import { editUser } from '../../actions/editUser'
+import { getId } from '../../actions/getId'
+
+import Popup from './models/Popup'
 
 class LoginEditPopap extends Component {
   constructor(props) {
@@ -105,11 +107,7 @@ class LoginEditPopap extends Component {
   }
 
   render() {
-    let active = ''
-    if (this.props.active) {
-      active = 'login-edit--active'
-    }
-
+    
     let error = ''
     if (this.state.invalid === 'Pass error') {
       error = 'Пароли не совпадают'
@@ -144,40 +142,38 @@ class LoginEditPopap extends Component {
       if (this.state.code) {
         form = 
         <>
-          <div className="registration__form-back-box" onClick={() => { this.setState({ code: false }) }}>
-            <span className='registration__form-back'></span>
+          <div className="popup__form-back-box" onClick={() => { this.setState({ code: false }) }}>
+            <span className='popup__form-back'></span>
           </div>
           
-          <form onSubmit={ this.handleCodeSubmit } className="registration__form code-form animated fadeIn">
+          <form onSubmit={ this.handleCodeSubmit } className="popup__form code-form animated fadeIn">
             <div className="code-label"> Мы отправили на вашу почту код подтверждения </div>
             <input 
               value       = { this.state.codeValue } 
               onChange    = { this.handleCodeChange }  
               type        = "text" 
-              className   = "input registration__form-email" 
+              className   = "input popup__form-email" 
               placeholder = "Код подверждения" 
               required
             />
 
-            <button className='btn registration__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
+            <button className='btn popup__form-submit' type='submit'> ПОДТВЕРДИТЬ </button>
           </form>
         </>
       }
 
     return (
-      <div className={"login-edit " + active} onClick = { (event) => (this.props.onClick(event)) }>
-        <div className="login-edit__window">
-          <button className="login-edit__close-btn">
-            <img src="./img/close.png" alt="" className="login-edit__close-img"/>
-          </button>
+      
+      <Popup 
+        active = { this.props.active }
+        title = 'Изменение логина' 
+        close = { this.props.closeAllPopup }
+        error = { error }
+      >
 
-          <div className="login-edit__title"> ИЗМЕНЕНИЕ ЛОГИНА </div>
-          <div className="invalid-label"> { error } </div>
+        { form }
 
-          { form }
-
-        </div>      
-      </div>
+      </Popup>
     )
   }
 }
