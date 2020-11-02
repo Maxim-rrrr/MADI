@@ -165,7 +165,7 @@ class User extends Component {
               }
             })
           } else if (+user.balance !== 0) {
-            this.props.activeAddBalancePopap()
+            this.props.activeAddBalancePopup()
             this.setState({
               loadingPayment: false
             })
@@ -179,7 +179,7 @@ class User extends Component {
       
       
     } else {
-      this.props.activeLoginPopap()
+      this.props.activeLoginPopup()
     }
 
   }

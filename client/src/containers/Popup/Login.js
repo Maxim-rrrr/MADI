@@ -61,7 +61,7 @@ class Login extends Component {
         localStorage.setItem(   'orders', user.orders   );
         localStorage.setItem( 'inviting', user.inviting );
    
-        this.props.closeLoginPopup();
+        this.props.closeAllPopup();
         this.props.loginUpdata(true);
       }
     } else {
@@ -81,7 +81,7 @@ class Login extends Component {
             localStorage.setItem(   'orders', user.orders   );
             localStorage.setItem( 'inviting', user.inviting );
        
-            this.props.closeLoginPopup();
+            this.props.closeAllPopup();
             this.props.loginUpdata(true);
           } 
 
