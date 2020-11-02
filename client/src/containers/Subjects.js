@@ -27,7 +27,6 @@ class Subjects extends Component {
     let name = event.target[0].value.trim()
     if (name.length > 1) {
       name = name[0].toUpperCase() + name.slice(1).toLowerCase()
-
     }
     
     // Модель

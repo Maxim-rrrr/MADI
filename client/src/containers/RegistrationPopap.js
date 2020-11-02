@@ -93,7 +93,7 @@ class RegistrationPopap extends Component {
         }
         
       }
-    })
+    }, 500)
   }
 
   // Отправка кода подтверждения
