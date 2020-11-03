@@ -93,10 +93,6 @@ class Login extends Component {
   }
 
   render() {
-    let active = ''
-    if (this.props.active) {
-      active = 'login--active'
-    }
 
     let error = ''
     if (this.state.invalid) {
