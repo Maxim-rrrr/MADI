@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
-import { editUser } from "../actions/editUser";
+import { editUser } from "../../../actions/editUser";
 
 class CustomerList extends Component {
   constructor(props) {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
-import { customersFetchData } from "../actions/customers";
-import CustomerList from './CustomerList'
-import Tasks from './Tasks';
-import Subjects from './Subjects';
+import { customersFetchData } from "../../actions/customers";
+import CustomerList from './components/CustomerList'
+import Tasks from './components/Tasks';
+import Subjects from './components/Subjects';
 
 class Admin extends Component {
   constructor(props){
@@ -22,11 +22,36 @@ class Admin extends Component {
     this.props.fetchData("/api/customers");
   }
 
+  exit() {
+    localStorage.setItem('token-admin', '')
+    window.location.reload()
+  }
+
   render() {
     let balances = []
     this.props.customers.map( value => balances.push(value.balance) )
     return (
       <>       
+        <header className="header">
+          <div className="container">
+            <div className="header__content">
+
+              <div className="header__logo">
+                <img src="./img/logo.png" alt="Logo"/>
+                <h1 className='header__title'> РГР работы МАДИ </h1>
+              </div>
+
+              <div className="header__admin-label">
+                АДМИНИСТРАТОР
+                <button className="account__exit" onClick={ () => (this.exit()) }>
+                  <img src="./img/exit.png" alt=""/>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </header>
+
         <div className='container'>
           <nav className='admin__nav'>
             {

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Login from './Popup/Login'
-import Registration from './Popup/Registration'
-import LoginEdit from './Popup/LoginEdit'
-import PasswordEdit from './Popup/PasswordEdit'
+import Login from '../Popup/Login'
+import Registration from '../Popup/Registration'
+import LoginEdit from '../Popup/LoginEdit'
+import PasswordEdit from '../Popup/PasswordEdit'
 import Account from './Account'
-import AddBalance from './Popup/AddBalance'
+import AddBalance from '../Popup/AddBalance'
 
 export default class Header extends Component {
   
@@ -78,10 +78,7 @@ export default class Header extends Component {
         <div className="container">
           <div className="header__content">
 
-            <div className="header__logo" 
-              onMouseOver = { this.hoverLogo } 
-              onMouseOut  = { this.hoverLogo } 
-            >
+            <div className="header__logo" >
               <img src="./img/logo.png" alt="Logo"/>
               <h1 className='header__title'> РГР работы МАДИ </h1>
             </div>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { getTasks } from '../actions/getTasks'
-import { getCustomer } from '../actions/getCustomer'
-import { createPayment } from '../actions/createPayment'
-import { paymentFullBalance } from '../actions/paymentFullBalance'
+import { getTasks } from '../../actions/getTasks'
+import { getCustomer } from '../../actions/getCustomer'
+import { createPayment } from '../../actions/createPayment'
+import { paymentFullBalance } from '../../actions/paymentFullBalance'
 
 import TasksNav from './TasksNav'
 

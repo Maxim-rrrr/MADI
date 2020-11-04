@@ -17,17 +17,10 @@ export default class Account extends Component {
         <button className="account__edit" /> 
         <b className = 'account__login' onClick={() => { this.props.activeLoginEditPopup() }}> { localStorage.getItem('email') } </b> 
       </div> 
-
-    if (localStorage.getItem('email') === 'admin@admin') {
-      login = 
-      <div className="account__login-block">
-        <b className = 'account__login'> АДМИНИСТРАТОР </b> 
-      </div> 
-    }
     
     let balance = <></>
     
-    if (localStorage.getItem('balance') && localStorage.getItem('email') !== 'admin@admin') {
+    if (localStorage.getItem('balance')) {
       balance = 
       <div className="account__balace-block" onClick = {() => { this.props.activeAddBalancePopup() }}>
         <button className="account__add-balance" /> 
@@ -35,9 +28,6 @@ export default class Account extends Component {
       </div> 
     }
  
-
-    
-
     return (
       <div className={'account' + this.props.logInClass}>
         <div className="account__info">
@@ -50,6 +40,7 @@ export default class Account extends Component {
         <button className="account__exit" onClick={ () => (this.exit()) }>
           <img src="./img/exit.png" alt=""/>
         </button>
+        
       </div>
     )
   }

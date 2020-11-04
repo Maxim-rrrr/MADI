@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getTasks } from '../actions/getTasks'
-import { setTask } from '../actions/setTask'
-import { addImg } from '../actions/addImg'
+import { getTasks } from '../../../actions/getTasks'
+import { setTask } from '../../../actions/setTask'
+import { addImg } from '../../../actions/addImg'
 
 
 import TasksNav from './TasksNav'

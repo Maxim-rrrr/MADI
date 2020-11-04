@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getTasks } from '../actions/getTasks'
-import { setTask } from '../actions/setTask'
-import { addTask } from '../actions/addTask'
-import { removeTask } from '../actions/removeTask'
+import { getTasks } from '../../../actions/getTasks'
+import { setTask } from '../../../actions/setTask'
+import { addTask } from '../../../actions/addTask'
+import { removeTask } from '../../../actions/removeTask'
 
 class Subjects extends Component {
   constructor (props) {

@@ -3,6 +3,7 @@ const router = express.Router()
 const dayjs = require('dayjs')
 
 const Сustomer = require('./Schemes/Customer')
+const Admin = require('./Schemes/Admin')
 const Task = require('./Schemes/Task')
 const Payment = require('./Schemes/Payment')
 const Log = require('./Schemes/Log')
@@ -57,6 +58,61 @@ router.post('/login', (req, res)=>{
 
   } catch (error) {
     logger(status = 500, message = `Ошибка сервера при входе пользователя: ${err}`)
+    res.send(error);
+  }
+
+});
+
+// Вход админа
+router.post('/login-admin', (req, res)=>{
+  try {
+    Admin.findOne({
+      name: req.body.name,
+      password: req.body.password
+    })
+    .then(admin => {
+      if (admin) {
+
+        res.send({status: 200, token: admin.token});
+
+      } else {
+        res.send({status: 400, message: 'Неверный логин или пароль'});
+      }
+    });
+
+  } catch (error) {
+    logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
+    res.send(error);
+  }
+
+});
+
+// Проверка на админа
+router.post('/isAdmin', (req, res)=>{
+  try {
+    Admin.findOne({
+      token: req.body.token
+    })
+    .then(admin => {
+      if (admin) {
+
+        res.send({ status: 200 });
+
+      } else {
+        if (req.body.userToken) {
+          let user = Сustomer.findOne({ token: req.body.userToken }).then()
+          logger(status = 400, message = `Попытка несанкционированного ввода в админку: от пользователя ${user.email}`)
+        } else {
+          logger(status = 400, message = `Попытка несанкционированного ввода в админку`)
+        }
+
+        res.send({ status: 400, message: 'Попытка несанкционированного ввода в админку' });
+        
+      }
+    });
+
+  } catch (error) {
+    logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
     res.send(error);
   }
 
