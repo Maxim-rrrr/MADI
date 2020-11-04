@@ -66,9 +66,22 @@ setInterval(async () => {
       .then((result) => {
         result = JSON.parse(result)
         if (result.status === "succeeded") {
-          console.log('payment.description: ', payment.description);
-          let description = JSON.parse(payment.description)
+          console.log('payment.description: ', result.description);
+          let description = JSON.parse(result.description)
           
+          // Отправка 5% от покупки пригласителю
+          let U = Сustomer.findOne({token: description.token}).then()
+
+          if (U.inviting) {
+            let invit_user = Сustomer.findOne({email: U.inviting}).then()
+
+            Сustomer.findOneAndUpdate({token: invit_user.token},{
+              balance: +invit_user.balance + (+result.amount.value * 0.1)
+            }).then()
+
+          }
+
+
           if (description.type == 1) { // Оплата работ
 
             // Подготовка изображений 
