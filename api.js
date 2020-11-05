@@ -88,19 +88,20 @@ router.post('/login-admin', (req, res)=>{
 });
 
 // Проверка на админа
-router.post('/isAdmin', (req, res)=>{
+router.post('/isAdmin', (req, res) => {
   try {
     Admin.findOne({
       token: req.body.token
     })
-    .then(admin => {
+    .then(async (admin) => {
       if (admin) {
 
         res.send({ status: 200 });
 
       } else {
+
         if (req.body.userToken) {
-          let user = Сustomer.findOne({ token: req.body.userToken }).then()
+          let user = await Сustomer.findOne({ token: req.body.userToken }).then()
           logger(status = 400, message = `Попытка несанкционированного ввода в админку: от пользователя ${user.email}`)
         } else {
           logger(status = 400, message = `Попытка несанкционированного ввода в админку`)
