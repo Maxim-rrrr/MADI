@@ -204,7 +204,7 @@ class User extends Component {
     let prise = 0, priseBtn = <></>
 
     let right = (document.documentElement.clientWidth - 1144) / 2 
-    let w = this.state.loadingPayment?250:80
+    let w = this.state.loadingPayment?80:250
     
     if (document.documentElement.clientWidth <= 1200) {
       right = (document.documentElement.clientWidth - w) / 2 

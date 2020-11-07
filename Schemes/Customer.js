@@ -4,7 +4,8 @@ const { Schema, model } = require("mongoose");
 const customerSchema = new Schema({
   email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  token:    { type: String, default: 0 },
+  token:    { type: String, default: '' },
+  inviteToken: { type: String, default: '' },
   balance:  { type: Number, default: 0 },
   inviting: { type: String, default: '' },
   orders:   { type: Array , default: [] },

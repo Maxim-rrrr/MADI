@@ -7,6 +7,7 @@ import { addUser } from './addUser'
 import { login } from './login'
 import { loginAdmin } from './login-admin'
 import { isAdmin } from './isAdmin'
+import { validInvite } from './validInvite'
 import { getId } from './getId'
 import { getCustomer } from './getCustomer'
 
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
     getCustomer,
     paymentFullBalance,
     loginAdmin,
-    isAdmin
+    isAdmin,
+    validInvite
 });
 
 export default rootReducer;

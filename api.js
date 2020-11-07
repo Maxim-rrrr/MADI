@@ -119,6 +119,23 @@ router.post('/isAdmin', (req, res) => {
 
 });
 
+router.post('/validInvite', (req, res) => {
+  console.log(req.body);
+  try {
+    Сustomer.findOne({inviteToken: req.body.inviteToken})
+      .then(customer => {
+        console.log(customer);
+        if (customer) {
+          res.send({ status: 200, email: customer.email })
+        } else {
+          res.send({ status: 400, message: 'Приглашение не найдено' })
+        }
+      })
+  } catch (error) {
+    res.send(error);
+  }
+})
+
 // Получение id пользователя по email
 router.post('/getId', (req, res)=>{
   try {
@@ -145,7 +162,7 @@ router.post('/getCustomer', (req, res)=>{
         if (customer) {
           if (req.body.counter) {
             res.send({status: 200, customer, counter: req.body.counter});
-          }
+          } 
           res.send({status: 200, customer});
         } else {
           res.send({status: 400, message: req.body.token});
@@ -211,14 +228,21 @@ router.post('/add-user', (req, res)=> {
     Сustomer.create(req.body)
       .then((customer) => {
         
-        let sha256 = crypto.createHash("sha256")
-        sha256.update(customer._id + '', "utf8")
+        function cryptor(value) {
+          let sha256 = crypto.createHash("sha256")
+          sha256.update(value + '', "utf8")
 
-        let token = sha256.digest("base64")
+          return sha256.digest("base64")
+        }
 
-        Сustomer.findByIdAndUpdate({_id: customer.id},{token: token}).then()
+        let token = cryptor(customer._id)
+        let inviteToken = cryptor(customer.email).replace('/','').replace('\\', '')
+
+        Сustomer.findByIdAndUpdate({_id: customer.id},{token, inviteToken}).then()
 
         customer.token = token
+        customer.inviteToken = inviteToken
+        
         res.send(customer)
       });
   } catch (err) {
@@ -311,6 +335,7 @@ router.post('/removeTask/:id', (req, res) =>{
 /////// Загрузка изображений ///////
 const multer = require('multer')
 const moment = require('moment')
+const { send } = require('process')
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {

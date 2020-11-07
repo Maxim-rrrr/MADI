@@ -71,7 +71,7 @@ class AddBalancePopap extends Component {
           value       = { this.state.summa } 
           onChange    = { this.handleSummaChange }  
           type        = "number" 
-          className   = "input add-balance__input" 
+          className   = "input popup__input" 
           placeholder = "Сумма..." 
           required
         />

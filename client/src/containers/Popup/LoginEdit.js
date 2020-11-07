@@ -116,13 +116,13 @@ class LoginEditPopap extends Component {
     }
 
     let form = 
-      <form onSubmit={ this.handleSubmit } className="login-edit__form">
+      <form onSubmit={ this.handleSubmit } className="popup__form">
 
         <input 
           value={ this.state.emailValue } 
           onChange={ this.handleEmailChange } 
           type="email" 
-          className="input login-edit__form-email" 
+          className="input popup__form-email" 
           placeholder="Новый Email" 
           required
         />
@@ -131,12 +131,12 @@ class LoginEditPopap extends Component {
           value={ this.state.passwordValue } 
           onChange={ this.handlePasswordChange } 
           type="password" 
-          className="input login-edit__form-pass" 
+          className="input popup__form-pass" 
           placeholder="Пароль" 
           required
         />
         
-        <button className='btn login-edit__form-submit' type='submit'> Изменить </button>
+        <button className='btn popup__form-submit' type='submit'> Изменить </button>
       </form>
 
       if (this.state.code) {

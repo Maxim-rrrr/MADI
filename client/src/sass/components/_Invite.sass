@@ -1,0 +1,96 @@
+.invite
+  &__loader
+    top: calc(50% - 40px)
+    right: calc(50% - 40px)
+  &__title
+    margin-top: 3rem 
+    font-size: 4rem
+    text-align: center
+    color: $yellow
+  &__subtitle
+    margin: 2rem 0
+    font-size: 2rem
+    text-align: center
+    color: $yellow
+  &__error
+    height: 2rem
+    font-size: 2rem
+    text-align: center
+    color:#FF826E
+  & .input, .btn
+    width: 50%
+    color: $yellow
+    border-color: $yellow
+  
+.invite-user
+  position: fixed
+  display: flex
+  align-items: center
+  justify-content: center
+  bottom: 1rem
+  left: 1rem
+  height: 50px
+  width: 50px
+  background-color: #313163
+  border-radius: 7px
+  cursor: pointer
+  transition: 0.2s
+  &:hover 
+    box-shadow: 0 0 10px #313163
+    & img
+      filter: drop-shadow(0 0 3px rgba($yellow, 0.2))
+  &--active
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: space-between
+    padding: 1rem
+    height: 10rem
+    width: 30rem
+    cursor: default
+    &:hover 
+      box-shadow: 0 0 0px #313163
+      & img
+        filter: drop-shadow(0 0 0px rgba($yellow, 0.2))
+  &__text
+    text-align: center
+    color: $yellow
+    font-size: 1.5rem
+  &__copy
+    &-box
+      display: flex
+      align-items: center
+      justify-content: space-between
+      width: 80%
+      height: 50px
+      border-radius: 15px
+      overflow: hidden
+    &-link
+      height: 100%
+      width: 100%
+      display: flex
+      align-items: center
+      padding-left: 1rem
+      background-color: #5058CD
+      border: none
+    &-btn
+      display: flex
+      align-items: center
+      height: 100%
+      min-width: 50px
+      padding: 0.5rem
+      background-color: $yellow
+      cursor: pointer
+  &__close-box
+    display: flex
+    justify-content: flex-end
+    width: 100%
+  &__close-btn
+    width: 20px
+    height: 20px
+    background: #0000002a url('../img/close.png') no-repeat center/cover
+    border: none
+    border-radius: 50%
+    cursor: pointer
+    &:hover
+      background: #0000004f url('../img/close.png') no-repeat center/cover

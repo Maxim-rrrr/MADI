@@ -5,6 +5,7 @@ import { getCustomer } from '../../actions/getCustomer'
 
 import Header from './Header'
 import User from './User'
+import Invite from './Invite'
 
 class UserPage extends Component {
   constructor(props) {
@@ -122,6 +123,8 @@ class UserPage extends Component {
   render() {
     return (
       <>
+        <Invite/>
+
         <Header 
           customers = { this.props.customers } 
           logIn = { this.state.login }

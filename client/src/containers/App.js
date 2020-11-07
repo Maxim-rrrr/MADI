@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Admin from './Admin/index';
 import User from './User/index'
+import invite from './Invite/index'
+import ErrorPage from './ErrorPage/index'
 
 
 export default class App extends Component {
@@ -17,6 +19,15 @@ export default class App extends Component {
             <Route exact path='/' component = { User } />
 
             <Route exact path='/admin' component={ Admin } />
+
+            <Route exact path='/invite/:inviteToken' component={ invite } />
+
+            <Route path="*">
+              <ErrorPage 
+                code = '404'
+                message = 'Страница не найдена'
+              />
+            </Route>
 
           </Switch>
         </Router>
