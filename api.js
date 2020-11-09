@@ -1,23 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const dayjs = require('dayjs')
 
 const Сustomer = require('./Schemes/Customer')
 const Admin = require('./Schemes/Admin')
 const Task = require('./Schemes/Task')
 const Payment = require('./Schemes/Payment')
-const Log = require('./Schemes/Log')
 
 const nodemailer = require('nodemailer')
-const crypto = require("crypto");
+const crypto = require("crypto")
+const config = require('config')
 
-function logger(status = 200, message = '') {
-  Log.create({
-    time: `${dayjs().get('D')}-${(dayjs().get('M') + 1)}-${dayjs().get('y')}_${dayjs().get('h')}:${dayjs().get('m')}:${dayjs().get('s')}:${dayjs().get('ms')}`,
-    status,
-    message
-  })
-}
+const logger = require('./modules/logger')
 
 
 /////// Работа с пользователями ///////
@@ -57,7 +50,7 @@ router.post('/login', (req, res)=>{
       });
 
   } catch (error) {
-    logger(status = 500, message = `Ошибка сервера при входе пользователя: ${err}`)
+    logger.logger(status = 500, message = `Ошибка сервера при входе пользователя: ${err}`)
     res.send(error);
   }
 
@@ -81,7 +74,7 @@ router.post('/login-admin', (req, res)=>{
     });
 
   } catch (error) {
-    logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
+    logger.logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
     res.send(error);
   }
 
@@ -102,9 +95,9 @@ router.post('/isAdmin', (req, res) => {
 
         if (req.body.userToken) {
           let user = await Сustomer.findOne({ token: req.body.userToken }).then()
-          logger(status = 400, message = `Попытка несанкционированного ввода в админку: от пользователя ${user.email}`)
+          logger.logger(status = 400, message = `Попытка несанкционированного ввода в админку: от пользователя ${user.email}`)
         } else {
-          logger(status = 400, message = `Попытка несанкционированного ввода в админку`)
+          logger.logger(status = 400, message = `Попытка несанкционированного ввода в админку`)
         }
 
         res.send({ status: 400, message: 'Попытка несанкционированного ввода в админку' });
@@ -113,7 +106,7 @@ router.post('/isAdmin', (req, res) => {
     });
 
   } catch (error) {
-    logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
+    logger.logger(status = 500, message = `Ошибка сервера при входе админа: ${err}`)
     res.send(error);
   }
 
@@ -185,15 +178,15 @@ router.post('/code', (req, res)=>{
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-          user: 'sendingmessage2@mail.ru',
-          pass: 'tyjNaPOuA12&'
+          user: config.get('emailSendMessage'),
+          pass: config.get('passSendMessage')
         }
       })
       
       let code = Math.floor(Math.random() * 900000 + 100000);
 
       let result = await transporter.sendMail({
-        from: '"Работы по курсам мади" <sendingmessage2@mail.ru>',
+        from: '"Работы по курсам мади" <' +  config.get('emailSendMessage') + '>',
         to: req.body.email,
         subject: 'Код подтверждения',
         text: '',
@@ -208,7 +201,7 @@ router.post('/code', (req, res)=>{
       
     } catch (err) {
       console.log(`status: 500`, `message: Ошибка сервера при отправке кода подтверждения: ${err}`);
-      logger(status = 500, message = `Ошибка сервера при отправке кода подтверждения: ${err}`)
+      logger.logger(status = 500, message = `Ошибка сервера при отправке кода подтверждения: ${err}`)
       res.send({
         error: err,
         massage: 'Наташа, мы всё уронили'
@@ -246,7 +239,7 @@ router.post('/add-user', (req, res)=> {
         res.send(customer)
       });
   } catch (err) {
-    logger(status = 500, message = `Ошибка сервера при регистрации пользователя: ${err}`)
+    logger.logger(status = 500, message = `Ошибка сервера при регистрации пользователя: ${err}`)
     res.send(err);
   }
   
@@ -264,7 +257,7 @@ router.post('/user-edit/:id', (req, res)=> {
         });
     });
   } catch (err) {
-    logger(status = 500, message = `Ошибка сервера при изменении данных пользователя: ${err}`)
+    logger.logger(status = 500, message = `Ошибка сервера при изменении данных пользователя: ${err}`)
     res.send(err)
   }
   
@@ -282,7 +275,7 @@ router.post('/addTask', (req, res) => {
       });
 
   } catch (err) { 
-    logger(status = 500, message = `Ошибка добавления предмета: ${err}`)
+    logger.logger(status = 500, message = `Ошибка добавления предмета: ${err}`)
     res.send({ status: 500, err }) 
   }
 });
@@ -295,7 +288,7 @@ router.post('/getTasks', (req, res) => {
       res.send({ status: 200, tasks });
     });
   } catch (err) { 
-    logger(status = 500, message = `Ошибка получения всех заданий из БД: ${err}`)
+    logger.logger(status = 500, message = `Ошибка получения всех заданий из БД: ${err}`)
     res.send({ status: 500, err }) 
   }
   
@@ -312,7 +305,7 @@ router.post('/setTask/:id', (req, res) => {
         });
     });
   } catch (err) {
-    logger(status = 500, message = `Ошибка изменения предмета: ${err}`)
+    logger.logger(status = 500, message = `Ошибка изменения предмета: ${err}`)
     res.send(err)
   }
   
@@ -326,7 +319,7 @@ router.post('/removeTask/:id', (req, res) =>{
       res.send({ status: 200, task });
     });
   } catch (err) {
-    logger(status = 500, message = `Ошибка удаления предмета: ${err}`)
+    logger.logger(status = 500, message = `Ошибка удаления предмета: ${err}`)
     res.send(err)
   }
   
@@ -404,13 +397,13 @@ router.post('/paymentFullBalance', async (req, res) =>{
           port: 465,
           secure: true, // true for 465, false for other ports
           auth: {
-            user: 'sendingmessage2@mail.ru',
-            pass: 'tyjNaPOuA12&'
+            user: config.get('emailSendMessage'),
+            pass: config.get('passSendMessage')
           }
         })
             
         await transporter.sendMail({
-          from: '"Работы по курсам мади" <sendingmessage2@mail.ru>',
+          from: '"Работы по курсам мади" <' +  config.get('emailSendMessage') + '>',
           to: user.email,
           subject: 'Решения',
           text: '',
@@ -419,11 +412,11 @@ router.post('/paymentFullBalance', async (req, res) =>{
           
         })
         
-        logger(status = 200, message = `Отправленны решения: ${description.email}  Предмет: ${description.subject} Раздел: ${description.categories.join(' -> ')} Заданий: ${description.tasks.join(', ')} `)
+        logger.logger(status = 200, message = `Отправленны решения: ${user.email}  Предмет: ${description.subject} Раздел: ${description.categories.join(' -> ')} Заданий: ${description.tasks.join(', ')} `)
         console.log(`Отправленны решения ${user.email}`)
 
       } catch (err) { 
-        logger(status = 500, message = `Ошибка отправки решений ${err}`)
+        logger.logger(status = 500, message = `Ошибка отправки решений ${err}`)
         console.log(`Ошибка отправки решений ${err}`) 
       }
     }
@@ -447,7 +440,7 @@ router.post('/paymentFullBalance', async (req, res) =>{
       numberPayment: description.numberPayment
     })
   } catch (err) {
-    logger(status = 500, message = `Ошибка покупки полность за баланс: ${err}`)
+    logger.logger(status = 500, message = `Ошибка покупки полность за баланс: ${err}`)
     res.send(err)
   }
   
@@ -474,11 +467,11 @@ router.post('/createPayment', (req, res) => {
   }, idempotenceKey)
   .then(result => {
     Payment.create({id: result.id}).then();
-    logger(status = 200, message = `успешное создание платежа id: ${result.id}`)
+    logger.logger(status = 200, message = `успешное создание платежа id: ${result.id}`)
     res.send({payment: result})
   })
   .catch(err => {
-    logger(status = 500, message = `Ошибка создания платежа`)
+    logger.logger(status = 500, message = `Ошибка создания платежа`)
     res.send(err)
   })
 

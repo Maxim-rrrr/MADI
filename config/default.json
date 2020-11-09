@@ -2,5 +2,7 @@
 {
   "port" : 4000,
   "localMongoUri": "mongodb://localhost/madi-db",
-  "mongoUri": "mongodb+srv://front-end_madi:EyWETKdme3Wu2EB@cluster0.erxb5.azure.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  "mongoUri": "mongodb+srv://front-end_madi:EyWETKdme3Wu2EB@cluster0.erxb5.azure.mongodb.net/<dbname>?retryWrites=true&w=majority",
+  "emailSendMessage": "sendingmessage2@mail.ru",
+  "passSendMessage": "tyjNaPOuA12&"
 }
