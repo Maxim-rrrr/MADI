@@ -81,7 +81,7 @@ class AddBalancePopap extends Component {
             <div className="loader add-balance__loader">
               <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
             </div>:
-            <button className='btn registration__form-submit' type='submit'> Оплатить </button>
+            <button className='btn popup__form-submit' type='submit'> Оплатить </button>
         }
         </form>
       </Popup>
