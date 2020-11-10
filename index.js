@@ -22,7 +22,7 @@ const PORT = config.get('port') || 4000
 
 async function start() {
   try { 
-    await mongoose.connect(config.get('localMongoUri'), { 
+    await mongoose.connect(config.get('mongoUri'), { 
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true
@@ -36,33 +36,6 @@ async function start() {
 }
 
 start()
-
-const Admin = require('./Schemes/Admin')
-async  function checkAdmin() {
-  
-  let admin = await Admin.findOne().then()
-
-  if (!admin) {
-    Admin.create({ 
-      "name" : "admin",
-      "password" : "DLla3eFURPnhvYSc2L2OA6UuxzEPompTiFiMErG5Pds=" 
-    }).then((admin) => {
-        
-      function cryptor(value) {
-        let sha256 = crypto.createHash("sha256")
-        sha256.update(value + '', "utf8")
-
-        return sha256.digest("base64")
-      }
-
-      let token = cryptor(admin._id)
-      Admin.findByIdAndUpdate({_id: admin.id},{ token }).then()
-
-    });
-  }
-}
-
-
 
 
 // Проверка подтверждённых платежей

@@ -16,7 +16,6 @@ class Registration extends Component {
       passwordValue: '',
       passwordRepeatValue: '',
       codeValue: '',
-      invitingValue: '',
 
       invalid: false,
       code: false
@@ -26,7 +25,6 @@ class Registration extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePasswordRepeatChange = this.handlePasswordRepeatChange.bind(this);
     this.handleCodeChange = this.handleCodeChange.bind(this);
-    this.handleInvitingChange = this.handleInvitingChange.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCodeSubmit = this.handleCodeSubmit.bind(this);
@@ -51,12 +49,6 @@ class Registration extends Component {
     });
   }
 
-  handleInvitingChange(event) {
-    this.setState({
-      invitingValue: event.target.value
-    });
-  }
-
   handleCodeChange(event) {
     if (event.target.value.length < 7) {
       this.setState({
@@ -75,7 +67,6 @@ class Registration extends Component {
 
     let sendCode = true
     // Проверим совпадают ли пароли
-    
     if (this.state.passwordValue !== this.state.passwordRepeatValue) {
       this.setState({
         invalid: 'Pass error'
@@ -84,59 +75,29 @@ class Registration extends Component {
     }
 
     // Проверим не заригистрирован ли такой Email уже
-    await setTimeout(() => {
-      if (this.props.getIdResponse.status === 200) {
-        this.setState({
-          invalid: 'email error'
-        });
-        sendCode = false
-
-      } else if (this.props.getIdResponse.status === 400) {
-        // Если отмечен пригласитель, то отправим запрос на существование такого аккаунта
-        if (this.state.invitingValue !== '') {
-          this.props.getId('/api/getId', {
-            "email": this.state.invitingValue
-          })
+    let timer = setInterval(() => {
+      if (this.props.getIdResponse) {
+        if (this.props.getIdResponse.status === 200) {
+          this.setState({
+            invalid: 'email error'
+          });
+          sendCode = false
   
-          // Проверим заригистрирован ли Email пригласителя
-          setTimeout(() => {
-            if (this.props.getIdResponse.status === 400) {
-              this.setState({
-                invalid: 'inviting error'
-              });
-              sendCode = false
-      
-            } else if (this.props.getIdResponse.status === 200) {
-              if (sendCode) {
-                this.props.codeSend("/api/code", {
-                  email: this.state.emailValue
-                });
-          
-                this.setState({
-                  code: true,
-                  invalid: ''
-                })
-              }
-              
-            }
-          }, 500) 
-
-        } else {
+        } else if (this.props.getIdResponse.status === 400) {
           if (sendCode) {
             this.props.codeSend("/api/code", {
               email: this.state.emailValue
             });
       
             this.setState({
-              code: true,
-              invalid: ''
+              code: true
             })
           }
+          
         }
-
+        clearInterval(timer)
       }
-    }, 500)
-
+    })
   }
 
   // Отправка кода подтверждения
@@ -227,15 +188,6 @@ class Registration extends Component {
           placeholder = "Повторите пароль" 
           minLength   = "4" 
           required 
-        />
-
-        <input 
-          value       = { this.state.invitingValue } 
-          onChange    = { this.handleInvitingChange } 
-          type        = "email" 
-          className   = "input popup__form-pass" 
-          placeholder = "Меня пригласил (email)" 
-          minLength   = "4" 
         />
 
         <button className='btn popup__form-submit' type='submit'> ЗАРЕГИСТРИРОВАТЬСЯ </button>

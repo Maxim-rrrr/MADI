@@ -202,50 +202,57 @@ class User extends Component {
   render() {
     
     let prise = 0, priseBtn = <></>
+    
+    // console.dir(widthContainer);
 
     let right = (document.documentElement.clientWidth - 1144) / 2 
     let w = this.state.loadingPayment?80:250
     
-    if (document.documentElement.clientWidth <= 1200) {
+    if (document.documentElement.clientWidth <= 576) {
       right = (document.documentElement.clientWidth - w) / 2 
+      
+    } else if (document.documentElement.clientWidth <= 1200) {
+      right = 20
     }
-      let subjects = []
 
-      if (this.props.getTasksResponse) {
-        this.props.getTasksResponse.tasks.forEach((subject) => {
-          if (subject.public) {
-            subjects.push(subject)
-          }
-        })
-      }
-      
-      let nav = this.state.navState
-  
-      let subject
-      if (nav.subject) {
-        subjects.forEach(item => {
-          if (item.name === nav.subject) {
-            subject = item
-          }
-        })
-      }
-      
-      let contentPage
-      if (nav.subject) {
-        if (nav.categories.length === 0) {       
-          contentPage = subject.tasks
-          
-        } else {
-          contentPage = subject.tasks
-          nav.categories.forEach(item => {
-            contentPage.forEach(task => {
-              if (task.name === item) {
-                contentPage = task.tasks
-              }
-            })
-          })
+
+    let subjects = []
+
+    if (this.props.getTasksResponse) {
+      this.props.getTasksResponse.tasks.forEach((subject) => {
+        if (subject.public) {
+          subjects.push(subject)
         }
+      })
+    }
+    
+    let nav = this.state.navState
+
+    let subject
+    if (nav.subject) {
+      subjects.forEach(item => {
+        if (item.name === nav.subject) {
+          subject = item
+        }
+      })
+    }
+    
+    let contentPage
+    if (nav.subject) {
+      if (nav.categories.length === 0) {       
+        contentPage = subject.tasks
+        
+      } else {
+        contentPage = subject.tasks
+        nav.categories.forEach(item => {
+          contentPage.forEach(task => {
+            if (task.name === item) {
+              contentPage = task.tasks
+            }
+          })
+        })
       }
+    }
 
       let content = <></>
       // Предметы

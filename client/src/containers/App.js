@@ -13,6 +13,7 @@ export default class App extends Component {
   
   render() {
     return (
+      <>
         <Router>
           <Switch>
 
@@ -31,6 +32,9 @@ export default class App extends Component {
 
           </Switch>
         </Router>
+
+        <div className="version-label"> 0.0.1 alfa </div>
+      </>
     );
   }
 }

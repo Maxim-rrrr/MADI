@@ -123,7 +123,7 @@ class UserPage extends Component {
   render() {
     return (
       <>
-        <Invite/>
+        { localStorage.getItem('token') && <Invite/> }
 
         <Header 
           customers = { this.props.customers } 

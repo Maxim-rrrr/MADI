@@ -7,7 +7,7 @@ export default class Invite extends Component {
     super(props)
 
     this.state = {
-      active: false
+      active: true
     }
   }
 
