@@ -28,7 +28,7 @@ export default class Invite extends Component {
       return sha256.digest("base64")
     }
 
-    let link = cryptor(localStorage.getItem('email')).replace('/','').replace('\\', '')
+    let link = cryptor(localStorage.getItem('email')).split('/').join('')
     return (
       <>
         {

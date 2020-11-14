@@ -229,7 +229,7 @@ router.post('/add-user', (req, res)=> {
         }
 
         let token = cryptor(customer._id)
-        let inviteToken = cryptor(customer.email).replace('/','').replace('\\', '')
+        let inviteToken = cryptor(customer.email).split('/').join('')
 
         Сustomer.findByIdAndUpdate({_id: customer.id},{token, inviteToken}).then()
 
@@ -328,7 +328,6 @@ router.post('/removeTask/:id', (req, res) =>{
 /////// Загрузка изображений ///////
 const multer = require('multer')
 const moment = require('moment')
-const { send } = require('process')
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -336,7 +335,18 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const date = moment().format('DDMMYYYY-HHmmss_SSS')
-    cb(null, date + '.jpg')
+
+    // Достаём расширение файла
+    let index = -1
+    for (let i = file.originalname.length - 1; i !== 0; i--) {
+      if (file.originalname[i] === '.') {
+        index = i
+        break
+      } 
+    }
+
+    cb(null, date + file.originalname.substring(index))
+    
   }
 })
  
@@ -379,8 +389,17 @@ router.post('/paymentFullBalance', async (req, res) =>{
     solutions.forEach((t, i) => {
       if (description.tasks.includes(i + 1)) {
         t.img.forEach(img => {
+
+          let ind = -1
+          for (let j = img.length - 1; j !== 0; j--) {
+            if (img[j] === '.') {
+              ind = j
+              break
+            } 
+          }
+
           attachments.push({
-            filename: `Задание_${i + 1}.jpg`,
+            filename: `Задание_${i + 1 + img.substring(ind)}`,
             path: `./uploads/${img}`,
             cid: 'unique@cid'
           })

@@ -5,6 +5,8 @@ import { getTasks } from '../../../actions/getTasks'
 import { setTask } from '../../../actions/setTask'
 import { addImg } from '../../../actions/addImg'
 
+import fileImg from '../../../img/files.png'
+
 
 import TasksNav from './TasksNav'
 
@@ -354,7 +356,7 @@ class Tasks extends Component {
   }
 
   // Добавление изображение
-  addImg(event) {
+  addImg(event, index) {
     event.preventDefault()
 
     // Отправка файла на сервер 
@@ -368,19 +370,8 @@ class Tasks extends Component {
           // Добавление файла к определённому заданию
           let fileName = this.props.addImgResponse.filename
     
-          let tasks = this.props.getTasksResponse.tasks 
-    
-          // Вынесем нужный предмет в отдельную переменную
-          let subject
-    
-          tasks.forEach((value) => {
-            if (value.name === this.state.navState.subject) {
-              subject = value
-            }
-          })
-    
           // Добавим решение
-          this.editInCategory(fileName, 'img-add')
+          this.editInCategory(fileName, 'img-add', index)
 
           this.setState({
             prevImg: this.props.addImgResponse.originalname
@@ -570,19 +561,52 @@ class Tasks extends Component {
                 <div className="task-card__imgs-box">
                   {
                     elem.img.map((img, i) => {
-                      return (
-                        <div className="img-box">
-                          <img 
-                            key = {img}
-                            src = {'http://localhost:4000/uploads/' + img} 
-                            alt = ''
-                          />
-                          <button className='btn-img-del' onClick = {(event) => {
-                            event.preventDefault();
-                            this.editInCategory('', 'img-remove', index, i)
-                          }}/>
-                        </div>
-                      )
+
+                      let ind = -1
+                      for (let j = img.length - 1; j !== 0; j--) {
+                        if (img[j] === '.') {
+                          ind = j
+                          break
+                        } 
+                      }
+
+                      if (['.png', '.jpg', '.jpeg', '.svg'].includes(img.substring(ind))) {
+                        return (
+                          <div className="img-box">
+                            <img 
+                              key = {img}
+                              src = {'http://rgrmadi.ru/uploads/' + img} // !!!!!!!!!!!!!!
+                              alt = 'Поменяь путь до файла в Taks.js'
+                            />
+                            <button className='btn-img-del' onClick = {(event) => {
+                              event.preventDefault();
+                              this.editInCategory('', 'img-remove', index, i)
+                            }}/>
+                          </div>
+                        )
+                      } else {
+                        return (
+                          <div className="img-box">
+                            
+                            <a href = {'http://rgrmadi.ru/uploads/' + img} target="_blank"> {/* !!!!!!!!!!!!!!! */}
+                              <img 
+                                key = {img}
+                                src = {fileImg} 
+                                alt = ''
+                                className = 'img-box__file'
+                              />
+                              <span className = 'img-box__file-label'>{img.substring(ind)}</span>
+                            </a>
+                            
+                            <button className='btn-img-del' onClick = {(event) => {
+                              event.preventDefault();
+                              this.editInCategory('', 'img-remove', index, i)
+                            }}/>
+                          </div>
+                        )
+                      }
+
+                      
                     })
                   }
                   

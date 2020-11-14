@@ -51,8 +51,17 @@ exports.checkPayment = async () => {
             solutions.forEach((t, i) => {
               if (description.tasks.includes(i + 1)) {
                 t.img.forEach(img => {
+
+                  let ind = -1
+                  for (let j = img.length - 1; j !== 0; j--) {
+                    if (img[j] === '.') {
+                      ind = j
+                      break
+                    } 
+                  }
+
                   attachments.push({
-                    filename: `Задание_${i + 1}.jpg`,
+                    filename: `Задание_${i + 1 + img.substring(ind)}`,
                     path: `./uploads/${img}`,
                     cid: 'unique@cid'
                   })
