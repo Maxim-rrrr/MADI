@@ -21,7 +21,8 @@ class User extends Component {
       prise: 0,
       checkboxes: [],
       loadingPayment: false,
-      numberPayment: 1
+      numberPayment: 1,
+      btnPriseHide: true
     };
 
   }
@@ -259,9 +260,9 @@ class User extends Component {
       if (!nav.subject && nav.categories.length === 0) {
         content = <>
           { 
-            subjects ? subjects.map(elem => {
+            subjects ? subjects.map((elem, index) => {
               return (
-                <div className='tasks__btn-group' key = {elem.name}>
+                <div className='tasks__btn-group animated fadeInUp' style = {{'animation-delay': `${index / 10}s`}} key = {elem.name}>
                   <button className="btn tasks__btn-category"  onClick = { () => {this.navEdit({subject: elem.name, categories: []})} }>
                     { elem.name } 
                   </button>
@@ -276,7 +277,7 @@ class User extends Component {
           {
             contentPage ? contentPage.map((elem, index) => {
               return (
-                <div className='tasks__btn-group' key = {elem.name}>
+                <div className='tasks__btn-group animated fadeInUp' style = {{'animation-delay': `${index / 10}s`}} key = {elem.name}>
                   <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [elem.name]})} }>
                     { elem.name } 
                   </button>
@@ -291,7 +292,7 @@ class User extends Component {
           {
             contentPage ? contentPage.map((elem, index) => {
               return (
-                <div className='tasks__btn-group' key = {elem.name}>
+                <div className='tasks__btn-group animated fadeInUp' style = {{'animation-delay': `${index / 10}s`}} key = {elem.name}>
                   <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [...this.state.navState.categories,elem.name]})} }>
                     { elem.name } 
                   </button>
@@ -319,17 +320,32 @@ class User extends Component {
             prise
           })
         }
-
+        
         if (prise !== 0) {
+          if (this.state.btnPriseHide) {
+            this.setState({btnPriseHide: false})
+          }
+          
           priseBtn = 
             <button 
               onClick={() => {this.payment()}}
-              className='btn btn-prise' 
+              className='btn btn-prise animated fadeInUp' 
               style={{right}}
             >
               Оплатить {prise} руб.
             </button>
-        } 
+        } else {
+          if (!this.state.btnPriseHide) {
+            priseBtn = 
+              <button 
+                onClick={() => {this.payment()}}
+                className='btn btn-prise animated fadeOutDown' 
+                style={{right}}
+              >
+                Оплатить {prise} руб.
+              </button>
+          }
+        }
 
         if (this.state.loadingPayment) {
           priseBtn = 
@@ -344,7 +360,7 @@ class User extends Component {
                 contentPage ? contentPage.map((elem, index) => {
                   return (
                     <>
-                      <div className="checkbox" key={index}>
+                      <div className="checkbox animated fadeInRight" style = {{'animation-delay': `${index / 30}s`}} key={index}>
                           <input onClick={() => {this.checkboxChange(index)}} checked={this.state.checkboxes[index]} className="checkbox__input" type="checkbox" id={"checkbox_" + index}/>
                           <label className="checkbox__label" htmlFor={"checkbox_" + index}>{ index + 1 }</label>
                       </div>
