@@ -6,13 +6,16 @@ import { setTask } from '../../../actions/setTask'
 import { addTask } from '../../../actions/addTask'
 import { removeTask } from '../../../actions/removeTask'
 
+import Popup from '../../Popup/models/Popup'
+
 class Subjects extends Component {
   constructor (props) {
     super(props)
     this.state = {
       error: false,
       editPublicTrue: [],
-      editPublicFalse: []
+      editPublicFalse: [],
+      activePopupsDel: []
     }
   }
 
@@ -89,12 +92,27 @@ class Subjects extends Component {
     }
   }
 
+  activePopup(index, bool) {
+    let activePopupsDel = this.state.activePopupsDel
+    activePopupsDel[index] = bool
+    this.setState({ activePopupsDel }) 
+  }
+
   render() {
     let subjects
 
     if (this.props.getTasksResponse) {
       subjects = this.props.getTasksResponse.tasks
+
+      if (this.state.activePopupsDel.length < subjects.length) {
+        let activePopupsDel = []
+        subjects.forEach(() => {
+          activePopupsDel.push(false)
+        })
+        this.setState({ activePopupsDel })
+      }
     }
+
 
     if (this.props.tab === 'Subjects') {
       return (
@@ -126,7 +144,9 @@ class Subjects extends Component {
             </form>
 
             { 
-              subjects ? subjects.map(elem => {
+              subjects ? subjects.map((elem, index) => {
+
+                
                 return (
                   
                   <div 
@@ -136,7 +156,27 @@ class Subjects extends Component {
                       'subjects__card subjects__card--public':
                       'subjects__card'
                     }>
-                    <div className='subjects__card-btn-del' onClick = {() => { this.deleteSubject(elem._id) }} ></div>
+
+                    <Popup
+                      active = { this.state.activePopupsDel[index] }
+                      title = { 'Удалить предмет ' + elem.name + '?' }
+                      close = { () => { this.activePopup(index, false) }}
+                    >
+                      <div className="popupbtn-group">
+                        <button 
+                          className="btn"  
+                          onClick = { () => { this.deleteSubject(elem._id) } }
+                        > Да </button>
+                        
+                        <button 
+                          className="btn" 
+                          onClick = { () => { this.activePopup(index, false) } }
+                        > Нет </button>
+                      </div>
+
+                    </Popup>
+
+                    <div className='subjects__card-btn-del' onClick = {() => { this.activePopup(index, true) }} ></div>
                     <div className = 'subjects__card-info'>
                       <div className = 'subjects__card-name'> { elem.name } </div>
                       <div className = 'subjects__card-model'> Модель:  {elem.model} </div>

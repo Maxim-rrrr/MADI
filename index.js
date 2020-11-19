@@ -48,4 +48,4 @@ setInterval(() => { checkPayment.checkPayment() }, 10000)
 const crontab = require('node-crontab')
 const sendReports = require('./modules/sendReport')
 
-crontab.scheduleJob("* * * * */7", () => { sendReports.sendReports() });
+crontab.scheduleJob("3 9 * * 6", () => { sendReports.sendReports() });

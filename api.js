@@ -113,11 +113,9 @@ router.post('/isAdmin', (req, res) => {
 });
 
 router.post('/validInvite', (req, res) => {
-  console.log(req.body);
   try {
     Сustomer.findOne({inviteToken: req.body.inviteToken})
       .then(customer => {
-        console.log(customer);
         if (customer) {
           res.send({ status: 200, email: customer.email })
         } else {
@@ -399,7 +397,7 @@ router.post('/paymentFullBalance', async (req, res) =>{
           }
 
           attachments.push({
-            filename: `Задание_${i + 1 + img.substring(ind)}`,
+            filename: `${i + 1 + img.substring(ind)}`,
             path: `./uploads/${img}`,
             cid: 'unique@cid'
           })

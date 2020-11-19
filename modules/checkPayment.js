@@ -61,7 +61,7 @@ exports.checkPayment = async () => {
                   }
 
                   attachments.push({
-                    filename: `Задание_${i + 1 + img.substring(ind)}`,
+                    filename: `${i + 1 + img.substring(ind)}`,
                     path: `./uploads/${img}`,
                     cid: 'unique@cid'
                   })

@@ -7,8 +7,8 @@ import { addImg } from '../../../actions/addImg'
 
 import fileImg from '../../../img/files.png'
 
-
 import TasksNav from './TasksNav'
+import Popup from '../../Popup/models/Popup'
 
 class Tasks extends Component {
   constructor(props) {
@@ -19,7 +19,9 @@ class Tasks extends Component {
         subject: null,
         categories: []
       },
-      prevImg: ''
+      prevImg: '',
+      activePopupsDel: [],
+      activePopupsDecision: []
     };
 
   }
@@ -385,6 +387,12 @@ class Tasks extends Component {
     event.target.reset()
   }
 
+  activePopup(index, bool) {
+    let activePopupsDel = this.state.activePopupsDel
+    activePopupsDel[index] = bool
+    this.setState({ activePopupsDel }) 
+  }
+
   render() {
     
     let subjects
@@ -445,11 +453,29 @@ class Tasks extends Component {
           contentPage ? contentPage.map((elem, index) => {
             return (
               <div className='tasks__btn-group' key = {elem.name}>
+                <Popup
+                  active = { this.state.activePopupsDel[index] }
+                  title = { 'Удалить раздел ' + elem.name + '?' }
+                  close = { () => { this.activePopup(index, false) }}
+                >
+                  <div className="popup__btn-group">
+                    <button 
+                      className="btn"  
+                      onClick = { () => { this.editInCategory(index, 'remove') } }
+                    > Да </button>
+                    
+                    <button 
+                      className="btn" 
+                      onClick = { () => { this.activePopup(index, false) } }
+                    > Нет </button>
+                  </div>
+
+                </Popup>
                 <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [elem.name]})} }>
                   { elem.name } 
                 </button>
 
-                <button className="tasks__btn-close" onClick = {() => { this.editInCategory(index, 'remove') }}>
+                <button className="tasks__btn-close" onClick = {() => { this.activePopup(index, true) }}>
                   <img src="./img/close.png" alt=""/> 
                 </button>
               </div>
@@ -479,11 +505,30 @@ class Tasks extends Component {
           contentPage ? contentPage.map((elem, index) => {
             return (
               <div className='tasks__btn-group' key = {elem.name}>
+                <Popup
+                  active = { this.state.activePopupsDel[index] }
+                  title = { 'Удалить раздел ' + elem.name + '?' }
+                  close = { () => { this.activePopup(index, false) }}
+                >
+                  <div className="popup__btn-group">
+                    <button 
+                      className="btn"  
+                      onClick = { () => { this.editInCategory(index, 'remove') } }
+                    > Да </button>
+                    
+                    <button 
+                      className="btn" 
+                      onClick = { () => { this.activePopup(index, false) } }
+                    > Нет </button>
+                  </div>
+
+                </Popup>
+
                 <button className="btn tasks__btn-category" onClick = { () => {this.navEdit({subject: this.state.navState.subject, categories: [...this.state.navState.categories,elem.name]})} }>
                   { elem.name } 
                 </button>
 
-                <button className="tasks__btn-close" onClick = {() => { this.editInCategory(index, 'remove')}}>
+                <button className="tasks__btn-close" onClick = {() => { this.activePopup(index, true)}}>
                   <img src="./img/close.png" alt=""/> 
                 </button>
               </div>
@@ -532,6 +577,15 @@ class Tasks extends Component {
 
         {
           contentPage ? contentPage.map((elem, index) => {
+            let active = this.state.activePopupsDecision
+
+            if (active.length < contentPage.length) {
+              active[index] = []
+              for (let j = 0; j < elem.img.length; j++) {
+                active[index].push(false)
+              }
+            }
+
             return (
               <div key = {index} className="task-card">
 
@@ -570,23 +624,90 @@ class Tasks extends Component {
                         } 
                       }
 
+                      let activePopupsDecision = this.state.activePopupsDecision[index]
+
                       if (['.png', '.jpg', '.jpeg', '.svg'].includes(img.substring(ind))) {
                         return (
                           <div className="img-box">
+                            <Popup
+                              active = { activePopupsDecision[i] }
+                              title = { 'Удалить решение?' }
+                              close = { () => { 
+                                let activePopupsDecision = this.state.activePopupsDecision
+                                activePopupsDecision[index][i] = false
+                                this.setState({ activePopupsDecision })
+                              }}
+                            >
+                              <div className="popup__btn-group">
+                                <button 
+                                  className="btn"  
+                                  onClick = { () => { 
+                                    this.editInCategory('', 'img-remove', index, i) 
+
+                                    let activePopupsDecision = this.state.activePopupsDecision
+                                    activePopupsDecision[index][i] = false
+                                    this.setState({ activePopupsDecision })
+                                  } }
+                                > Да </button>
+                                
+                                <button 
+                                  className="btn" 
+                                  onClick = { () => { 
+                                    let activePopupsDecision = this.state.activePopupsDecision
+                                    activePopupsDecision[index][i] = false
+                                    this.setState({ activePopupsDecision })
+                                  } }
+                                > Нет </button>
+                              </div>
+
+                            </Popup>
                             <img 
                               key = {img}
                               src = {'http://rgrmadi.ru/uploads/' + img} // !!!!!!!!!!!!!!
                               alt = 'Поменяь путь до файла в Taks.js'
                             />
-                            <button className='btn-img-del' onClick = {(event) => {
-                              event.preventDefault();
-                              this.editInCategory('', 'img-remove', index, i)
+                            <button className='btn-img-del' onClick = {() => {
+                              let activePopupsDecision = this.state.activePopupsDecision
+                              activePopupsDecision[index][i] = true
+                              this.setState({ activePopupsDecision })
                             }}/>
                           </div>
                         )
                       } else {
                         return (
                           <div className="img-box">
+                            <Popup
+                              active = { activePopupsDecision[i] }
+                              title = { 'Удалить решение?' }
+                              close = { () => { 
+                                let activePopupsDecision = this.state.activePopupsDecision
+                                activePopupsDecision[index][i] = false
+                                this.setState({ activePopupsDecision })
+                              }}
+                            >
+                              <div className="popup__btn-group">
+                                <button 
+                                  className="btn"  
+                                  onClick = { () => { 
+                                    this.editInCategory('', 'img-remove', index, i) 
+
+                                    let activePopupsDecision = this.state.activePopupsDecision
+                                    activePopupsDecision[index][i] = false
+                                    this.setState({ activePopupsDecision })
+                                  } }
+                                > Да </button>
+                                
+                                <button 
+                                  className="btn" 
+                                  onClick = { () => { 
+                                    let activePopupsDecision = this.state.activePopupsDecision
+                                    activePopupsDecision[index][i] = false
+                                    this.setState({ activePopupsDecision })
+                                  } }
+                                > Нет </button>
+                              </div>
+
+                            </Popup>
                             
                             <a href = {'http://rgrmadi.ru/uploads/' + img} target="_blank"> {/* !!!!!!!!!!!!!!! */}
                               <img 
@@ -598,9 +719,10 @@ class Tasks extends Component {
                               <span className = 'img-box__file-label'>{img.substring(ind)}</span>
                             </a>
                             
-                            <button className='btn-img-del' onClick = {(event) => {
-                              event.preventDefault();
-                              this.editInCategory('', 'img-remove', index, i)
+                            <button className='btn-img-del' onClick = {() => {
+                              let activePopupsDecision = this.state.activePopupsDecision
+                              activePopupsDecision[index][i] = true
+                              this.setState({ activePopupsDecision })
                             }}/>
                           </div>
                         )
