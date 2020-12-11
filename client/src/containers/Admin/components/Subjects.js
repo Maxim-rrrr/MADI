@@ -162,10 +162,13 @@ class Subjects extends Component {
                       title = { 'Удалить предмет ' + elem.name + '?' }
                       close = { () => { this.activePopup(index, false) }}
                     >
-                      <div className="popupbtn-group">
+                      <div className="popup__btn-group">
                         <button 
                           className="btn"  
-                          onClick = { () => { this.deleteSubject(elem._id) } }
+                          onClick = { () => { 
+                            this.deleteSubject(elem._id) 
+                            this.activePopup(index, false)
+                          } }
                         > Да </button>
                         
                         <button 

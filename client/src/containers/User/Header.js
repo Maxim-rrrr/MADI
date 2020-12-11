@@ -5,6 +5,7 @@ import LoginEdit from '../Popup/LoginEdit'
 import PasswordEdit from '../Popup/PasswordEdit'
 import Account from './Account'
 import AddBalance from '../Popup/AddBalance'
+import Support from '../Popup/Support'
 
 export default class Header extends Component {
   
@@ -72,6 +73,11 @@ export default class Header extends Component {
 
         <AddBalance
           active  = { this.props.addBalancePopup }
+          closeAllPopup = { () => {this.props.closeAllPopup()} }
+        />
+
+        <Support
+          active  = { this.props.supportPopup }
           closeAllPopup = { () => {this.props.closeAllPopup()} }
         />
 

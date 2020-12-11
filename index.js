@@ -9,6 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/api', require('./api'));
 app.use('/uploads', express.static('uploads'))
+app.use('/file', express.static('file'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')))

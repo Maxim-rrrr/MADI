@@ -20,6 +20,7 @@ class UserPage extends Component {
       registrationPopup: false,
       passwordEditPopup: false,
       addBalancePopup: false,
+      supportPopup: false,
 
       user: {}
     } 
@@ -29,6 +30,7 @@ class UserPage extends Component {
     this.activePasswordEditPopup = this.activePasswordEditPopup.bind(this)
     this.activeLoginEditPopup = this.activeLoginEditPopup.bind(this)
     this.activeAddBalancePopup = this.activeAddBalancePopup.bind(this)
+    this.activeSupportPopup = this.activeSupportPopup.bind(this)
 
     this.closeAllPopup = this.closeAllPopup.bind(this)
   }
@@ -58,10 +60,17 @@ class UserPage extends Component {
       loginEditPopup: true
     })
   }
+  
 
   activeAddBalancePopup() {
     this.setState({
       addBalancePopup: true
+    })
+  }
+
+  activeSupportPopup() {
+    this.setState({
+      supportPopup: true
     })
   }
 
@@ -71,7 +80,8 @@ class UserPage extends Component {
       loginEditPopup: false,
       registrationPopup: false,
       passwordEditPopup: false,
-      addBalancePopup: false
+      addBalancePopup: false,
+      supportPopup: false
     })
   }
 
@@ -136,6 +146,7 @@ class UserPage extends Component {
           registrationPopup = { this.state.registrationPopup }
           passwordEditPopup = { this.state.passwordEditPopup }
           addBalancePopup   = { this.state.addBalancePopup   }
+          supportPopup      = { this.state.supportPopup      }
 
           activeLoginPopup        = { this.activeLoginPopup        }
           activeRegistrationPopup = { this.activeRegistrationPopup }
@@ -150,6 +161,7 @@ class UserPage extends Component {
           activeLoginPopup = { this.activeLoginPopup }
           userUpdata = { () => {this.userUpdata()} }
           activeAddBalancePopup   = { this.activeAddBalancePopup }
+          activeSupportPopup = { this.activeSupportPopup }
         />
 
       </>

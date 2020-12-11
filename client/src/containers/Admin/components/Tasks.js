@@ -34,7 +34,12 @@ class Tasks extends Component {
 
   componentDidMount() {
     this.props.getTasks('/api/getTasks')
-    setInterval(this.props.getTasks('/api/getTasks'), 10)
+    setInterval(() => {
+      this.props.getTasks('/api/getTasks')
+      this.setState({ 
+        getTasksResponse: this.props.getTasksResponse
+      })
+    }, 100)
   }
   
   // Изменение категории
@@ -368,7 +373,7 @@ class Tasks extends Component {
 
     let addImgTimer = setInterval(() => {
       if (this.props.addImgResponse) {
-        if (this.props.addImgResponse.originalname !== this.state.prevImg) {
+        if (this.props.addImgResponse.filename !== this.state.prevImg) {
           // Добавление файла к определённому заданию
           let fileName = this.props.addImgResponse.filename
     
@@ -376,7 +381,7 @@ class Tasks extends Component {
           this.editInCategory(fileName, 'img-add', index)
 
           this.setState({
-            prevImg: this.props.addImgResponse.originalname
+            prevImg: this.props.addImgResponse.filename
           })
           clearInterval(addImgTimer)
 
@@ -395,10 +400,15 @@ class Tasks extends Component {
 
   render() {
     
+    function byField(field) {
+      return (a, b) => a[field] > b[field] ? 1 : -1;
+    }
+
     let subjects
 
-    if (this.props.getTasksResponse) {
-      subjects = this.props.getTasksResponse.tasks
+    if (this.state.getTasksResponse) {
+      subjects = this.state.getTasksResponse.tasks
+      subjects.sort(byField('name'))
     }
     
     let nav = this.state.navState
@@ -426,6 +436,8 @@ class Tasks extends Component {
             }
           })
         })
+
+        contentPage.sort(byField('name'))
       }
     }
     
@@ -461,7 +473,10 @@ class Tasks extends Component {
                   <div className="popup__btn-group">
                     <button 
                       className="btn"  
-                      onClick = { () => { this.editInCategory(index, 'remove') } }
+                      onClick = { () => { 
+                        this.editInCategory(index, 'remove') 
+                        this.activePopup(index, false)
+                      } }
                     > Да </button>
                     
                     <button 
@@ -513,7 +528,10 @@ class Tasks extends Component {
                   <div className="popup__btn-group">
                     <button 
                       className="btn"  
-                      onClick = { () => { this.editInCategory(index, 'remove') } }
+                      onClick = { () => { 
+                        this.editInCategory(index, 'remove') 
+                        this.activePopup(index, false)
+                      } }
                     > Да </button>
                     
                     <button 

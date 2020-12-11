@@ -190,6 +190,16 @@ class Registration extends Component {
           required 
         />
 
+        <div className="input-group allow">
+          <input 
+            type        = "checkbox" 
+            className   = "input"
+            id          = 'checkbox'
+            required 
+          />
+          <label htmlFor="checkbox"> Согласие на обработку персональных данных </label>
+        </div>
+
         <button className='btn popup__form-submit' type='submit'> ЗАРЕГИСТРИРОВАТЬСЯ </button>
       </form>
 

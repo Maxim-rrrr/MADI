@@ -1,6 +1,9 @@
 .task-user-form
   display: flex
+  align-items: center
   flex-wrap: wrap
+  justify-content: center
+  
 
 .btn-allСhoice
   display: block
@@ -10,7 +13,7 @@
 
   /* Checkbox */
 .checkbox 
-  display: flex
+  display: inline-block
   margin: 2rem 0
   &__input 
     appearance: none
@@ -18,7 +21,7 @@
     display: flex
     flex-direction: column
     align-items: center
-    margin-right: 2rem
+    margin: 0 1rem
     font-size: 2rem
     color:  $yellow
     cursor: pointer
@@ -81,5 +84,26 @@
   100% 
     transform: rotate(360deg)
   
+
+.support
+  position: fixed
+  bottom: 1.8rem
+  left: calc(50% - 1.5rem)
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 3rem
+  width: 3rem
+  font-size: 2rem
+  color: $black
+  border-radius: 50%
+  background-color: $yellow
+  cursor: pointer
+
+.terms-use
+  position: fixed
+  bottom: 0.5rem
+  left: calc(50% - 5.8rem)
+  color: $yellow
 
   

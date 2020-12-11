@@ -216,6 +216,10 @@ class User extends Component {
       right = 20
     }
 
+    function byField(field) {
+      return (a, b) => a[field] > b[field] ? 1 : -1;
+    }
+
 
     let subjects = []
 
@@ -225,6 +229,8 @@ class User extends Component {
           subjects.push(subject)
         }
       })
+
+      subjects.sort(byField('name'))
     }
     
     let nav = this.state.navState
@@ -252,6 +258,8 @@ class User extends Component {
             }
           })
         })
+
+        contentPage.sort(byField('name'))
       }
     }
 
@@ -388,6 +396,8 @@ class User extends Component {
               { content } 
             </div>
             
+            <div className="support" onClick={() => { this.props.activeSupportPopup() }}>?</div>
+            <a href="./file/terms-use.pdf" className="terms-use"> Пользовательское соглашение </a>
           </div>
         </div>
       )
