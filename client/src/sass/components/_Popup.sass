@@ -23,10 +23,10 @@
     max-width: 40rem
     min-height: 30rem
     margin-top: -30vh
-    background: $yellow url('../img/logo-bw.png') no-repeat
+    background: $dark url('../img/logo-bw.png') no-repeat
     background-position: -53% 130%
     border-radius: 5px
-    border: 3px solid #504c63
+    border: 3px solid $font
     box-shadow: 4px 4px 4px rgba(0,0,0,0.6)
     transition: all 0.6s
   &__close-btn
@@ -41,7 +41,7 @@
     font-size: 2.5rem
     font-weight: 700
     text-align: center
-    color: #504c63
+    color: $font
   &__form
     display: flex
     flex-direction: column
@@ -51,9 +51,14 @@
     &-email, &-pass
       width: 60%
       margin-bottom: 1.7rem
+      border-bottom: 3px solid $font
+      color: $font
     &-submit
       margin-top: 4rem
       margin-bottom: 2rem
+  &__input
+    border-bottom: 3px solid $font
+    color: $font
   &__invalid-label
     position: absolute
     width: 100%
@@ -67,12 +72,12 @@
     margin: 1rem auto
     font-size: 1.2rem
     background: transparent
-    color: #504c63
+    color: $font
     border: none
     text-decoration: underline
     cursor: pointer
     &:hover
-      color: #2f2c3d
+      color: $font
   &__back
     position: relative
     display: block

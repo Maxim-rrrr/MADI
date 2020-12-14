@@ -12,9 +12,11 @@
     line-height: 1.7
     font-size: 1.3rem
     text-align: right
-    color: #504c63
+    color: $font
   &__balace-block
-    display: block
+    display: flex
+    align-items: center
+    justify-content: flex-end
     cursor: pointer
     &:hover
       &>.account__balace
@@ -22,12 +24,29 @@
       &>.account__add-balance
         box-shadow: 0 2px 2px rgba(0,0,0,0.3)
   &__add-balance
+    position: relative
     height: 1.6rem
     width: 1.6rem
-    background: transparent url('../img/more.png') center no-repeat
-    border: 2px solid #504c63
+    margin-right: 0.3rem
+    background: transparent
+    border: 2px solid $font
     border-radius: 50%
     cursor: pointer
+    &::after, &::before
+      content: ''
+      position: absolute
+      background-color: $font
+    &::after
+      width: 0.8rem
+      height: 1px
+      left: 0.29rem
+    &::before
+      width: 1px
+      height: 0.8rem
+      top: 0.28rem
+      left: calc(0.65rem)
+
+      
   &__login
     &:hover
       text-decoration: underline 
