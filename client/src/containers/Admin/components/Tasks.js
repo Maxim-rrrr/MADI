@@ -39,7 +39,7 @@ class Tasks extends Component {
       this.setState({ 
         getTasksResponse: this.props.getTasksResponse
       })
-    }, 100)
+    }, 1000)
   }
   
   // Изменение категории
@@ -74,292 +74,81 @@ class Tasks extends Component {
     })
 
     let c = categoriesIndex
+    let T
     switch(categories.length) {
       case 0:
-        if (type === 'add') {
-          subject.tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {
-          subject.tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks = []
-          } else if (subject.tasks.length > +value) {
-            subject.tasks = subject.tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks.length; j > 0; j--) {
-              subject.tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[index].prise = value
-        }
-
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
-
+        T = subject
         break
       case 1: 
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {
-          
-          subject.tasks[c[0]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks = []
-          } else if (subject.tasks[c[0]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks = subject.tasks[c[0]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]]
         break
       case 2:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]]
         break
       case 3:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          } 
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]]
         break
       case 4:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]]
         break
       case 5:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]]
         break
       case 6:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]]
         break
       case 7:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[6]]
         break
       case 8:
-        if (type === 'add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.push({
-            name: value,
-            tasks: []
-          })
-        } else if (type === 'remove') {  
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.splice(value, 1)
-        } else if (type === 'number') {
-          if (+value === 0) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks = []
-          } else if (subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.length > +value) {
-            subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.slice(0, value)
-          } else {
-            for (let j = value - subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.length; j > 0; j--) {
-              subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks.push({
-                "prise" : 20,
-                "img" : []
-              })
-            }
-          }
-        } else if (type === 'img-add') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks[index].img.push(value)
-        } else if (type === 'img-remove') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks[index].img.splice(indexImg, 1)
-        } else if (type === 'prise') {
-          subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[7]].tasks[c[8]].tasks[index].prise = value
-        }
-        this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
-        this.props.getTasks('/api/getTasks')
+        T = subject.tasks[c[0]].tasks[c[1]].tasks[c[2]].tasks[c[3]].tasks[c[4]].tasks[c[5]].tasks[c[6]].tasks[c[7]]
         break
       default:
         break
     }
+
+    if (type === 'add') {
+      T.tasks.push({
+        name: value,
+        tasks: []
+      })
+    } else if (type === 'remove') {  
+      T.tasks.splice(value, 1)
+    } else if (type === 'number') {
+      if (+value === 0) {
+        T.tasks = []
+      } else if (T.tasks.length > +value) {
+        T.tasks = T.tasks.slice(0, value)
+      } else {
+        for (let j = value - T.tasks.length; j > 0; j--) {
+          T.tasks.push({
+            "prise" : 20,
+            "img" : [],
+            "description": '',
+            "conditionFile": '',
+            "conditionText": '',
+          })
+        }
+      }
+    } else if (type === 'img-add') {
+      T.tasks[index].img.push(value)
+    } else if (type === 'img-remove') {
+      T.tasks[index].img.splice(indexImg, 1)
+    } else if (type === 'prise') {
+      T.tasks[index].prise = value
+    } else if (type === 'add-file-condition') {
+      T.tasks[index].conditionFile = value
+    } else if (type === 'remove-file-condition') {
+      T.tasks[index].conditionFile = ''
+    } else if (type === 'edit-text-condition') {
+      T.tasks[index].conditionText = value
+    } else if (type === 'edit-description') {
+      T.tasks[index].description = value
+    }
+
+
+    this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
+    this.props.getTasks('/api/getTasks')
   }
 
   // Добавление изображение
@@ -379,6 +168,36 @@ class Tasks extends Component {
     
           // Добавим решение
           this.editInCategory(fileName, 'img-add', index)
+
+          this.setState({
+            prevImg: this.props.addImgResponse.filename
+          })
+          clearInterval(addImgTimer)
+
+        }
+      }
+    }, 10)
+    
+    event.target.reset()
+  }
+
+  // Добавление условия
+  addFileCondition(event, index) {
+    event.preventDefault()
+
+    // Отправка файла на сервер 
+    const formData = new FormData()
+    formData.append('myFile', event.target.children[0].files[0])
+    this.props.addImg('/api/addImg', formData)
+
+    let addImgTimer = setInterval(() => {
+      if (this.props.addImgResponse) {
+        if (this.props.addImgResponse.filename !== this.state.prevImg) {
+          // Добавление файла к определённому заданию
+          let fileName = this.props.addImgResponse.filename
+    
+          // Добавим условия
+          this.editInCategory(fileName, 'add-file-condition', index)
 
           this.setState({
             prevImg: this.props.addImgResponse.filename
@@ -595,6 +414,18 @@ class Tasks extends Component {
 
         {
           contentPage ? contentPage.map((elem, index) => {
+            if (typeof elem['description'] === "undefined") {
+              this.editInCategory('', 'edit-description', index)
+            }
+
+            if (typeof elem['conditionFile'] === "undefined") {
+              this.editInCategory('', 'add-file-condition', index)
+            }
+
+            if (typeof elem['conditionText'] === "undefined") {
+              this.editInCategory('', 'edit-text-condition', index)
+            }
+
             let active = this.state.activePopupsDecision
 
             if (active.length < contentPage.length) {
@@ -604,31 +435,116 @@ class Tasks extends Component {
               }
             }
 
+            let conditionFileInd
+            if (elem.conditionFile) {
+              conditionFileInd = -1
+              for (let j = elem.conditionFile.length - 1; j !== 0; j--) {
+                if (elem.conditionFile[j] === '.') {
+                  conditionFileInd = j
+                  break
+                } 
+              }
+            }
+
             return (
               <div key = {index} className="task-card">
+                <div className="task-card__header">
+                  <span className="task-card__title"> Задание { index + 1 } </span>
 
-                <span className="task-card__title"> Задание { index + 1 } </span>
+                  {/* Изменение цены заданий */}
+                  <form onSubmit = { (event) => { 
+                    event.preventDefault()
+                    let value = event.target.children[1].value
+                    event.target.children[1].value = ''
+                    this.editInCategory(value, 'prise', index)
+                  } }  className="prise-form">
+                    <span className = "prise-span" > Цена: </span>
+                    
+                    <input 
+                      type = "number" 
+                      className = "input varisnt-form__input" 
+                      placeholder = { elem.prise }
+                    />
 
-                {/* Изменение цены заданий */}
-                <form onSubmit = { (event) => { 
-                  event.preventDefault()
-                  let value = event.target.children[1].value
-                  event.target.children[1].value = ''
-                  this.editInCategory(value, 'prise', index)
-                } }  className="prise-form">
-                  <span className = "prise-span" > Цена: </span>
-                  
+                    <span className = "prise-span" > руб. </span>
+                    
+                    <button type='submit' className="varisnt-form__btn" />
+                  </form>
+
+                </div>
+
+                <span className="task-card__title"> Описание </span>
+                <form 
+                  className = 'form'
+                  onSubmit = {(event) => {
+                    event.preventDefault()
+                    this.editInCategory(event.target[0].value, 'edit-description', index) 
+                    event.target[0].value = ''
+                  }}
+                >
                   <input 
-                    type = "number" 
-                    className = "input varisnt-form__input" 
-                    placeholder = { elem.prise }
+                    type="text"
+                    placeholder = { elem.description }
+                    className= 'input varisnt-form__input varisnt-form__input-description' 
                   />
-
-                  <span className = "prise-span" > руб. </span>
-                  
-                  <button type='submit' className="varisnt-form__btn" />
+                  <button className='varisnt-form__btn'/>
                 </form>
 
+                <span className="task-card__title"> Условие задачи </span>
+                {
+                  elem.conditionFile?
+                  ['.png', '.jpg', '.jpeg', '.svg'].includes(elem.conditionFile.substring(conditionFileInd)) ? 
+                  <div className="img-box">
+                    <img 
+                      key = {elem.conditionFile}
+                      src = {'/uploads/' + elem.conditionFile} 
+                      alt = 'Поменяь путь до файла в Taks.js'
+                    />
+                    <button className='btn-img-del' onClick = {() => { this.editInCategory('', 'remove-file-condition', index) }}/>
+                  </div> : <div className="img-box">
+                    <a href = {'/uploads/' + elem.conditionFile} target="_blank"> 
+                      <img 
+                        key = {elem.conditionFile}
+                        src = {fileImg} 
+                        alt = ''
+                        className = 'img-box__file'
+                      />
+                      <span className = 'img-box__file-label'>{elem.conditionFile.substring(conditionFileInd)}</span>
+                    </a>
+                    
+                    <button className='btn-img-del' onClick = {() => { this.editInCategory('', 'remove-file-condition', index) }}/>
+                  </div> :
+                  <form 
+                    onSubmit = {(event) => {this.addFileCondition(event, index)}}
+                    className = 'form-add-img'
+                    encType = 'multipart/form-data'
+                  >
+                    <input 
+                      className = 'add-img' 
+                      type = 'file' 
+                      name = 'myFile'
+                    />
+                    <button className='varisnt-form__btn'></button>
+                  </form>
+                }
+
+                <form 
+                  className = 'form'
+                  onSubmit = {(event) => {
+                    event.preventDefault()
+                    this.editInCategory(event.target[0].value, 'edit-text-condition', index) 
+                    event.target[0].value = ''
+                  }}
+                >
+                  <input 
+                    type="text"
+                    placeholder = { elem.conditionText }
+                    className= 'input varisnt-form__input varisnt-form__input-description' 
+                  />
+                  <button className='varisnt-form__btn'></button>
+                </form>
+
+                <span className="task-card__title"> Решения </span>
                 {/* Решение */}
                 <div className="task-card__imgs-box">
                   {
@@ -681,7 +597,7 @@ class Tasks extends Component {
                             </Popup>
                             <img 
                               key = {img}
-                              src = {'http://rgrmadi.ru/uploads/' + img} // !!!!!!!!!!!!!!
+                              src = {'/uploads/' + img} 
                               alt = 'Поменяь путь до файла в Taks.js'
                             />
                             <button className='btn-img-del' onClick = {() => {
@@ -727,7 +643,7 @@ class Tasks extends Component {
 
                             </Popup>
                             
-                            <a href = {'http://rgrmadi.ru/uploads/' + img} target="_blank"> {/* !!!!!!!!!!!!!!! */}
+                            <a href = {'/uploads/' + img} target="_blank"> 
                               <img 
                                 key = {img}
                                 src = {fileImg} 

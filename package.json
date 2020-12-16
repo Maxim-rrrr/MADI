@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently \"mongod\" \"node index\"",
-    "server": "concurrently \"mongod\" \"nodemon index\"", 
+    "server": "concurrently \"mongod\" \"nodemon index\"",
     "client": "npm run start --prefix client",
     "client:install": "npm install --prefix client",
     "client:build": "npm run build --prefix client",
@@ -24,6 +24,7 @@
     "multer": "^1.4.2",
     "node-crontab": "0.0.8",
     "nodemailer": "^6.4.11",
+    "react-textarea-autosize": "^8.3.0",
     "yandex-checkout": "^1.0.13"
   },
   "devDependencies": {

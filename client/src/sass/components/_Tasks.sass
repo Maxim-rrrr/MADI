@@ -27,7 +27,7 @@
       margin-left: 1.5rem
       background: transparent url('../img/check.png') no-repeat center
       background-size: 60%
-      border: 3px solid #ecc454
+      border: 3px solid $font
       border-radius: 50%
       transition: 0.1s
       cursor: pointer
@@ -69,18 +69,22 @@
   &__label
     width: 40%
     font-size: 1.5rem
-    color: #ecc454
+    color: $font
   &__input
     width: 30%
     margin: 0 0.5rem  
     padding: 0
     font-size: 1.5rem
     text-align: center
-    color: #ecc454
-    border-color: #ecc454
+    color: $font
+    border-color: $font
     &::placeholder
       color: #504c63
       font-size: 1.5rem
+    &-description
+      width: 100%
+      text-align: left
+      border-bottom: 2px solid $font
   &__btn
     display: block
     height: 3rem  
@@ -88,7 +92,7 @@
     margin-left: 1.5rem
     background: transparent url('../img/check.png') no-repeat center
     background-size: 60%
-    border: 3px solid #ecc454
+    border: 3px solid $font
     border-radius: 50%
     transition: 0.1s
     cursor: pointer
@@ -100,19 +104,29 @@
   margin: 1rem 
   margin-top: 2rem
   width: 200px
-  border-color: #ecc454
-  color: #ecc454
+  border-color: $font
+  color: $font
 
 
 .task-card
-  border-bottom: 3px solid #ecc454
-  padding: 0 0 1rem 0
+  background-color: $dark
+  padding: 1rem
+  margin-bottom: 1rem
+  border-radius: 1rem
+  border: 3px solid $font
+  &__header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 1rem
+
   &__title
     display: block
-    margin: 2rem 0 1rem
+    margin-top: 2rem
+    margin-bottom: 1rem
     font-size: 1.5rem
     text-decoration: underline
-    color: #ecc454
+    color: $font
   &__imgs-box
     display: flex
     align-items: flex-start
@@ -123,7 +137,7 @@
   &>img
     max-width: 300px
     margin-right: 1rem
-    border: 2px solid #ecc454
+    border: 2px solid $font
     border-radius: 3px
   &>a
     position: relative
@@ -157,11 +171,10 @@
   &-form
     display: flex
     align-items: center
-    margin: 1rem
-    width: 40%
+    width: 18.3rem
   &-span
     font-size: 1.5rem
-    color: #ecc454
+    color: $font
 
 .form-add-img
   display: flex
