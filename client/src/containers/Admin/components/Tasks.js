@@ -598,7 +598,7 @@ class Tasks extends Component {
                             <img 
                               key = {img}
                               src = {'/uploads/' + img} 
-                              alt = 'Поменяь путь до файла в Taks.js'
+                              alt = ''
                             />
                             <button className='btn-img-del' onClick = {() => {
                               let activePopupsDecision = this.state.activePopupsDecision

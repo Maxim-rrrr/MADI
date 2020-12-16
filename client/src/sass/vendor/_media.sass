@@ -33,11 +33,25 @@
   .header__title
     display: none
 
+  .condition
+    flex-direction: column
+    &__text
+      max-width: 100%
+      margin: 0.5rem
+      margin-right: 0
+    &__img-box a
+      display: block
+      width: 100%
+    &__img-box img
+      display: block
+      margin: auto
+    & .img-box__file
+      display: block
+      margin: auto
+
 @media screen and ( max-width: 576px )
   .container
     width: 95%
-  .btn-allСhoice
-    margin: 0 auto
   .btn-prise
     bottom: 150px
   .invite

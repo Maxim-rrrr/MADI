@@ -8,6 +8,8 @@ import { paymentFullBalance } from '../../actions/paymentFullBalance'
 
 import TasksNav from './TasksNav'
 
+import fileImg from '../../img/files.png'
+
 class User extends Component {
   constructor(props) {
     super(props)
@@ -22,7 +24,8 @@ class User extends Component {
       checkboxes: [],
       loadingPayment: false,
       numberPayment: 1,
-      btnPriseHide: true
+      btnPriseHide: true, 
+      fullImgs: []
     };
 
   }
@@ -363,14 +366,90 @@ class User extends Component {
         }
 
         content = <>
-           <form  className="task-user-form">
+            <button onClick={() => {this.allСhoice()}} className='btn btn-allСhoice'> Выбрать всё </button> 
+
+            <form  className="task-user-form">
               {
                 contentPage ? contentPage.map((elem, index) => {
+                  let conditionFileInd
+                  if (elem.conditionFile) {
+                    conditionFileInd = -1
+                    for (let j = elem.conditionFile.length - 1; j !== 0; j--) {
+                      if (elem.conditionFile[j] === '.') {
+                        conditionFileInd = j
+                        break
+                      } 
+                    }
+                  }
+
                   return (
                     <>
-                      <div className="checkbox animated fadeInRight" style = {{'animation-delay': `${index / 30}s`}} key={index}>
-                          <input onClick={() => {this.checkboxChange(index)}} checked={this.state.checkboxes[index]} className="checkbox__input" type="checkbox" id={"checkbox_" + index}/>
-                          <label className="checkbox__label" htmlFor={"checkbox_" + index}>{ index + 1 }</label>
+                      <div className={this.state.checkboxes[index] ? "task-user-form__section task-user-form__section--checked" : "task-user-form__section"} onClick={() => {this.checkboxChange(index)}}>
+                        <div className="task-user-form__section-header">
+                          <div className="checkbox animated fadeInRight" style = {{'animation-delay': `${index / 30}s`}} key={index}>
+                            <label className={this.state.checkboxes[index] ? "checkbox__label checkbox__label--checked" : "checkbox__label"}>{ index + 1 }</label>
+                          </div>
+
+                          {
+                            elem.conditionFile || elem.conditionText ?
+                            <div className="condition">
+                              <div className="condition__title"> Условие: </div>
+
+                              {
+                                elem.conditionText && 
+                                <div className="condition__text">
+                                  { elem.conditionText }
+                                </div>
+                              }
+
+                              {
+                                elem.conditionFile && 
+                                <div className="condition__file">
+                                  { 
+                                    ['.png', '.jpg', '.jpeg', '.svg'].includes(elem.conditionFile.substring(conditionFileInd)) ? 
+                                    <div 
+                                      className = { this.state.fullImgs[index] ? "condition__img-box fullImg" : "condition__img-box"}
+                                      
+                                    >
+                                      
+                                      <img 
+                                        key = {elem.conditionFile}
+                                        src = {'/uploads/' + elem.conditionFile} 
+                                        alt = ''
+                                        onClick = {(event) => { 
+                                          let fullImgs = this.state.fullImgs
+  
+                                          fullImgs[index] ? fullImgs[index] = false : fullImgs[index] = true
+                                          
+                                          this.setState({ fullImgs: fullImgs })
+                                        }}
+                                      />
+                                      
+                                    </div> : 
+                                    <div className="">
+                                      <a href = {'/uploads/' + elem.conditionFile} target="_blank"> 
+                                        <img 
+                                          key = {elem.conditionFile}
+                                          src = {fileImg} 
+                                          alt = ''
+                                          className = 'img-box__file'
+                                        />
+                                      </a>
+                                    </div>                                  
+                                  }
+                                </div>
+                              }
+
+                            </div>: ''
+                          }
+                        </div>
+                        
+                        {
+                          elem.description && 
+                          <div className = 'description'>
+                            { elem.description }
+                          </div>
+                        }
                       </div>
                     </>
                   )
@@ -378,8 +457,6 @@ class User extends Component {
               } 
             </form>
 
-            <button onClick={() => {this.allСhoice()}} className='btn btn-allСhoice'> Выбрать всё </button> 
-          
             { priseBtn }
         </>
       }
