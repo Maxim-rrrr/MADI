@@ -6,16 +6,16 @@ import Tasks from './components/Tasks';
 import Subjects from './components/Subjects';
 
 class Admin extends Component {
-  constructor(props){
-    super (props)
+  constructor(props) {
+    super(props)
     this.state = {
-      tab: localStorage.getItem('tab_admin')?localStorage.getItem('tab_admin'):'CustomerList'
+      tab: localStorage.getItem('tab_admin') ? localStorage.getItem('tab_admin') : 'CustomerList'
     }
   }
 
   componentDidMount() {
     this.props.fetchData("/api/customers");
-    
+
   }
 
   customersUpdataDB() {
@@ -29,22 +29,22 @@ class Admin extends Component {
 
   render() {
     let balances = []
-    this.props.customers.map( value => balances.push(value.balance) )
+    this.props.customers.map(value => balances.push(value.balance))
     return (
-      <>       
+      <>
         <header className="header">
           <div className="container">
             <div className="header__content">
 
               <div className="header__logo">
-                <img src="./img/logo.png" alt="Logo"/>
+                <img src="./img/logo.png" alt="Logo" />
                 <h1 className='header__title'> РГР работы МАДИ </h1>
               </div>
 
               <div className="header__admin-label">
                 АДМИНИСТРАТОР
-                <button className="account__exit" onClick={ () => (this.exit()) }>
-                  <img src="./img/exit.png" alt=""/>
+                <button className="account__exit" onClick={() => (this.exit())}>
+                  <img src="./img/exit.png" alt="" />
                 </button>
               </div>
 
@@ -55,40 +55,40 @@ class Admin extends Component {
         <div className='container'>
           <nav className='admin__nav'>
             {
-              [['CustomerList', 'Пользователи'], ['Tasks', 'Задания'], ['Subjects', 'Предметы']].map(value => {
+              [['CustomerList', 'Пользователи'], ['Tasks', 'Задания'], ['Subjects', 'Предметы'], ['terms-of-use', 'Пользовательское соглашение']].map(value => {
                 let active = ''
                 if (value[0] === this.state.tab) {
                   active = ' admin__nav-item--active'
                 }
                 return (
-                  <div 
-                    key = {value[0]}
-                    className={'admin__nav-item' + active} 
-                    onClick = {() => { 
+                  <div
+                    key={value[0]}
+                    className={'admin__nav-item' + active}
+                    onClick={() => {
                       localStorage.setItem('tab_admin', value[0])
-                      this.setState({ tab: value[0] }) 
+                      this.setState({ tab: value[0] })
                     }}
-                  > { value[1] } </div>
+                  > { value[1]} </div>
                 )
               })
             }
           </nav>
         </div>
-        
 
-        <CustomerList 
-          tab = { this.state.tab } 
-          customers = { this.props.customers }
-          balances = { balances } 
-          customersUpdataDB = { () => { this.customersUpdataDB() } }
+
+        <CustomerList
+          tab={this.state.tab}
+          customers={this.props.customers}
+          balances={balances}
+          customersUpdataDB={() => { this.customersUpdataDB() }}
         />
 
         <Tasks
-          tab = { this.state.tab } 
+          tab={this.state.tab}
         />
 
         <Subjects
-          tab = { this.state.tab } 
+          tab={this.state.tab}
         />
 
       </>
