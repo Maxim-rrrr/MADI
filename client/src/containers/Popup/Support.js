@@ -31,7 +31,7 @@ class Support extends Component {
           <span>&nbsp;</span>
           
           <span> Сереброва Вероника Сергеевна </span>
-          <span> ИНН 7707083893 </span>
+          <span> Самозанятый: ИНН 165051092088 </span>
           <span><a href="tel:+7 901 504 87-67"> +7 901 504 87-67 </a>  </span>
           
         </div>

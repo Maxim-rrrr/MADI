@@ -46,12 +46,10 @@ class AddBalancePopap extends Component {
     let payment = setInterval(() => {
       if (this.props.createPaymentResponse) {
         clearInterval(payment)
-        if (this.props.createPaymentResponse.confirmation) {
-          window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
-        } 
         this.setState({
           loadingPayment: false,
         });
+        window.location.href = this.props.createPaymentResponse.payment.confirmation.confirmation_url;
       }
     })
 

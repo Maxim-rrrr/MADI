@@ -144,31 +144,31 @@ class User extends Component {
 
             })
             
-          } else if (+user.balance === 0) {
-            this.props.createPayment('/api/createPayment', {
-              prise: this.state.prise,
-              info: {
-                type: 1, // Прямая оплата товара
-                token: user.token,
-                email: user.email,
-                subject: this.state.navState.subject,
-                categories: this.state.navState.categories,
-                tasks
-              }
-            })
+          // } else if (+user.balance === 0) {
+          //   console.log('user.balance === 0')
+          //   this.props.createPayment('/api/createPayment', {
+          //     prise: this.state.prise,
+          //     info: {
+          //       type: 1, // Прямая оплата товара
+          //       token: user.token,
+          //       email: user.email,
+          //       subject: this.state.navState.subject,
+          //       categories: this.state.navState.categories,
+          //       tasks
+          //     }
+          //   })
   
-            let payment = setInterval(() => {
-              if (this.props.createPaymentResponse) {
-                clearInterval(payment)
-                if (this.props.createPaymentResponse.confirmation) {
-                  window.location.href = this.props.createPaymentResponse.confirmation.confirmation_url;
-                } 
-                this.setState({
-                  loadingPayment: false,
-                });
-              }
-            })
-          } else if (+user.balance !== 0) {
+          //   let payment = setInterval(() => {
+          //     if (this.props.createPaymentResponse) {
+          //       clearInterval(payment)
+          //       this.setState({
+          //         loadingPayment: false,
+          //       });
+          //       console.log(this.props.createPaymentResponse)
+          //       window.location.href = this.props.createPaymentResponse.payment.confirmation.confirmation_url;
+          //     }
+          //   })
+          } else if (+this.state.prise > +user.balance && +this.state.prise !== 0) {
             this.props.activeAddBalancePopup()
             this.setState({
               loadingPayment: false
