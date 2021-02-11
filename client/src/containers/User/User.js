@@ -190,7 +190,7 @@ class User extends Component {
 
   componentDidMount() {
     this.props.getTasks('/api/getTasks')
-    setInterval(this.props.getTasks('/api/getTasks'), 10)
+    // setInterval(this.props.getTasks('/api/getTasks'), 10)
 
     setInterval(() => {
       if (this.state.navState.variant === null) {

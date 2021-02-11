@@ -227,7 +227,7 @@ class Tasks extends Component {
 
     if (this.state.getTasksResponse) {
       subjects = this.state.getTasksResponse.tasks
-      subjects.sort(byField('name'))
+      // subjects.sort(byField('name'))
     }
     
     let nav = this.state.navState
@@ -256,7 +256,7 @@ class Tasks extends Component {
           })
         })
 
-        contentPage.sort(byField('name'))
+        // contentPage.sort(byField('name'))
       }
     }
     
