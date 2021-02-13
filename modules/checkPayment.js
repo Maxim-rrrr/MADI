@@ -1,4 +1,4 @@
-const YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ');
+const YandexCheckout = require('yandex-checkout')('778992', 'live_mI9nD9Zhg3zO0AzsQRZ4WzyNmbE2Ccasn4BGjTKDUPw');
 const Payment = require('../Schemes/Payment')
 const Task = require('../Schemes/Task')
 const Сustomer = require('../Schemes/Customer')
@@ -11,23 +11,23 @@ exports.checkPayment = async () => {
   let payments = await Payment.find({}).then()
 
   payments.forEach((payment) => {
-
     YandexCheckout.getPayment(payment.id)
       .then((result) => {
-        result = JSON.parse(result)
         if (result.status === "succeeded") {
-          console.log('payment.description: ', result.description);
           let description = JSON.parse(result.description)
           
-          // Отправка 5% от покупки пригласителю
-          let U = Сustomer.findOne({token: description.token}).then()
-
-          if (U.inviting) {
-            let invit_user = Сustomer.findOne({email: U.inviting}).then()
-
-            Сustomer.findOneAndUpdate({token: invit_user.token},{
-              balance: +invit_user.balance + (+result.amount.value * 0.1)
-            }).then()
+          const bonus = async () => {
+            // Отправка 5% от покупки пригласителю
+            let U = await Сustomer.findOne({token: description.token}).then()
+  
+            if (U.inviting) {
+              let invit_user = await Сustomer.findOne({email: U.inviting}).then()
+  
+              Сustomer.findOneAndUpdate({token: invit_user.token},{
+                balance: +invit_user.balance + (+result.amount.value * 0.1)
+              }).then()
+  
+            }
 
           }
 
@@ -98,7 +98,7 @@ exports.checkPayment = async () => {
                 Payment.deleteOne({_id: payment._id}).then()
 
                 let user = await Сustomer.findOne({token: description.token}).then()
-                Сustomer.findOneAndUpdate({token: user.token},{
+                Сustomer.findOneAndUpdate({token: user.token}, {
                   orders: [...user.orders, {
                     'subject': description.subject,
                     'work': description.work,
@@ -119,15 +119,21 @@ exports.checkPayment = async () => {
             try {
               sum = +result.amount.value
               user_token = description.token
-  
-              user = Сustomer.findOne({token: user_token}).then()
-              user.balance += sum;
-  
-              Сustomer.findOneAndUpdate({token: user_token},{
-                balance: user.balance,
-                summa: user.summa + +result.amount.value
-              }).then()
-              logger.logger(status = 200, message = `Пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
+              console.log(`user_token ---- ${user_token}`)
+              const addBalanse = async () => {
+                let user = await Сustomer.findOne({token: user_token}).then()
+                user.balance += sum;
+    
+                Сustomer.findOneAndUpdate({token: user_token},{
+                  balance: user.balance,
+                  summa: user.summa + +result.amount.value
+                }).then()
+                logger.logger(status = 200, message = `Пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
+                Payment.deleteOne({id: payment.id}).then()
+              }
+
+              addBalanse()
+
             } catch (err) {
               logger.logger(status = 500, message = `Ошибка пополнение счёта: ${description.email} Сумма: ${result.amount.value} руб.`)
             }

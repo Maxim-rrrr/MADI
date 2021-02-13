@@ -146,7 +146,7 @@ router.post('/getId', (req, res)=>{
 });
 
 // Получение пользователя по token
-router.post('/getCustomer', (req, res)=>{
+router.post('/getCustomer', (req, res) => {
   try {
     Сustomer.findOne({token: req.body.token})
       .then(customer => {
@@ -279,12 +279,12 @@ router.post('/addTask', (req, res) => {
 });
 
 // Получение всего списка
-router.post('/getTasks', (req, res) => {
+router.post('/getTasks', async (req, res) => {
   try {
-    Task.find({})
-    .then(tasks => {
-      res.send({ status: 200, tasks });
+    Task.find({}).then(tasks => {
+      res.send({ status: 200, tasks });      
     });
+
   } catch (err) { 
     logger.logger(status = 500, message = `Ошибка получения всех заданий из БД: ${err}`)
     res.send({ status: 500, err }) 
@@ -465,11 +465,15 @@ router.post('/paymentFullBalance', async (req, res) =>{
 
 
 /////// Яндекс Касса ///////
-const YandexCheckout = require('yandex-checkout')('Ваш идентификатор магазина', 'Ваш секретный ключ') // !!!
+const YandexCheckout = require('yandex-checkout')('778992', 'live_mI9nD9Zhg3zO0AzsQRZ4WzyNmbE2Ccasn4BGjTKDUPw') // !!!
+const generator = require('generate-password')
 
 // Создание платежа
 router.post('/createPayment', (req, res) => {
-  let idempotenceKey = 'ключ идемпотентности' // !!!
+  let idempotenceKey = generator.generate({
+    length: 16,
+    numbers: true
+  }) // !!!
   YandexCheckout.createPayment({
     'amount': {
       'value': req.body.prise,
@@ -477,7 +481,7 @@ router.post('/createPayment', (req, res) => {
     },
     'confirmation': {
       'type': 'redirect',
-      'return_url': 'Страница возврата после платежа' // !!!
+      'return_url': 'http://rgrmadi.ru' // !!!
     },
     "capture": true,
     "description": JSON.stringify(req.body.info)
