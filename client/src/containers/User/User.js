@@ -248,6 +248,7 @@ class User extends Component {
     }
     
     let contentPage
+    let sign
     if (nav.subject) {
       if (nav.categories.length === 0) {       
         contentPage = subject.tasks
@@ -258,6 +259,7 @@ class User extends Component {
           contentPage.forEach(task => {
             if (task.name === item) {
               contentPage = task.tasks
+              sign = task.sign ? task.sign : ''
             }
           })
         })
@@ -311,6 +313,13 @@ class User extends Component {
               )
             }) : ''
           }
+          {
+          sign ?
+          <div className='sign animated fadeInUp' style = {{'animation-delay': `${contentPage.length / 10}s`}}>{sign}</div>: 
+          <></>
+          }
+          
+
         </>
       // Задания
       } else {

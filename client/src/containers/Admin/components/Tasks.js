@@ -144,8 +144,10 @@ class Tasks extends Component {
       T.tasks[index].conditionText = value
     } else if (type === 'edit-description') {
       T.tasks[index].description = value
+    } else if (type === 'edit-sign') {
+      T.sign = value
+      console.log(T)
     }
-
 
     this.props.setTask('/api/setTask/' + subject._id, {"tasks": subject.tasks})
     this.props.getTasks('/api/getTasks')
@@ -242,6 +244,7 @@ class Tasks extends Component {
     }
     
     let contentPage
+    let sign
     if (nav.subject) {
       if (nav.categories.length === 0) {       
         contentPage = subject.tasks
@@ -252,6 +255,7 @@ class Tasks extends Component {
           contentPage.forEach(task => {
             if (task.name === item) {
               contentPage = task.tasks
+              sign = task.sign ? task.sign : ''
             }
           })
         })
@@ -384,6 +388,24 @@ class Tasks extends Component {
             type = 'text' 
             className = 'input tasks__input' 
             placeholder = 'Добавить...'
+          />
+          <button type='submit' className="customer-list__btn" />
+        </form>
+
+        
+        <form
+          onSubmit = { (event) => { 
+            event.preventDefault()  
+            this.editInCategory(event.target[0].value, 'edit-sign') 
+            event.target[0].value = ''
+          } }
+          className="tasks__form"
+          style = {{'margin-top': '5rem'}}
+        >
+          <input 
+            type = 'text' 
+            className = 'input tasks__input' 
+            placeholder = {sign ? sign: 'Добавить подпись'}
           />
           <button type='submit' className="customer-list__btn" />
         </form>

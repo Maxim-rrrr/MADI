@@ -33,7 +33,7 @@ export default class App extends Component {
           </Switch>
         </Router>
 
-        <div className="version-label"> 0.1.0 </div>
+        <div className="version-label"> 0.1.1 </div>
       </>
     );
   }

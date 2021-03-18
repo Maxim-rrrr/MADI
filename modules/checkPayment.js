@@ -31,6 +31,7 @@ exports.checkPayment = async () => {
 
           }
 
+          bonus()
 
           if (description.type == 1) { // Оплата работ
 
