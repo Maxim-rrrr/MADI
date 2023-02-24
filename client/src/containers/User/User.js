@@ -303,6 +303,11 @@ class User extends Component {
       } else if (nav.subject && nav.categories.length !== 0 && nav.categories.length < subject.model) {
         content = <>
           {
+          sign ?
+          <div className='sign animated fadeInUp' style = {{'animation-delay': `${contentPage.length / 10}s`}}>{sign}</div>: 
+          <></>
+          }
+          {
             contentPage ? contentPage.map((elem, index) => {
               return (
                 <div className='tasks__btn-group animated fadeInUp' style = {{'animation-delay': `${index / 10}s`}} key = {elem.name}>
@@ -312,11 +317,6 @@ class User extends Component {
                 </div>
               )
             }) : ''
-          }
-          {
-          sign ?
-          <div className='sign animated fadeInUp' style = {{'animation-delay': `${contentPage.length / 10}s`}}>{sign}</div>: 
-          <></>
           }
           
 
